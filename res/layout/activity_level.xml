@@ -1,0 +1,62 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    tools:context=".LevelActivity" >
+
+    <Button
+        android:id="@+id/button_mainstream"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:onClick="onClick"
+        style="@style/BigBWButton"
+        android:text="@string/button_level_mainstream" />
+
+    <Button
+        android:id="@+id/button_plus"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:onClick="onClick"
+        style="@style/BigBWButton"
+        android:text="@string/button_level_plus" />
+
+    <Button
+        android:id="@+id/button_advanced"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:onClick="onClick"
+        style="@style/BigBWButton"
+        android:text="@string/button_level_advanced" />
+
+    <Button
+        android:id="@+id/button_c1"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:onClick="onClick"
+        style="@style/BigBWButton"
+        android:text="@string/button_level_c1" />
+
+    <Button
+        android:id="@+id/button_c2"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:onClick="onClick"
+        style="@style/BigBWButton"
+        android:text="@string/button_level_c2" />
+
+    <Button
+        android:id="@+id/button_c3a"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:onClick="onClick"
+        style="@style/BigBWButton"
+        android:text="@string/button_level_c3a" />
+
+</LinearLayout>

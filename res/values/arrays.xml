@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+  <array name="preference_speed_entries">
+    <item>Slow</item>
+    <item>Normal</item>
+    <item>Fast</item>
+  </array>
+  <array name="preference_speed_values">
+    <item>Slow</item>
+    <item>Normal</item>
+    <item>Fast</item>
+  </array>
+</resources>

@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    package="com.bradchristie.taminationsapp"
+    android:versionCode="1"
+    android:versionName="1.0.1" >
+
+    <uses-sdk
+        android:minSdkVersion="8"
+        android:targetSdkVersion="16" />
+
+    <application
+        android:allowBackup="true"
+        android:icon="@drawable/ic_launcher"
+        android:label="@string/app_name" >
+        <activity
+            android:name="com.bradchristie.taminationsapp.LevelActivity"
+            android:label="@string/app_name" >
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+        <activity
+            android:name="com.bradchristie.taminationsapp.CallActivity"
+            android:label="@string/title_activity_call" >
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="android.app.ListActivity" />
+        </activity>
+        <activity
+            android:name="com.bradchristie.taminationsapp.AnimListActivity"
+            android:label="@string/title_activity_anim_list" >
+        </activity>
+        <activity
+            android:name="com.bradchristie.taminationsapp.AnimationActivity"
+            android:label="@string/title_activity_animation" >
+        </activity>
+        <activity
+            android:name="com.bradchristie.taminationsapp.SettingsActivity"
+            android:label="@string/title_activity_settings" >
+        </activity>
+        <activity
+            android:name="com.bradchristie.taminationsapp.DefinitionActivity"
+            android:label="@string/title_activity_definition" >
+        </activity>
+        <activity
+            android:name="com.bradchristie.taminationsapp.AboutActivity"
+            android:label="@string/title_activity_about" >
+        </activity>
+    </application>
+
+</manifest>

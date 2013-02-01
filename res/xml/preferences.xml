@@ -1,0 +1,27 @@
+
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
+    <ListPreference
+        android:key="speed"
+        android:title="Speed"
+        android:dialogTitle="Speed"
+        android:entries="@array/preference_speed_entries"
+        android:entryValues="@array/preference_speed_values"
+        android:defaultValue="Normal"
+        />
+    <CheckBoxPreference
+        android:defaultValue="false"
+        android:title="Loop"
+        android:key="loop"/>
+    <CheckBoxPreference
+        android:defaultValue="false"
+        android:title="Grid"
+        android:key="grid"/>
+    <CheckBoxPreference
+        android:defaultValue="false"
+        android:title="Paths"
+        android:key="paths"/>
+    <CheckBoxPreference
+        android:defaultValue="false"
+        android:title="Numbers"
+        android:key="numbers"/>
+    </PreferenceScreen>
