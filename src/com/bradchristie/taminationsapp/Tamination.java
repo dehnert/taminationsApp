@@ -71,6 +71,7 @@ public class Tamination {
     return null;
   }
 
+  static int maxdumps = 20;
   static List<Movement> translate(Element elem)
   {
     List<Movement> retval = null;
@@ -91,8 +92,15 @@ public class Tamination {
   {
     List<Movement> movements = new ArrayList<Movement>();
     NodeList movelist = pathelem.getElementsByTagName("*");
-    for (int i=0; i<movelist.getLength(); i++)
-      movements.addAll(translate((Element)movelist.item(i)));
+    for (int i=0; i<movelist.getLength(); i++) {
+      Element elem = (Element)movelist.item(i);
+      //  A bug in Gingerbread XML parsing getElementsByTagName
+      //  returns the parent as well as the children
+      //  if it matches the selector.
+      //  So we need to check for that here.
+      if (!elem.getTagName().equals("path"))
+        movements.addAll(translate(elem));
+    }
     return movements;
   }
 
