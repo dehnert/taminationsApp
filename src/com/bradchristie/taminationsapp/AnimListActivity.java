@@ -67,8 +67,7 @@ public class AnimListActivity extends Activity
       add(s);
     }
 
-
-  }
+  }  // end of CallListAdapter class
 
   private String xmlname;
   private int[] posanim;
@@ -92,6 +91,8 @@ public class AnimListActivity extends Activity
       posanim[j] = -1;
     for (int i=0; i<tams.getLength(); i++) {
       Element tam = (Element)tams.item(i);
+      if (tam.getAttribute("display").equals("none"))
+        continue;  // animations for sequencer only
       String title = tam.getAttribute("title");
       String from = tam.getAttribute("from");
       String group = tam.getAttribute("group");
