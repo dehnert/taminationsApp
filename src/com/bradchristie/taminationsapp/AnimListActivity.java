@@ -125,6 +125,15 @@ public class AnimListActivity extends Activity
     lv.setOnItemClickListener(this);
   }
 
+  //  Definition
+  public void onButtonDefinitionClicked(View v) {
+    startActivity(new Intent(this,DefinitionActivity.class));
+  }
+  //  Settings
+  public void onButtonSettingsClicked(View v) {
+    startActivity(new Intent(this,SettingsActivity.class));
+  }
+
   @Override
   public boolean onCreateOptionsMenu(Menu menu) {
     // Inflate the menu; this adds items to the action bar if it is present.
