@@ -97,8 +97,12 @@ public class AnimListActivity extends Activity
       String from = tam.getAttribute("from");
       String group = tam.getAttribute("group");
       if (group.length() > 0) {
-        if (!group.equals(prevgroup))
-          s.add(group,R.layout.calllist_header);
+        if (!group.equals(prevgroup)) {
+          if (group.matches("\\s+"))
+            s.add(group,R.layout.calllist_separator);
+          else
+            s.add(group,R.layout.calllist_header);
+        }
         from = title.replace(group," ").trim();
       }
       else if (!title.equals(prevtitle))
@@ -106,10 +110,11 @@ public class AnimListActivity extends Activity
       prevtitle = title;
       prevgroup = group;
       posanim[s.getCount()] = i;
-      if (group.equals(" "))
+      // this is the selectable one
+      if (group.matches("\\s+"))
         s.add(from,R.layout.calllist_item);
       else
-        s.add(from,R.layout.calllist_indenteditem);  // this is the selectable one
+        s.add(from,R.layout.calllist_indenteditem);
     }
     if (tams.getLength() == 0) {
       //  Special handling if there are no animations for this call
