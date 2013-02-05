@@ -19,7 +19,9 @@ $(OBJ) : $(SRC)
 
 %.xml :
 	copy $(subst /,\,$(subst $(OBJDIR),$(TAMINATIONS),$@)) $(subst /,\,$@)
+#  The mobile site requires a viewport tag, but that breaks
+#  scrolling for Gingerbread on the app.  So remove the viewport tag here.
 %.html :
-	copy $(subst /,\,$(subst $(OBJDIR),$(TAMINATIONS),$@)) $(subst /,\,$@)
+	perl -p -e "s/.*viewport.*//" $(subst $(OBJDIR),$(TAMINATIONS),$@) >$@
 %.png :
 	copy $(subst /,\,$(subst $(OBJDIR),$(TAMINATIONS),$@)) $(subst /,\,$@)
