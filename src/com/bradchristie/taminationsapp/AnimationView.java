@@ -170,6 +170,16 @@ public class AnimationView extends SurfaceView implements SurfaceHolder.Callback
     }
 
     /**
+     *   Set the visibility of phantom dancers
+     */
+    public synchronized void setPhantomVisibility(boolean show)
+    {
+      for (Dancer d : dancers) {
+        d.hidden = d.gender == Dancer.PHANTOM && !show;
+      }
+    }
+
+    /**
      *  Turn on drawing of dancer paths
      */
     public synchronized void setPathVisibility(boolean show)
@@ -585,6 +595,7 @@ public class AnimationView extends SurfaceView implements SurfaceHolder.Callback
     thread.setLoop(prefs.getBoolean("loop",false));
     thread.setNumbers(prefs.getBoolean("numbers",false));
     thread.setSpeed(prefs.getString("speed", "Normal"));
+    thread.setPhantomVisibility(prefs.getBoolean("phantoms",false));
     thread.setListener(listener);
     if (listener != null)
       listener.onAnimationChanged(AnimationListener.ANIMATION_READY,0f);

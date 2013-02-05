@@ -28,6 +28,7 @@ import android.graphics.Matrix;
 import android.graphics.Paint;
 import android.graphics.Paint.Style;
 import android.graphics.Path;
+import android.graphics.RectF;
 import android.util.Pair;
 
 public class Dancer {
@@ -35,6 +36,7 @@ public class Dancer {
   static public final int BOY = 1;
   static public final int GIRL = 2;
   static public final int PHANTOM = 3;
+  static private final RectF rect = new RectF(-0.5f,-0.5f,.5f,.5f);
 
   public float startx;
   public float starty;
@@ -155,16 +157,20 @@ public class Dancer {
     c.drawCircle(0.5f,0f,0.33f,p);
     p.setColor(showNumber ? Color.WHITE : fillColor);
     if (gender == BOY)
-      c.drawRect(-0.5f,-0.5f,.5f,.5f,p);
+      c.drawRect(rect,p);
     else if (gender == GIRL)
       c.drawCircle(0f,0f,.5f,p);
+    else if (gender == PHANTOM)
+      c.drawRoundRect(rect, 0.3f, 0.3f, p);
     p.setStyle(Style.STROKE);
     p.setStrokeWidth(0.1f);
     p.setColor(drawColor);
     if (gender == BOY)
-      c.drawRect(-0.5f,-0.5f,.5f,.5f,p);
+      c.drawRect(rect,p);
     else if (gender == GIRL)
       c.drawCircle(0f,0f,.5f,p);
+    else if (gender == PHANTOM)
+      c.drawRoundRect(rect, 0.3f, 0.3f, p);
     if (showNumber) {
       float[] m = new float[9];
       tx.getValues(m);

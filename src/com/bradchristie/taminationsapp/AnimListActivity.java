@@ -97,20 +97,30 @@ public class AnimListActivity extends Activity
       String from = tam.getAttribute("from");
       String group = tam.getAttribute("group");
       if (group.length() > 0) {
+        //  Add header for new group as needed
         if (!group.equals(prevgroup)) {
-          if (group.matches("\\s+"))
-            s.add(group,R.layout.calllist_separator);
+          if (group.matches("\\s+")) {
+            //  Blank group, for calls with no common starting phrase
+            //  Add a green separator unless it's the first group
+            if (s.getCount() > 0)
+              s.add(group,R.layout.calllist_separator);
+          }
           else
+            //  Named group e.g. "As Couples.."
+            //  Add a header with the group name, which starts
+            //  each call in the group
             s.add(group,R.layout.calllist_header);
         }
         from = title.replace(group," ").trim();
       }
       else if (!title.equals(prevtitle))
+        //  Not a group but a different call
+        //  Put out a header with this call
         s.add(title+" from",R.layout.calllist_header);
       prevtitle = title;
       prevgroup = group;
       posanim[s.getCount()] = i;
-      // this is the selectable one
+      // Put out a selectable item
       if (group.matches("\\s+"))
         s.add(from,R.layout.calllist_item);
       else

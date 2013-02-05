@@ -1,27 +1,38 @@
 
-<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android" >
+
     <ListPreference
-        android:key="speed"
-        android:title="Speed"
+        android:defaultValue="Normal"
         android:dialogTitle="Speed"
         android:entries="@array/preference_speed_entries"
         android:entryValues="@array/preference_speed_values"
-        android:defaultValue="Normal"
-        />
+        android:key="speed"
+        android:title="Speed" />
+
     <CheckBoxPreference
         android:defaultValue="false"
-        android:title="Loop"
-        android:key="loop"/>
+        android:key="loop"
+        android:summary="Repeat the animation continuously"
+        android:title="Loop" />
     <CheckBoxPreference
         android:defaultValue="false"
-        android:title="Grid"
-        android:key="grid"/>
+        android:key="grid"
+        android:summary="Show a dancer-sized grid on the dance floor"
+        android:title="Grid" />
     <CheckBoxPreference
         android:defaultValue="false"
-        android:title="Paths"
-        android:key="paths"/>
+        android:key="paths"
+        android:summary="Draw a line that shows each dancer&apos;s route"
+        android:title="Paths" />
     <CheckBoxPreference
         android:defaultValue="false"
-        android:title="Numbers"
-        android:key="numbers"/>
-    </PreferenceScreen>
+        android:key="numbers"
+        android:summary="Number all the dancers"
+        android:title="Numbers" />
+    <CheckBoxPreference
+        android:defaultValue="false"
+        android:key="phantoms"
+        android:summary="Show phantom dancers where used for Challenge calls"
+        android:title="Phantoms" />
+
+</PreferenceScreen>

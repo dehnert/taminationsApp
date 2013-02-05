@@ -36,6 +36,8 @@ public class DefinitionActivity extends Activity {
     SharedPreferences prefs = getSharedPreferences("Taminations",MODE_PRIVATE);
     String name = prefs.getString("link",getString(android.R.string.untitled));
     WebView defview = (WebView)findViewById(R.id.definitionView);
+    //  Turn on pinch-to-zoom, which is off(!) by default
+    defview.getSettings().setBuiltInZoomControls(true);
     defview.loadUrl("file:///android_asset/" + name);
   }
 
