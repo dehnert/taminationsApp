@@ -8,7 +8,6 @@
         android:entryValues="@array/preference_speed_values"
         android:key="speed"
         android:title="Speed" />
-
     <CheckBoxPreference
         android:defaultValue="false"
         android:key="loop"
@@ -24,10 +23,12 @@
         android:key="paths"
         android:summary="Draw a line that shows each dancer&apos;s route"
         android:title="Paths" />
-    <CheckBoxPreference
-        android:defaultValue="false"
-        android:key="numbers"
-        android:summary="Number all the dancers"
+    <ListPreference
+        android:defaultValue="Off"
+        android:dialogTitle="Numbers"
+        android:entries="@array/preference_numbers_entries"
+        android:entryValues="@array/preference_numbers_values"
+        android:key="numbers2"
         android:title="Numbers" />
     <CheckBoxPreference
         android:defaultValue="false"

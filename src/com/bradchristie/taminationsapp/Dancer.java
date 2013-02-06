@@ -36,6 +36,9 @@ public class Dancer {
   static public final int BOY = 1;
   static public final int GIRL = 2;
   static public final int PHANTOM = 3;
+  static public final int NUMBERS_OFF = 0;
+  static public final int NUMBERS_DANCERS = 1;
+  static public final int NUMBERS_COUPLES = 2;
   static private final RectF rect = new RectF(-0.5f,-0.5f,.5f,.5f);
 
   public float startx;
@@ -45,7 +48,8 @@ public class Dancer {
   public Matrix tx;
   public int hands;
   public String number;
-  public boolean showNumber = false;
+  public String number_couple;
+  public int showNumber = NUMBERS_OFF;
   public Dancer rightgrip;
   public Dancer leftgrip;
   public boolean hidden = false;
@@ -61,9 +65,11 @@ public class Dancer {
   public int fillColor;
   public int drawColor;
 
-  public Dancer(String n, int g, int c, float x, float y, float angle, List<Movement> moves)
+  public Dancer(String n, String nc, int g, int c,
+                float x, float y, float angle, List<Movement> moves)
   {
     number = n;
+    number_couple = nc;
     gender = g;
     fillColor = c;
     drawColor = Color.darker(c);
@@ -155,7 +161,7 @@ public class Dancer {
     p.setStyle(Style.FILL);
     p.setColor(drawColor);
     c.drawCircle(0.5f,0f,0.33f,p);
-    p.setColor(showNumber ? Color.WHITE : fillColor);
+    p.setColor(showNumber==NUMBERS_OFF ? fillColor : Color.WHITE);
     if (gender == BOY)
       c.drawRect(rect,p);
     else if (gender == GIRL)
@@ -171,7 +177,7 @@ public class Dancer {
       c.drawCircle(0f,0f,.5f,p);
     else if (gender == PHANTOM)
       c.drawRoundRect(rect, 0.3f, 0.3f, p);
-    if (showNumber) {
+    if (showNumber != NUMBERS_OFF) {
       float[] m = new float[9];
       tx.getValues(m);
       float angle = MathF.atan2(m[Matrix.MSKEW_X],m[Matrix.MSCALE_Y]);
@@ -185,7 +191,8 @@ public class Dancer {
       p.setTextSize(textSize);
       //  Text positioning seems to be confused by the transform
       //  These numbers were found by trial-and-error
-      c.drawText(number, -textSize*.3f, textSize*.4f, p);
+      c.drawText(showNumber==NUMBERS_DANCERS?number:number_couple,
+                 -textSize*.3f, textSize*.4f, p);
     }
   }
 

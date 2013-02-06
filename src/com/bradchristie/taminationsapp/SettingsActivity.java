@@ -32,6 +32,7 @@ public class SettingsActivity extends PreferenceActivity
 {
 
   private ListPreference speedPreference;
+  private ListPreference numbersPreference;
 
   @Override
   public void onCreate(Bundle savedInstanceState)
@@ -39,6 +40,7 @@ public class SettingsActivity extends PreferenceActivity
     super.onCreate(savedInstanceState);
     addPreferencesFromResource(R.xml.preferences);
     speedPreference = (ListPreference)getPreferenceScreen().findPreference("speed");
+    numbersPreference = (ListPreference)getPreferenceScreen().findPreference("numbers2");
   }
 
   public void onSharedPreferenceChanged(SharedPreferences prefs, String key)
@@ -48,25 +50,29 @@ public class SettingsActivity extends PreferenceActivity
       speedPreference.setSummary("Dancers move at a "+
                                  prefs.getString("speed", "Normal")+" pace");
     }
+    else if (key.equals("numbers2"))
+      numbersPreference.setSummary(prefs.getString("numbers2","Off"));
+
   }
 
   @Override
   protected void onResume()
   {
-  	super.onResume();
-  	// Set the initial speed summary
-  	SharedPreferences prefs = getPreferenceScreen().getSharedPreferences();
-  	speedPreference.setSummary("Dancers move at a "+
-  			prefs.getString("speed", "Normal")+" pace");
-  	// Set up this listener whenever a key changes
-  	prefs.registerOnSharedPreferenceChangeListener(this);
+    super.onResume();
+    // Set the initial speed summary
+    SharedPreferences prefs = getPreferenceScreen().getSharedPreferences();
+    speedPreference.setSummary("Dancers move at a "+
+        prefs.getString("speed", "Normal")+" pace");
+    numbersPreference.setSummary(prefs.getString("numbers2","Off"));
+    // Set up this listener whenever a key changes
+    prefs.registerOnSharedPreferenceChangeListener(this);
   }
 
   @Override
   protected void onPause()
   {
-  	super.onPause();
-  	// Unregister the listener
-  	getPreferenceScreen().getSharedPreferences().unregisterOnSharedPreferenceChangeListener(this);
+    super.onPause();
+    // Unregister the listener
+    getPreferenceScreen().getSharedPreferences().unregisterOnSharedPreferenceChangeListener(this);
   }
 }

@@ -199,7 +199,7 @@ public class AnimationView extends SurfaceView implements SurfaceHolder.Callback
     /**
      *   Set display of dancer numbers
      */
-    public synchronized void setNumbers(boolean numberem)
+    public synchronized void setNumbers(int numberem)
     {
       for (Dancer d : dancers)
         d.showNumber = numberem;
@@ -285,7 +285,7 @@ public class AnimationView extends SurfaceView implements SurfaceHolder.Callback
         if (c == null)
           return;  // sanity check
         //  Draw background
-        ColorDrawable cd = new ColorDrawable(0xffffffc0);
+        ColorDrawable cd = new ColorDrawable(0xfffff0e0);
         Rect candim = c.getClipBounds();
         cd.setBounds(candim);
         cd.draw(c);
@@ -495,7 +495,10 @@ public class AnimationView extends SurfaceView implements SurfaceHolder.Callback
       parts = tam.getAttribute("parts");
       NodeList flist = formation.getElementsByTagName("dancer");
       dancers = new Dancer[flist.getLength()*2];
-      int[] dancerColor = { Color.RED, Color.YELLOW, Color.LTGRAY };
+      //  Except for the phantoms, these are the standard colors
+      //  used for teaching callers
+      int[] dancerColor = { Color.RED, Color.GREEN, Color.LTGRAY,
+                            Color.BLUE, Color.YELLOW, Color.LTGRAY };
       String[] numbers = Tamination.getNumbers(tam);
       for (int i=0; i<flist.getLength(); i++) {
         Element fd = (Element)flist.item(i);
@@ -512,9 +515,10 @@ public class AnimationView extends SurfaceView implements SurfaceHolder.Callback
           g = Dancer.PHANTOM;
         Element pathelem = (Element)tam.getElementsByTagName("path").item(i);
         List<Movement> movelist = Tamination.translatePath(pathelem);
-        dancers[i*2] = new Dancer(numbers[i*2],g,dancerColor[i/2],x,y,angle,movelist);
-        dancers[i*2+1] =
-              new Dancer(numbers[i*2+1],g,Color.rotate(dancerColor[i/2]),-x,-y,angle+180f,movelist);
+        dancers[i*2] = new Dancer(numbers[i*2],String.valueOf(i/2+1),g,
+                                  dancerColor[i/2],x,y,angle,movelist);
+        dancers[i*2+1] = new Dancer(numbers[i*2+1],String.valueOf(i/2+1+flist.getLength()/2),g,
+                                    dancerColor[i/2+3],-x,-y,angle+180f,movelist);
         if (g == Dancer.PHANTOM && !showPhantoms) {
           dancers[i*2].hidden = true;
           dancers[i*2+1].hidden = true;
@@ -593,7 +597,13 @@ public class AnimationView extends SurfaceView implements SurfaceHolder.Callback
     thread.setGridVisibility(prefs.getBoolean("grid", false));
     thread.setPathVisibility(prefs.getBoolean("paths", false));
     thread.setLoop(prefs.getBoolean("loop",false));
-    thread.setNumbers(prefs.getBoolean("numbers",false));
+    String numberpref = prefs.getString("numbers2","");
+    if (numberpref.contains("1-8"))
+      thread.setNumbers(Dancer.NUMBERS_DANCERS);
+    else if (numberpref.contains("1-4"))
+      thread.setNumbers(Dancer.NUMBERS_COUPLES);
+    else
+      thread.setNumbers(Dancer.NUMBERS_OFF);
     thread.setSpeed(prefs.getString("speed", "Normal"));
     thread.setPhantomVisibility(prefs.getBoolean("phantoms",false));
     thread.setListener(listener);
