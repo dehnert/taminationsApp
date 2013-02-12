@@ -34,6 +34,11 @@ public class Color extends android.graphics.Color {
 
   static public int ORANGE = 0xffffc800;
 
+  static public int invert(int c)
+  {
+    return argb(alpha(c),255-red(c),255-green(c),255-blue(c));
+  }
+
   static public int darker(int c) {
     return argb(
         alpha(c),
@@ -42,15 +47,14 @@ public class Color extends android.graphics.Color {
         Math.round(blue(c)*FACTOR));
   }
 
-  //  not sure if this is ok ..
-  static public int rotate(int c) {
-    int retval = 0;
-    if (c == RED)
-      retval = CYAN;
-    else if (c == LTGRAY)
-      retval = LTGRAY;
-    else
-      retval = BLUE;
-    return retval;
+  static public int brighter(int c)
+  {
+    return invert(darker(invert(c)));
   }
+
+  static public int veryBright(int c)
+  {
+    return brighter(brighter(brighter(brighter(c))));
+  }
+
 }

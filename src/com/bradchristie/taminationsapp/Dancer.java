@@ -153,7 +153,6 @@ public class Dancer {
         rightgrip = null;
     } else  // End of path
       hands = Movement.BOTHHANDS;
-
   }
 
   public void draw(Canvas c) {
@@ -161,7 +160,7 @@ public class Dancer {
     p.setStyle(Style.FILL);
     p.setColor(drawColor);
     c.drawCircle(0.5f,0f,0.33f,p);
-    p.setColor(showNumber==NUMBERS_OFF ? fillColor : Color.WHITE);
+    p.setColor(showNumber==NUMBERS_OFF ? fillColor : Color.veryBright(fillColor));
     if (gender == BOY)
       c.drawRect(rect,p);
     else if (gender == GIRL)
