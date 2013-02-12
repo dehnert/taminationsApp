@@ -497,9 +497,11 @@ public class AnimationView extends SurfaceView implements SurfaceHolder.Callback
       dancers = new Dancer[flist.getLength()*2];
       //  Except for the phantoms, these are the standard colors
       //  used for teaching callers
-      int[] dancerColor = { Color.RED, Color.GREEN, Color.LTGRAY,
-                            Color.BLUE, Color.YELLOW, Color.LTGRAY };
+      int[] dancerColor = { Color.RED, Color.GREEN,
+                            Color.BLUE, Color.YELLOW,
+                            Color.LTGRAY, Color.LTGRAY };
       String[] numbers = Tamination.getNumbers(tam);
+      int[] couples = Tamination.getCouples(tam);
       for (int i=0; i<flist.getLength(); i++) {
         Element fd = (Element)flist.item(i);
         float x = Float.valueOf(fd.getAttribute("x"));
@@ -515,10 +517,10 @@ public class AnimationView extends SurfaceView implements SurfaceHolder.Callback
           g = Dancer.PHANTOM;
         Element pathelem = (Element)tam.getElementsByTagName("path").item(i);
         List<Movement> movelist = Tamination.translatePath(pathelem);
-        dancers[i*2] = new Dancer(numbers[i*2],String.valueOf(i/2+1),g,
-                                  dancerColor[i/2],x,y,angle,movelist);
-        dancers[i*2+1] = new Dancer(numbers[i*2+1],String.valueOf(i/2+1+flist.getLength()/2),g,
-                                    dancerColor[i/2+3],-x,-y,angle+180f,movelist);
+        dancers[i*2] = new Dancer(numbers[i*2],String.valueOf(couples[i*2]),g,
+                                  dancerColor[couples[i*2]-1],x,y,angle,movelist);
+        dancers[i*2+1] = new Dancer(numbers[i*2+1],String.valueOf(couples[i*2+1]),g,
+                                    dancerColor[couples[i*2+1]-1],-x,-y,angle+180f,movelist);
         if (g == Dancer.PHANTOM && !showPhantoms) {
           dancers[i*2].hidden = true;
           dancers[i*2+1].hidden = true;

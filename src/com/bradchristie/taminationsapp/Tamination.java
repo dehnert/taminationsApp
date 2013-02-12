@@ -230,4 +230,20 @@ public class Tamination {
     return retval;
   }
 
+  static int[] getCouples(Element tam)
+  {
+    int[] retval = {1,3,1,3,2,4,2,4,5,6,5,6};
+    NodeList paths = tam.getElementsByTagName("path");
+    for (int i=0; i<paths.getLength(); i++) {
+      Element p = (Element)paths.item(i);
+      String c = p.getAttribute("couples");
+      if (c.length() > 0) {
+        retval[i*2] = Integer.valueOf(c.substring(0,1));
+        retval[i*2+1] = Integer.valueOf(c.substring(2,3));
+      }
+    }
+    return retval;
+  }
+
+
 }
