@@ -141,7 +141,7 @@ public class Movement {
   public Matrix rotate(float t)
   {
     float tt = Math.min(Math.max(0,t),beats);
-    return this.brotate.rotate(tt/beats);
+    return brotate.rotate(tt/beats);
   };
 
   public void recalculate()
@@ -150,8 +150,4 @@ public class Movement {
     this.brotate = new Bezier(0f,0f,cx3,0f,cx4,cy4,x4,y4);
   }
 
-  public String toString()
-  {
-    return beats+" "+x2+" "+y2;
-  }
 }

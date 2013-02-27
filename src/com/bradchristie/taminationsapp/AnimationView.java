@@ -300,9 +300,9 @@ public class AnimationView extends SurfaceView implements SurfaceHolder.Callback
           Paint pline = new Paint();
           pline.setARGB(255,0,0,0);
           pline.setStrokeWidth(0f);
-          for (float x=-7.5f; x<=7.5f; x+=1)
+          for (float x=-7.5f; x<=7.5f; x+=1.0f)
             c.drawLine(x,-7.5f,x,7.5f,pline);
-          for (float y=-7.5f; y<=7.5f; y+=1)
+          for (float y=-7.5f; y<=7.5f; y+=1.0f)
             c.drawLine(-7.5f,y,7.5f,y,pline);
         }
         //  Draw paths if requested

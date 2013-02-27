@@ -2,8 +2,6 @@
 #  This file generates the xml files in the raw directory from
 #  the corresponding files from the Taminations project.
 #  Requires $(TAMINATIONS) to be set to the location of that project
-#  Note that the images used in the definitions are not processed here -
-#  if those are changed they need to be copied manually
 
 OBJDIR = assets
 SRC = $(wildcard $(TAMINATIONS)/*/*.xml) \

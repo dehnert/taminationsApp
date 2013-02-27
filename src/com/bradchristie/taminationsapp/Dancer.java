@@ -100,7 +100,7 @@ public class Dancer {
 
   public boolean isPhantom()
   {
-    return false;
+    return gender == PHANTOM;
   }
 
   public float beats()

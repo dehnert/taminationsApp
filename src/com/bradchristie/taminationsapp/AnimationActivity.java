@@ -145,7 +145,9 @@ public class AnimationActivity extends Activity
   @Override
   protected void onPause() {
     super.onPause();
-    mAnimationView.getThread().doPause(); // pause animation when Activity pauses
+    AnimationThread th = mAnimationView.getThread();
+    if (th != null)  // sanity check
+      th.doPause(); // pause animation when Activity pauses
   }
   public void onWindowFocusChanged (boolean hasFocus)
   {

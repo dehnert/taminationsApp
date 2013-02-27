@@ -121,24 +121,24 @@ public class Tamination {
     // TODO handle error if path not found
     List<Movement> retval = translatePath(pathelem);
     //  Now apply any modifications
-    double beats = 0;
+    float beats = 0f;
     if (moveelem.hasAttribute("beats"))
-      beats = Double.valueOf(moveelem.getAttribute("beats"));
-    double scaleX = 0;
+      beats = Float.valueOf(moveelem.getAttribute("beats"));
+    float scaleX = 0f;
     if (moveelem.hasAttribute("scaleX"))
-      scaleX = Double.valueOf(moveelem.getAttribute("scaleX"));
-    double scaleY = 0;
+      scaleX = Float.valueOf(moveelem.getAttribute("scaleX"));
+    float scaleY = 0f;
     if (moveelem.hasAttribute("scaleY"))
-      scaleY = Double.valueOf(moveelem.getAttribute("scaleY"));
-    double offsetX = 0;
+      scaleY = Float.valueOf(moveelem.getAttribute("scaleY"));
+    float offsetX = 0f;
     if (moveelem.hasAttribute("offsetX"))
-      offsetX = Double.valueOf(moveelem.getAttribute("offsetX"));
-    double offsetY = 0;
+      offsetX = Float.valueOf(moveelem.getAttribute("offsetX"));
+    float offsetY = 0f;
     if (moveelem.hasAttribute("offsetY"))
-      offsetY = Double.valueOf(moveelem.getAttribute("offsetY"));
+      offsetY = Float.valueOf(moveelem.getAttribute("offsetY"));
     String reflect = moveelem.getAttribute("reflect");
     String hands = moveelem.getAttribute("hands");
-    double oldbeats = 0;  //  If beats is given, we need to know how to scale
+    float oldbeats = 0f;  //  If beats is given, we need to know how to scale
     for  (int i=0; i<retval.size(); i++)  // each movement
       oldbeats += retval.get(i).beats;
     for  (int i=0; i<retval.size(); i++) {

@@ -60,7 +60,7 @@ public class Bezier {
     ax = x2 - x1 - cx - bx;
 
     cy = 3.0f*(ctrly1-y1);
-    by = 3.0f*(ctrly2-ctrly1) - this.cy;
+    by = 3.0f*(ctrly2-ctrly1) - cy;
     ay = y2 - y1 - cy - by;
   }
 
