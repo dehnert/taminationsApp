@@ -14,15 +14,18 @@
         android:label="@string/app_name" >
         <activity
             android:name="com.bradchristie.taminationsapp.LevelActivity"
+            android:screenOrientation="portrait"
+            android:configChanges="orientation"
             android:label="@string/app_name" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
-
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
         <activity
             android:name="com.bradchristie.taminationsapp.CallActivity"
+            android:screenOrientation="portrait"
+            android:configChanges="orientation"
             android:label="@string/title_activity_call" >
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
@@ -30,14 +33,20 @@
         </activity>
         <activity
             android:name="com.bradchristie.taminationsapp.AnimListActivity"
+            android:screenOrientation="portrait"
+            android:configChanges="orientation"
             android:label="@string/title_activity_anim_list" >
         </activity>
         <activity
             android:name="com.bradchristie.taminationsapp.AnimationActivity"
+            android:screenOrientation="portrait"
+            android:configChanges="orientation"
             android:label="@string/title_activity_animation" >
         </activity>
         <activity
             android:name="com.bradchristie.taminationsapp.SettingsActivity"
+            android:screenOrientation="portrait"
+            android:configChanges="orientation"
             android:label="@string/title_activity_settings" >
         </activity>
         <activity
@@ -46,6 +55,8 @@
         </activity>
         <activity
             android:name="com.bradchristie.taminationsapp.AboutActivity"
+            android:screenOrientation="portrait"
+            android:configChanges="orientation"
             android:label="@string/title_activity_about" >
         </activity>
     </application>

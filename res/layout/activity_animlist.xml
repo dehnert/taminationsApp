@@ -9,7 +9,48 @@
         android:id="@+id/listview_anim"
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:layout_weight="1" />
+        android:layout_weight="1.46" />
+
+    <LinearLayout
+        android:id="@+id/layout_difficulty"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding="4dp" >
+
+        <TextView
+            android:id="@+id/textView1"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:background="#ffe0e0ff"
+            android:paddingLeft="10dp"
+            android:text="@string/label_difficulty_common"
+            android:textColor="#ff000000"
+            android:textSize="20sp" />
+
+        <TextView
+            android:id="@+id/textView2"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:background="#ffffffe0"
+            android:paddingLeft="10dp"
+            android:text="@string/label_difficulty_harder"
+            android:textColor="#ff000000"
+            android:textSize="20sp" />
+
+        <TextView
+            android:id="@+id/textView3"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:background="#ffffe0e0"
+            android:paddingLeft="10dp"
+            android:text="@string/label_difficulty_expert"
+            android:textColor="#ff000000"
+            android:textSize="20sp" />
+
+    </LinearLayout>
 
    <LinearLayout
         android:layout_width="match_parent"

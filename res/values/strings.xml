@@ -33,5 +33,7 @@
     <string name="button_animation_numbers">#</string>
     <string name="title_activity_definition">DefinitionActivity</string>
     <string name="title_activity_about">About</string>
-
+    <string name="label_difficulty_common">Common</string>
+    <string name="label_difficulty_harder">Harder</string>
+    <string name="label_difficulty_expert">Expert</string>
 </resources>

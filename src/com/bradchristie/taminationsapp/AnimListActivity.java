@@ -49,21 +49,30 @@ public class AnimListActivity extends Activity
   {
     private LayoutInflater mInflater;
     private ArrayList<Integer> resources = new ArrayList<Integer>();
+    private ArrayList<Integer> difficulty = new ArrayList<Integer>();
     CallListAdapter(Context context, int textViewResourceId)
     {
       super(context,textViewResourceId);
-      mInflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+      mInflater = (LayoutInflater)context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
     }
     public View getView (int position, View convertView, ViewGroup parent)
     {
       TextView myview = (TextView)mInflater.inflate(resources.get(position),parent,false);
-      myview.setText((CharSequence) getItem(position));
+      myview.setText((CharSequence)getItem(position));
+      int d = difficulty.get(position);
+      if (d==1)
+        myview.setBackgroundColor(0xffe0e0ff);
+      else if (d==2)
+        myview.setBackgroundColor(0xffffffe0);
+      else if (d==3)
+        myview.setBackgroundColor(0xffffe0e0);
       return myview;
     }
 
-    public void add(String s, int r)
+    public void add(String s, int r, int d)
     {
       resources.add(r);
+      difficulty.add(d);
       add(s);
     }
 
@@ -89,6 +98,7 @@ public class AnimListActivity extends Activity
     posanim = new int[tams.getLength()*2];
     for (int j=0; j<posanim.length; j++)
       posanim[j] = -1;
+    int diffsum = 0;
     for (int i=0; i<tams.getLength(); i++) {
       Element tam = (Element)tams.item(i);
       if (tam.getAttribute("display").equals("none"))
@@ -96,6 +106,11 @@ public class AnimListActivity extends Activity
       String title = tam.getAttribute("title");
       String from = tam.getAttribute("from");
       String group = tam.getAttribute("group");
+      int d = 0;
+      String diffstr = tam.getAttribute("difficulty");
+      if (diffstr.length() > 0)
+        d = Integer.valueOf(diffstr);
+      diffsum += d;
       if (group.length() > 0) {
         //  Add header for new group as needed
         if (!group.equals(prevgroup)) {
@@ -103,41 +118,44 @@ public class AnimListActivity extends Activity
             //  Blank group, for calls with no common starting phrase
             //  Add a green separator unless it's the first group
             if (s.getCount() > 0)
-              s.add(group,R.layout.calllist_separator);
+              s.add(group,R.layout.calllist_separator,0);
           }
           else
             //  Named group e.g. "As Couples.."
             //  Add a header with the group name, which starts
             //  each call in the group
-            s.add(group,R.layout.calllist_header);
+            s.add(group,R.layout.calllist_header,0);
         }
         from = title.replace(group," ").trim();
       }
       else if (!title.equals(prevtitle))
         //  Not a group but a different call
         //  Put out a header with this call
-        s.add(title+" from",R.layout.calllist_header);
+        s.add(title+" from",R.layout.calllist_header,0);
       prevtitle = title;
       prevgroup = group;
       posanim[s.getCount()] = i;
       // Put out a selectable item
       if (group.matches("\\s+"))
-        s.add(from,R.layout.calllist_item);
+        s.add(from,R.layout.calllist_item,d);
       else
-        s.add(from,R.layout.calllist_indenteditem);
+        s.add(from,R.layout.calllist_indenteditem,d);
     }
     if (tams.getLength() == 0) {
       //  Special handling if there are no animations for this call
       String title = "Sorry, there are no animations for " +
           prefs.getString("call",getString(android.R.string.untitled));
-      s.add(title,R.layout.calllist_header);
+      s.add(title,R.layout.calllist_header,0);
       title = "You can view the definition by tapping here.";
-      s.add(title,R.layout.calllist_item);
+      s.add(title,R.layout.calllist_item,0);
     }
     //  Build the list of animations
     ListView lv = (ListView)findViewById(R.id.listview_anim);
     lv.setAdapter(s);
     lv.setOnItemClickListener(this);
+    //  Show the difficulty legend only if difficulties are set
+    View dv = findViewById(R.id.layout_difficulty);
+    dv.setVisibility(diffsum > 0 ? View.VISIBLE : View.GONE);
   }
 
   //  Definition

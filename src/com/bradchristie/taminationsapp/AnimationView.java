@@ -385,11 +385,11 @@ public class AnimationView extends SurfaceView implements SurfaceHolder.Callback
       }
       for (int i1=0; i1<dancers.length-1; i1++) {
         Dancer d1 = dancers[i1];
-        if (d1.isPhantom() && !this.showPhantoms)
+        if (d1.isPhantom() && !showPhantoms)
           continue;
-        for (int i2=i1+1; i2<this.dancers.length; i2++) {
+        for (int i2=i1+1; i2<dancers.length; i2++) {
           Dancer d2 = this.dancers[i2];
-          if (d2.isPhantom() && !this.showPhantoms)
+          if (d2.isPhantom() && !showPhantoms)
             continue;
           Handhold hh = Handhold.getHandhold(d1,d2);
           if (hh != null)
@@ -397,6 +397,7 @@ public class AnimationView extends SurfaceView implements SurfaceHolder.Callback
         }
       }
 
+      //  Sort the array to put best scores first
       Handhold[] hharr = new Handhold[hhlist.size()];
       hhlist.toArray(hharr);
       Arrays.sort(hharr);
