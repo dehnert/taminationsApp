@@ -27,8 +27,6 @@ import android.app.Activity;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
-import android.view.Menu;
-import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.SeekBar;
@@ -156,40 +154,12 @@ public class AnimationActivity extends Activity
     Button playbutton = (Button)findViewById(R.id.button_play);
     playbutton.setText(R.string.button_animation_play);
   }
-  @Override
-  public boolean onCreateOptionsMenu(Menu menu) {
-    // Inflate the menu; this adds items to the action bar if it is present.
-    getMenuInflater().inflate(R.menu.activity_animation, menu);
-    return true;
-  }
 
   @Override
   public void onAnimationChanged(int action, float loc)
   {
     AnimationUpdater a = new AnimationUpdater(action, loc);
     runOnUiThread(a);
-  }
-
-
-  @Override
-  public boolean onOptionsItemSelected(MenuItem item) {
-      // Handle item selection
-      switch (item.getItemId()) {
-          case R.id.menu_settings:
-              startActivity(new Intent(this,SettingsActivity.class));
-              return true;
-          case R.id.menu_definition:
-            startActivity(new Intent(this,DefinitionActivity.class));
-            return true;
-          case R.id.menu_about:
-            startActivity(new Intent(this,AboutActivity.class));
-            return true;
-          //case R.id.help:
-          //    showHelp();
-          //    return true;
-          default:
-              return super.onOptionsItemSelected(item);
-      }
   }
 
   @Override

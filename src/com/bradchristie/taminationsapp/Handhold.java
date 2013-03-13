@@ -46,7 +46,7 @@ public class Handhold implements Comparable<Handhold> {
     score = s;
   }
 
-  public static Handhold getHandhold(Dancer d1, Dancer d2)
+  public static Handhold getHandhold(Dancer d1, Dancer d2, int geometry)
   {
     if (d1.hidden || d2.hidden)
       return null;
@@ -74,12 +74,12 @@ public class Handhold implements Comparable<Handhold> {
     float dfactor1 = 0.1f;  // for distance up to 2.0
     float dfactor2 = 2.0f;  // for distance past 2.0
     float cutover = 2.0f;
-    // TODO if (d1.tamsvg.hexagon)
-    //  cutover = 2.5;
-    //if (d1.tamsvg.bigon)
-    //  cutover = 3.7;
+    if (geometry == Geometry.HEXAGON)
+      cutover = 2.5f;
+    else if (geometry == Geometry.BIGON)
+      cutover = 3.7f;
     float d = MathF.sqrt(dx*dx+dy*dy);
-    float dfactor0 =  /* this.hexagon ? 1.15 :  */ 1.0f;
+    float dfactor0 = geometry == Geometry.HEXAGON ? 1.15f : 1.0f;
     float d0 = d*dfactor0;
     float score1 = d0 > cutover ? (d0-cutover)*dfactor2+2*dfactor1 : d0*dfactor1;
     float score2 = score1;
@@ -95,8 +95,8 @@ public class Handhold implements Comparable<Handhold> {
     float ah2 = 0f;
     float afactor1 = 0.2f;
     float afactor2 = 1.0f;
-    // TODO if (d1.tamsvg.bigon)
-    //  afactor2 = 0.6;
+    if (geometry == Geometry.BIGON)
+      afactor2 = 0.6f;
     //  Dancer 1
     float a = MathF.abs(MathF.IEEEremainder(MathF.abs(a1-a0+MathF.PI*3f/2f),MathF.PI*2f));
     float ascore = a > MathF.PI/6f ? (a-MathF.PI/6f)*afactor2+MathF.PI/6f*afactor1
@@ -158,6 +158,11 @@ public class Handhold implements Comparable<Handhold> {
   public int compareTo(Handhold another)
   {
     return (int)(score*1000 - another.score*1000);
+  }
+
+  public boolean inCenter()
+  {
+    return dancer1.inCenter() && dancer2.inCenter();
   }
 
 }

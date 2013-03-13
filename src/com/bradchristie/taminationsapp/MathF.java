@@ -35,6 +35,21 @@ public class MathF
     return Math.abs(a);
   }
 
+  public static float floor(float a)
+  {
+    return FloatMath.floor(a);
+  }
+
+  public static float ceil(float a)
+  {
+    return FloatMath.ceil(a);
+  }
+
+  public static float round(float a)
+  {
+    return (float)Math.round(a);
+  }
+
   public static float atan2(float y, float x)
   {
     return (float)Math.atan2(y,x);
@@ -59,4 +74,15 @@ public class MathF
   {
     return (float)Math.IEEEremainder(a,b);
   }
+
+  public static float toRadians(float a)
+  {
+    return a * MathF.PI / 180f;
+  }
+
+  public static float toDegrees(float a)
+  {
+    return a * 180f / MathF.PI;
+  }
+
 }

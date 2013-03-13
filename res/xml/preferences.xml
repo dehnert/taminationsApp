@@ -35,5 +35,16 @@
         android:key="phantoms"
         android:summary="Show phantom dancers where used for Challenge calls"
         android:title="Phantoms" />
-
+    <ListPreference
+        android:defaultValue="None"
+        android:dialogTitle="Special Geometry"
+        android:entries="@array/preference_geometry_entries"
+        android:entryValues="@array/preference_geometry_values"
+        android:key="geometry"
+        android:title="Special Geometry" />
+    <Preference android:title="About">
+      <intent
+          android:targetPackage="com.bradchristie.taminationsapp"
+          android:targetClass="com.bradchristie.taminationsapp.AboutActivity" />
+    </Preference>
 </PreferenceScreen>

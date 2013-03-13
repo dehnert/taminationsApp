@@ -22,7 +22,7 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:background="#ffe0e0ff"
+            android:background="#ffe0ffe0"
             android:paddingLeft="10dp"
             android:text="@string/label_difficulty_common"
             android:textColor="#ff000000"

@@ -20,4 +20,14 @@
     <item>Number dancers 1-8</item>
     <item>Number couples 1-4</item>
   </array>
+  <array name="preference_geometry_entries">
+    <item>No special geometry</item>
+    <item>Hexagon</item>
+    <item>Bi-gon</item>
+  </array>
+  <array name="preference_geometry_values">
+    <item>None</item>
+    <item>Hexagon</item>
+    <item>Bi-gon</item>
+  </array>
 </resources>

@@ -20,12 +20,10 @@
 
 package com.bradchristie.taminationsapp;
 
-import android.os.Bundle;
 import android.app.Activity;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.view.Menu;
-import android.view.MenuItem;
+import android.os.Bundle;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.TextView;
@@ -36,13 +34,6 @@ public class LevelActivity extends Activity implements OnClickListener {
   protected void onCreate(Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
     setContentView(R.layout.activity_level);
-  }
-
-  @Override
-  public boolean onCreateOptionsMenu(Menu menu) {
-    // Inflate the menu; this adds items to the action bar if it is present.
-    getMenuInflater().inflate(R.menu.activity_level, menu);
-    return true;
   }
 
   /**
@@ -57,21 +48,4 @@ public class LevelActivity extends Activity implements OnClickListener {
     startActivity(new Intent(this,CallActivity.class));
   }
 
-  @Override
-  public boolean onOptionsItemSelected(MenuItem item) {
-      // Handle item selection
-      switch (item.getItemId()) {
-          case R.id.menu_settings:
-              startActivity(new Intent(this,SettingsActivity.class));
-              return true;
-          case R.id.menu_about:
-            startActivity(new Intent(this,AboutActivity.class));
-            return true;
-          //case R.id.help:
-          //    showHelp();
-          //    return true;
-          default:
-              return super.onOptionsItemSelected(item);
-      }
-  }
 }

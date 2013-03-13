@@ -31,8 +31,6 @@ import android.app.Activity;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
-import android.view.Menu;
-import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
@@ -79,36 +77,11 @@ public class CallActivity extends Activity implements OnItemClickListener {
     lv.setOnItemClickListener(this);
   }
 
-  @Override
-  public boolean onCreateOptionsMenu(Menu menu) {
-    // Inflate the menu; this adds items to the action bar if it is present.
-    getMenuInflater().inflate(R.menu.activity_call, menu);
-    return true;
-  }
-
   public void onItemClick(AdapterView<?> parent, View v, int position, long id) {
     SharedPreferences prefs = getSharedPreferences("Taminations",MODE_PRIVATE);
     prefs.edit().putString("call",mapping.get(position).get("call")).commit();
     prefs.edit().putString("link",mapping.get(position).get("link")).commit();
     startActivity(new Intent(this,AnimListActivity.class));
-  }
-
-  @Override
-  public boolean onOptionsItemSelected(MenuItem item) {
-      // Handle item selection
-      switch (item.getItemId()) {
-          case R.id.menu_settings:
-              startActivity(new Intent(this,SettingsActivity.class));
-              return true;
-          case R.id.menu_about:
-            startActivity(new Intent(this,AboutActivity.class));
-            return true;
-          //case R.id.help:
-          //    showHelp();
-          //    return true;
-          default:
-              return super.onOptionsItemSelected(item);
-      }
   }
 
 }

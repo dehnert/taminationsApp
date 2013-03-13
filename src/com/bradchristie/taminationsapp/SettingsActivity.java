@@ -33,6 +33,7 @@ public class SettingsActivity extends PreferenceActivity
 
   private ListPreference speedPreference;
   private ListPreference numbersPreference;
+  private ListPreference geometryPreference;
 
   @Override
   public void onCreate(Bundle savedInstanceState)
@@ -41,6 +42,7 @@ public class SettingsActivity extends PreferenceActivity
     addPreferencesFromResource(R.xml.preferences);
     speedPreference = (ListPreference)getPreferenceScreen().findPreference("speed");
     numbersPreference = (ListPreference)getPreferenceScreen().findPreference("numbers2");
+    geometryPreference = (ListPreference)getPreferenceScreen().findPreference("geometry");
   }
 
   public void onSharedPreferenceChanged(SharedPreferences prefs, String key)
@@ -52,18 +54,24 @@ public class SettingsActivity extends PreferenceActivity
     }
     else if (key.equals("numbers2"))
       numbersPreference.setSummary(prefs.getString("numbers2","Off"));
-
+    else if (key.equals("geometry")) {
+      String value = prefs.getString("geometry", "None");
+      if (value.equals("None"))
+        geometryPreference.setSummary("Special geometries are Hexagon and Bi-Gon");
+      else
+        geometryPreference.setSummary(value);
+    }
   }
 
   @Override
   protected void onResume()
   {
     super.onResume();
-    // Set the initial speed summary
+    // Set the initial summaries
     SharedPreferences prefs = getPreferenceScreen().getSharedPreferences();
-    speedPreference.setSummary("Dancers move at a "+
-        prefs.getString("speed", "Normal")+" pace");
-    numbersPreference.setSummary(prefs.getString("numbers2","Off"));
+    onSharedPreferenceChanged(prefs,"speed");
+    onSharedPreferenceChanged(prefs,"numbers2");
+    onSharedPreferenceChanged(prefs,"geometry");
     // Set up this listener whenever a key changes
     prefs.registerOnSharedPreferenceChangeListener(this);
   }

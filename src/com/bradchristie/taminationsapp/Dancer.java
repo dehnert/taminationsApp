@@ -16,7 +16,7 @@
     You should have received a copy of the GNU General Public License
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-*/
+ */
 
 package com.bradchristie.taminationsapp;
 
@@ -39,11 +39,10 @@ public class Dancer {
   static public final int NUMBERS_OFF = 0;
   static public final int NUMBERS_DANCERS = 1;
   static public final int NUMBERS_COUPLES = 2;
-  static private final RectF rect = new RectF(-0.5f,-0.5f,.5f,.5f);
+  static private final RectF rect = new RectF(-0.5f, -0.5f, .5f, .5f);
 
-  public float startx;
-  public float starty;
-  public float startangle;
+  public Geometry geom;
+  public Matrix starttx;
   public int gender;
   public Matrix tx;
   public int hands;
@@ -65,83 +64,83 @@ public class Dancer {
   public int fillColor;
   public int drawColor;
 
-  public Dancer(String n, String nc, int g, int c,
-                float x, float y, float angle, List<Movement> moves)
-  {
+  public Dancer(String n, String nc, int g, int c, Matrix mat,
+      Geometry geometry, List<Movement> moves) {
     number = n;
     number_couple = nc;
     gender = g;
     fillColor = c;
     drawColor = Color.darker(c);
-    startx = x;
-    starty = y;
-    startangle = angle;
+    starttx = geometry.startMatrix(mat);
+    geom = geometry;
     movelist = moves;
     // Calculate list of transforms to speed up animations
     transformlist = new ArrayList<Matrix>();
     Matrix tx = new Matrix();
-    for (Movement m :  movelist) {
+    for (Movement m : movelist) {
       Matrix tt = m.translate(999);
       tx.preConcat(tt);
       Matrix tr = m.rotate(999);
       tx.preConcat(tr);
       transformlist.add(new Matrix(tx));
     }
-    //  Compute points of path for drawing path
-    //  TODO this could use the Path.cubicTo method straight off the Beziers
+    // Compute points of path for drawing path
     pathpath = new Path();
-    pathpath.moveTo(startx,starty);
-    for (float beat=0.1f; beat<beats(); beat+=0.1f) {
+    animate(0.0f);
+    Pair<Float, Float> loc = location();
+    pathpath.moveTo(loc.first, loc.second);
+    for (float beat = 0.1f; beat < beats(); beat += 0.1f) {
       animate(beat);
-      Pair<Float,Float> loc = location();
+      loc = location();
       pathpath.lineTo(loc.first, loc.second);
     }
+    animate(-2.0f);
   }
 
-  public boolean isPhantom()
-  {
+  public boolean isPhantom() {
     return gender == PHANTOM;
   }
 
-  public float beats()
-  {
+  public float beats() {
     float retval = 0f;
     for (Movement m : movelist)
       retval += m.beats;
     return retval;
   }
 
-  public Pair<Float,Float> location()
-  {
+  public Pair<Float, Float> location() {
     float[] m = new float[9];
     tx.getValues(m);
-    return new Pair<Float,Float>(m[Matrix.MTRANS_X],m[Matrix.MTRANS_Y]);
+    return new Pair<Float, Float>(m[Matrix.MTRANS_X], m[Matrix.MTRANS_Y]);
   }
 
-  public void animate(float beat)
+  public boolean inCenter()
   {
+    Pair<Float,Float> loc = location();
+    return MathF.sqrt(loc.first*loc.first + loc.second*loc.second) < 1.1f;
+  }
+
+  public void animate(float beat) {
+    float beatin = beat;
     // Be sure to reset grips at start
     if (beat == 0)
       rightgrip = leftgrip = null;
-    //  Start to build transform
-    Matrix start = new Matrix();
-    start.preTranslate(startx, starty);
-    start.preRotate(startangle);
-    tx = start;
+    // Start to build transform
+    tx = new Matrix(starttx);
     hands = Movement.BOTHHANDS;
-    //  Apply all completed movements
+    // Apply all completed movements
     Movement m = null;
-    for (int i=0; i<movelist.size(); i++) {
+    for (int i = 0; i < movelist.size(); i++) {
       m = movelist.get(i);
       if (beat >= m.beats) {
-        tx = new Matrix(start);
+        tx = new Matrix(starttx);
         tx.preConcat(transformlist.get(i));
         beat -= movelist.get(i).beats;
         m = null;
       } else
         break;
     }
-    //  Apply movement in progress
+    // Apply movement in progress
     if (m != null) {
       tx.preConcat(m.translate(beat));
       tx.preConcat(m.rotate(beat));
@@ -151,47 +150,51 @@ public class Dancer {
         leftgrip = null;
       if ((m.hands & Movement.GRIPRIGHT) == 0)
         rightgrip = null;
-    } else  // End of path
+    } else
+      // End of path
       hands = Movement.BOTHHANDS;
+    // Modification for any special geometry
+    tx.postConcat(geom.pathMatrix(this,beatin));
   }
 
   public void draw(Canvas c) {
     Paint p = new Paint(Paint.ANTI_ALIAS_FLAG);
     p.setStyle(Style.FILL);
     p.setColor(drawColor);
-    c.drawCircle(0.5f,0f,0.33f,p);
-    p.setColor(showNumber==NUMBERS_OFF ? fillColor : Color.veryBright(fillColor));
+    c.drawCircle(0.5f, 0f, 0.33f, p);
+    p.setColor(showNumber == NUMBERS_OFF ? fillColor : Color
+        .veryBright(fillColor));
     if (gender == BOY)
-      c.drawRect(rect,p);
+      c.drawRect(rect, p);
     else if (gender == GIRL)
-      c.drawCircle(0f,0f,.5f,p);
+      c.drawCircle(0f, 0f, .5f, p);
     else if (gender == PHANTOM)
       c.drawRoundRect(rect, 0.3f, 0.3f, p);
     p.setStyle(Style.STROKE);
     p.setStrokeWidth(0.1f);
     p.setColor(drawColor);
     if (gender == BOY)
-      c.drawRect(rect,p);
+      c.drawRect(rect, p);
     else if (gender == GIRL)
-      c.drawCircle(0f,0f,.5f,p);
+      c.drawCircle(0f, 0f, .5f, p);
     else if (gender == PHANTOM)
       c.drawRoundRect(rect, 0.3f, 0.3f, p);
     if (showNumber != NUMBERS_OFF) {
       float[] m = new float[9];
       tx.getValues(m);
-      float angle = MathF.atan2(m[Matrix.MSKEW_X],m[Matrix.MSCALE_Y]);
+      float angle = MathF.atan2(m[Matrix.MSKEW_X], m[Matrix.MSCALE_Y]);
       Matrix txtext = new Matrix();
-      txtext.postRotate(-angle*180f/MathF.PI + 90f);
+      txtext.postRotate(-angle * 180f / MathF.PI + 90f);
       txtext.postScale(1f, -1f);
       c.concat(txtext);
       p.setColor(Color.BLACK);
       p.setStyle(Style.FILL);
       float textSize = 0.7f;
       p.setTextSize(textSize);
-      //  Text positioning seems to be confused by the transform
-      //  These numbers were found by trial-and-error
-      c.drawText(showNumber==NUMBERS_DANCERS?number:number_couple,
-                 -textSize*.3f, textSize*.4f, p);
+      // Text positioning seems to be confused by the transform
+      // These numbers were found by trial-and-error
+      c.drawText(showNumber == NUMBERS_DANCERS ? number : number_couple,
+          -textSize * .3f, textSize * .4f, p);
     }
   }
 

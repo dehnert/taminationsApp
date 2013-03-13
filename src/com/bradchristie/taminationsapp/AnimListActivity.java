@@ -32,8 +32,6 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.LayoutInflater;
-import android.view.Menu;
-import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
@@ -45,12 +43,12 @@ import android.widget.TextView;
 public class AnimListActivity extends Activity
        implements OnItemClickListener {
 
-  private class CallListAdapter extends ArrayAdapter<String>
+  private class AnimListAdapter extends ArrayAdapter<String>
   {
     private LayoutInflater mInflater;
     private ArrayList<Integer> resources = new ArrayList<Integer>();
     private ArrayList<Integer> difficulty = new ArrayList<Integer>();
-    CallListAdapter(Context context, int textViewResourceId)
+    AnimListAdapter(Context context, int textViewResourceId)
     {
       super(context,textViewResourceId);
       mInflater = (LayoutInflater)context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
@@ -61,11 +59,13 @@ public class AnimListActivity extends Activity
       myview.setText((CharSequence)getItem(position));
       int d = difficulty.get(position);
       if (d==1)
-        myview.setBackgroundColor(0xffe0e0ff);
+        myview.setBackgroundColor(0xffe0ffe0);
       else if (d==2)
         myview.setBackgroundColor(0xffffffe0);
       else if (d==3)
         myview.setBackgroundColor(0xffffe0e0);
+      else if (d==0)
+        myview.setBackgroundColor(0xffffffff);
       return myview;
     }
 
@@ -76,7 +76,7 @@ public class AnimListActivity extends Activity
       add(s);
     }
 
-  }  // end of CallListAdapter class
+  }  // end of AnimListAdapter class
 
   private String xmlname;
   private int[] posanim;
@@ -94,7 +94,7 @@ public class AnimListActivity extends Activity
     NodeList tams = doc.getElementsByTagName("tam");
     String prevtitle = "";
     String prevgroup = "";
-    CallListAdapter s = new CallListAdapter(this,R.layout.calllist_item);
+    AnimListAdapter s = new AnimListAdapter(this,R.layout.animlist_item);
     posanim = new int[tams.getLength()*2];
     for (int j=0; j<posanim.length; j++)
       posanim[j] = -1;
@@ -118,36 +118,36 @@ public class AnimListActivity extends Activity
             //  Blank group, for calls with no common starting phrase
             //  Add a green separator unless it's the first group
             if (s.getCount() > 0)
-              s.add(group,R.layout.calllist_separator,0);
+              s.add(group,R.layout.animlist_separator,-1);
           }
           else
             //  Named group e.g. "As Couples.."
             //  Add a header with the group name, which starts
             //  each call in the group
-            s.add(group,R.layout.calllist_header,0);
+            s.add(group,R.layout.animlist_header,-1);
         }
         from = title.replace(group," ").trim();
       }
       else if (!title.equals(prevtitle))
         //  Not a group but a different call
         //  Put out a header with this call
-        s.add(title+" from",R.layout.calllist_header,0);
+        s.add(title+" from",R.layout.animlist_header,-1);
       prevtitle = title;
       prevgroup = group;
       posanim[s.getCount()] = i;
       // Put out a selectable item
       if (group.matches("\\s+"))
-        s.add(from,R.layout.calllist_item,d);
+        s.add(from,R.layout.animlist_item,d);
       else
-        s.add(from,R.layout.calllist_indenteditem,d);
+        s.add(from,R.layout.animlist_indenteditem,d);
     }
     if (tams.getLength() == 0) {
       //  Special handling if there are no animations for this call
       String title = "Sorry, there are no animations for " +
           prefs.getString("call",getString(android.R.string.untitled));
-      s.add(title,R.layout.calllist_header,0);
+      s.add(title,R.layout.animlist_header,-1);
       title = "You can view the definition by tapping here.";
-      s.add(title,R.layout.calllist_item,0);
+      s.add(title,R.layout.animlist_item,0);
     }
     //  Build the list of animations
     ListView lv = (ListView)findViewById(R.id.listview_anim);
@@ -167,13 +167,6 @@ public class AnimListActivity extends Activity
     startActivity(new Intent(this,SettingsActivity.class));
   }
 
-  @Override
-  public boolean onCreateOptionsMenu(Menu menu) {
-    // Inflate the menu; this adds items to the action bar if it is present.
-    getMenuInflater().inflate(R.menu.activity_animlist, menu);
-    return true;
-  }
-
   public void onItemClick(AdapterView<?> parent, View v, int position, long id) {
     if (posanim.length == 0) {
       if (position >= 1)
@@ -185,27 +178,6 @@ public class AnimListActivity extends Activity
       prefs.edit().putString("xmlname",xmlname).commit();
       startActivity(new Intent(this,AnimationActivity.class));
     }
-  }
-
-  @Override
-  public boolean onOptionsItemSelected(MenuItem item) {
-      // Handle item selection
-      switch (item.getItemId()) {
-          case R.id.menu_settings:
-              startActivity(new Intent(this,SettingsActivity.class));
-              return true;
-          case R.id.menu_definition:
-              startActivity(new Intent(this,DefinitionActivity.class));
-              return true;
-          case R.id.menu_about:
-            startActivity(new Intent(this,AboutActivity.class));
-            return true;
-          //case R.id.help:
-          //    showHelp();
-          //    return true;
-          default:
-              return super.onOptionsItemSelected(item);
-      }
   }
 
 }

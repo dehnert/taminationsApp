@@ -23,7 +23,6 @@ package com.bradchristie.taminationsapp;
 import android.app.Activity;
 import android.content.SharedPreferences;
 import android.os.Bundle;
-import android.view.Menu;
 import android.webkit.WebView;
 
 public class DefinitionActivity extends Activity {
@@ -39,13 +38,6 @@ public class DefinitionActivity extends Activity {
     //  Turn on pinch-to-zoom, which is off(!) by default
     defview.getSettings().setBuiltInZoomControls(true);
     defview.loadUrl("file:///android_asset/" + name);
-  }
-
-  @Override
-  public boolean onCreateOptionsMenu(Menu menu) {
-    // Inflate the menu; this adds items to the action bar if it is present.
-    getMenuInflater().inflate(R.menu.activity_definition, menu);
-    return true;
   }
 
 }

@@ -87,14 +87,4 @@ public class Bezier {
     return retval;
   };
 
-  /*
-    public String toString()
-    {
-      return '[ '+this.x1.toFixed(1)+' '+this.y1.toFixed(1)+' '+
-                  this.ctrlx1.toFixed(1)+' '+this.ctrly1.toFixed(1)+' '+
-                  this.ctrlx2.toFixed(1)+' '+this.ctrly2.toFixed(1)+' '+
-                  this.x2.toFixed(1)+' '+this.y2.toFixed(1)+' ]';
-    };
- */
-
 }

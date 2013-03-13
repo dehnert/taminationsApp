@@ -23,6 +23,7 @@ package com.bradchristie.taminationsapp;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Vector;
 
 import org.w3c.dom.Element;
 import org.w3c.dom.NodeList;
@@ -30,6 +31,7 @@ import org.w3c.dom.NodeList;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.graphics.Canvas;
+import android.graphics.Matrix;
 import android.graphics.Paint;
 import android.graphics.Paint.Style;
 import android.graphics.Rect;
@@ -57,6 +59,8 @@ public class AnimationView extends SurfaceView implements SurfaceHolder.Callback
     private boolean showPaths = false;
     /** Indicate if the animation should repeat when the end is reached */
     private boolean loop = false;
+    /** Special geometries */
+    private int geometry = Geometry.SQUARE;
     /** Indicate if phantoms should be drawn */
     private boolean showPhantoms = false;
     /** Array of dancers in the current animation */
@@ -77,7 +81,9 @@ public class AnimationView extends SurfaceView implements SurfaceHolder.Callback
     /** Used to figure out elapsed time between frames */
     private long mLastTime;
     /** Current location in the animation */
-    private float beat = -2f;
+    private float beat = -2.0f;
+    /** Previous location  */
+    private float prevbeat = -2.0f;
 
     public AnimationThread(SurfaceHolder surfaceHolder, Context context,
         Handler handler) {
@@ -218,6 +224,18 @@ public class AnimationView extends SurfaceView implements SurfaceHolder.Callback
         speed = 500;  // default normal speed
     }
 
+    /**  Set hexagon geometry  */
+    public synchronized void setHexagon(boolean ishex)
+    {
+      geometry = Geometry.HEXAGON;
+    }
+
+    /**  Set bigon geometry  */
+    public synchronized void setBigon(boolean isbigon)
+    {
+      geometry = Geometry.BIGON;
+    }
+
     /**
      *   Return animation beats, including 2 beat intro
      */
@@ -296,14 +314,16 @@ public class AnimationView extends SurfaceView implements SurfaceHolder.Callback
         c.scale(s,-s);
         c.rotate(90f);
         //  Draw grid if on
-        if (showGrid) {
+        if (showGrid)
+          Geometry.drawGrid(geometry,c);
+        //  Always show bigon center mark
+        if (geometry == Geometry.BIGON) {
           Paint pline = new Paint();
           pline.setARGB(255,0,0,0);
+          pline.setStyle(Style.STROKE);
           pline.setStrokeWidth(0f);
-          for (float x=-7.5f; x<=7.5f; x+=1.0f)
-            c.drawLine(x,-7.5f,x,7.5f,pline);
-          for (float y=-7.5f; y<=7.5f; y+=1.0f)
-            c.drawLine(-7.5f,y,7.5f,y,pline);
+          c.drawLine(0.0f,-0.5f,0.0f,0.5f,pline);
+          c.drawLine(-0.5f,0.0f,0.5f,0.0f,pline);
         }
         //  Draw paths if requested
         if (showPaths) {
@@ -325,17 +345,29 @@ public class AnimationView extends SurfaceView implements SurfaceHolder.Callback
         hline.setStyle(Style.FILL);
         for (Dancer d: dancers) {
           Pair<Float,Float> loc = d.location();
-          if (d.rightHandVisibility && d.rightdancer.number.compareTo(d.number) < 0) {
-            Pair<Float,Float> loc2 = d.rightdancer.location();
-            c.drawLine(loc.first, loc.second, loc2.first, loc2.second, hline);
-            c.drawCircle((loc.first+loc2.first)/2f,
-                         (loc.second+loc2.second)/2f,.125f,hline);
+          if (d.rightHandVisibility) {
+            if (d.rightdancer == null) {  // hexagon center
+              c.drawLine(loc.first,loc.second,0.0f,0.0f,hline);
+              c.drawCircle(0.0f,0.0f,0.125f,hline);
+            }
+            else if (d.rightdancer.number.compareTo(d.number) < 0) {
+              Pair<Float,Float> loc2 = d.rightdancer.location();
+              c.drawLine(loc.first, loc.second, loc2.first, loc2.second, hline);
+              c.drawCircle((loc.first+loc2.first)/2f,
+                           (loc.second+loc2.second)/2f,.125f,hline);
+            }
           }
-          if (d.leftHandVisibility && d.leftdancer.number.compareTo(d.number) < 0) {
-            Pair<Float,Float> loc2 = d.leftdancer.location();
-            c.drawLine(loc.first, loc.second, loc2.first, loc2.second, hline);
-            c.drawCircle((loc.first+loc2.first)/2f,
-                         (loc.second+loc2.second)/2f,.125f,hline);
+          if (d.leftHandVisibility) {
+            if (d.leftdancer == null) {  // hexagon center
+              c.drawLine(loc.first,loc.second,0.0f,0.0f,hline);
+              c.drawCircle(0.0f,0.0f,0.125f,hline);
+            }
+            else if (d.leftdancer.number.compareTo(d.number) < 0) {
+              Pair<Float,Float> loc2 = d.leftdancer.location();
+              c.drawLine(loc.first, loc.second, loc2.first, loc2.second, hline);
+              c.drawCircle((loc.first+loc2.first)/2f,
+                           (loc.second+loc2.second)/2f,.125f,hline);
+            }
           }
         }
         //  Draw dancers
@@ -369,14 +401,16 @@ public class AnimationView extends SurfaceView implements SurfaceHolder.Callback
         beat += (float)diff/speed;
       mLastTime = now;
       //  Move dancers
-      for (int i=0; i<dancers.length; i++)
-        dancers[i].animate(beat);
-
-      //  TODO add rest of code from tamsvg.paint
-      //  specifically hexagon, bigon, barstool
+      //  For big jumps, move incrementally -
+      //  this helps hexagon and bigon compute the right location
+      float delta = beat - prevbeat;
+      int incs = (int)MathF.ceil(MathF.abs(delta));
+      for (int j=1; j<=incs; j++) {
+        for (int i=0; i<dancers.length; i++)
+          dancers[i].animate(prevbeat + (float)j*delta/(float)incs);
+      }
 
       //  Compute handholds
-      //  TODO Handhold.dfactor0 = this.hexagon ? 1.15 : 1.0;
       ArrayList<Handhold> hhlist = new ArrayList<Handhold>();
       for (Dancer d0 : dancers) {
         d0.rightdancer = d0.leftdancer = null;
@@ -391,7 +425,7 @@ public class AnimationView extends SurfaceView implements SurfaceHolder.Callback
           Dancer d2 = this.dancers[i2];
           if (d2.isPhantom() && !showPhantoms)
             continue;
-          Handhold hh = Handhold.getHandhold(d1,d2);
+          Handhold hh = Handhold.getHandhold(d1,d2,geometry);
           if (hh != null)
             hhlist.add(hh);
         }
@@ -405,14 +439,8 @@ public class AnimationView extends SurfaceView implements SurfaceHolder.Callback
       //  Apply the handholds in order from best to worst
       //  so that if a dancer has a choice it gets the best handhold
       for (Handhold hh : hharr) {
-        /*if (this.bigon) {
-          if (Math.abs(hh.d1.centerAngle()-3*Math.PI/2) < 3 &&
-              hh.d1.hands == Movement.RIGHTHAND)
-            continue;
-        }*/
         //  Check that the hands aren't already used
-        //  TODO var incenter = this.hexagon && hh.inCenter();
-        boolean incenter = false;
+        boolean incenter = geometry == Geometry.HEXAGON && hh.inCenter();
         if (incenter ||
             (hh.hold1 == Movement.RIGHTHAND && hh.dancer1.rightdancer == null ||
                 hh.hold1 == Movement.LEFTHAND && hh.dancer1.leftdancer == null) &&
@@ -473,9 +501,10 @@ public class AnimationView extends SurfaceView implements SurfaceHolder.Callback
       }
 
       //  At end of animation?
+      prevbeat = beat;
       if (beat >= beats) {
         if (loop && isRunning)
-          beat = -2f;
+          prevbeat = beat = -2f;
         else {
           doPause();
           if (listener != null)
@@ -495,7 +524,7 @@ public class AnimationView extends SurfaceView implements SurfaceHolder.Callback
         formation = Tamination.getFormation(ctx,tam.getAttribute("formation"));
       parts = tam.getAttribute("parts");
       NodeList flist = formation.getElementsByTagName("dancer");
-      dancers = new Dancer[flist.getLength()*2];
+      dancers = new Dancer[flist.getLength()*geometry];
       //  Except for the phantoms, these are the standard colors
       //  used for teaching callers
       int[] dancerColor = { Color.RED, Color.GREEN,
@@ -503,6 +532,28 @@ public class AnimationView extends SurfaceView implements SurfaceHolder.Callback
                             Color.LTGRAY, Color.LTGRAY };
       String[] numbers = Tamination.getNumbers(tam);
       int[] couples = Tamination.getCouples(tam);
+      if (geometry == Geometry.HEXAGON) {
+        String[] hexnumbers = { "A","E","I",
+                                "B","F","J",
+                                "C","G","K",
+                                "D","H","L",
+                                "u","v","w","x","y","z" };
+        numbers = hexnumbers;
+        int[] hexcouples = { 1, 3, 5, 1, 3, 5, 2, 4, 6, 2, 4, 6, 7, 8, 7, 8, 7, 8 };
+        couples = hexcouples;
+        int[] hexcolor = { Color.RED, Color.GREEN,
+                           Color.MAGENTA, Color.BLUE,
+                           Color.YELLOW, Color.CYAN,
+                           Color.LTGRAY, Color.LTGRAY };
+        dancerColor = hexcolor;
+      }
+      else if (geometry == Geometry.BIGON) {
+        String[] bigonnumbers = { "1", "2", "3", "4", "5", "6" };
+        numbers = bigonnumbers;
+        int[] bigoncouples = { 1, 2, 3, 4, 5, 6 };
+        couples = bigoncouples;
+      }
+      int dnum = 0;
       for (int i=0; i<flist.getLength(); i++) {
         Element fd = (Element)flist.item(i);
         float x = Float.valueOf(fd.getAttribute("x"));
@@ -518,15 +569,20 @@ public class AnimationView extends SurfaceView implements SurfaceHolder.Callback
           g = Dancer.PHANTOM;
         Element pathelem = (Element)tam.getElementsByTagName("path").item(i);
         List<Movement> movelist = Tamination.translatePath(pathelem);
-        dancers[i*2] = new Dancer(numbers[i*2],String.valueOf(couples[i*2]),g,
-                                  dancerColor[couples[i*2]-1],x,y,angle,movelist);
-        dancers[i*2+1] = new Dancer(numbers[i*2+1],String.valueOf(couples[i*2+1]),g,
-                                    dancerColor[couples[i*2+1]-1],-x,-y,angle+180f,movelist);
-        if (g == Dancer.PHANTOM && !showPhantoms) {
-          dancers[i*2].hidden = true;
-          dancers[i*2+1].hidden = true;
+        Vector<Geometry> geoms = Geometry.getGeometry(geometry);
+        for (Geometry geom : geoms) {
+          Matrix m = new Matrix();
+          m.postRotate(angle);
+          m.postTranslate(x, y);
+          dancers[dnum] = new Dancer(numbers[dnum],
+                                     String.valueOf(couples[dnum]),g,
+                                     dancerColor[couples[dnum]-1],
+                                     m,geom,movelist);
+          if (g == Dancer.PHANTOM && !showPhantoms)
+            dancers[dnum].hidden = true;
+          beats = Math.max(beats,dancers[dnum].beats()+2f);
+          dnum++;
         }
-        beats = Math.max(beats,dancers[i*2].beats()+2f);
       }
       dirtify();
     }
@@ -594,12 +650,17 @@ public class AnimationView extends SurfaceView implements SurfaceHolder.Callback
       public void handleMessage(Message m) {
       }
     });
-    thread.setAnimation(tam);
     SharedPreferences prefs =
         PreferenceManager.getDefaultSharedPreferences(getContext());
     thread.setGridVisibility(prefs.getBoolean("grid", false));
     thread.setPathVisibility(prefs.getBoolean("paths", false));
+    String geom = prefs.getString("geometry","None");
+    if (geom.equals("Hexagon"))
+      thread.setHexagon(true);
+    else if (geom.equals("Bi-gon"))
+      thread.setBigon(true);
     thread.setLoop(prefs.getBoolean("loop",false));
+    thread.setAnimation(tam);
     String numberpref = prefs.getString("numbers2","");
     if (numberpref.contains("1-8"))
       thread.setNumbers(Dancer.NUMBERS_DANCERS);
