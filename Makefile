@@ -4,14 +4,19 @@
 #  Requires $(TAMINATIONS) to be set to the location of that project
 
 OBJDIR = assets
-SRC = $(wildcard $(TAMINATIONS)/*/*.xml) \
-      $(wildcard $(TAMINATIONS)/*/*.html) \
-      $(wildcard $(TAMINATIONS)/*/*.png)
+TAMDIRS = ms plus adv c1 c2 c3a src
+TAMTYPES = xml html png
+SRC = $(foreach dir,$(TAMDIRS),\
+      $(foreach type,$(TAMTYPES),\
+      $(wildcard $(TAMINATIONS)/$(dir)/*.$(type))))
 
 SRCNAMES = $(subst $(TAMINATIONS),,$(SRC))
 OBJ = $(addprefix $(OBJDIR),$(SRCNAMES))
 
 all : $(OBJ)
+
+debug :
+	echo $(SRC)
 
 $(OBJ) : $(SRC)
 
