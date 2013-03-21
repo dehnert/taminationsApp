@@ -5,11 +5,16 @@
     android:orientation="vertical"
     tools:context=".AnimListActivity" >
 
+    <TextView
+        android:id="@+id/animlist_title"
+        android:text="@string/app_name"
+        style="@style/ActivityTitle" />
+
     <ListView
         android:id="@+id/listview_anim"
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:layout_weight="1.46" />
+        android:layout_weight="1" />
 
     <LinearLayout
         android:id="@+id/layout_difficulty"
@@ -22,7 +27,7 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:background="#ffe0ffe0"
+            android:background="#ffe0e0ff"
             android:paddingLeft="10dp"
             android:text="@string/label_difficulty_common"
             android:textColor="#ff000000"

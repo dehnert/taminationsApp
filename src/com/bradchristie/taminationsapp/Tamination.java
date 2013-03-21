@@ -25,6 +25,10 @@ import java.util.List;
 
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
+import javax.xml.xpath.XPath;
+import javax.xml.xpath.XPathConstants;
+import javax.xml.xpath.XPathExpressionException;
+import javax.xml.xpath.XPathFactory;
 
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
@@ -35,7 +39,14 @@ import android.content.Context;
 public class Tamination {
 
   static private Document mdoc = null;
+  static private Document fdoc = null;
 
+  /**
+   *   Convenience method to retrieve a XML document
+   * @param ctx
+   * @param name
+   * @return
+   */
   static public Document getXMLAsset(Context ctx, String name)
   {
     Document doc = null;
@@ -52,6 +63,24 @@ public class Tamination {
     return doc;
   }
 
+  /**
+   *   Convenience method to evaluate a XPath expression
+   * @param expr
+   * @param node
+   * @return
+   */
+  static public NodeList evalXPath(String expr, Object node)
+  {
+    NodeList retval = null;
+    XPath xpath = XPathFactory.newInstance().newXPath();
+    try {
+      retval = (NodeList) xpath.evaluate(expr, node, XPathConstants.NODESET);
+    } catch (XPathExpressionException e) {
+      //  TODO report error
+    }
+    return retval;
+  }
+
   static public void loadMoves(Context ctx)
   {
     if (mdoc == null)
@@ -60,15 +89,10 @@ public class Tamination {
 
   static public Element getFormation(Context ctx, String fname)
   {
-    Document fdoc = getXMLAsset(ctx,"src/formations.xml");
-    NodeList flist = fdoc.getElementsByTagName("formation");
-    for (int i=0; i<flist.getLength(); i++) {
-      Element f = (Element)flist.item(i);
-      if (f.getAttribute("name").equals(fname))
-        return f;
-    }
-    //  TODO handle this error
-    return null;
+    if (fdoc == null)
+      fdoc = getXMLAsset(ctx,"src/formations.xml");
+    NodeList flist = evalXPath("/formations/formation[@name='"+fname+"']",fdoc);
+    return (Element)flist.item(0);
   }
 
   static int maxdumps = 20;
@@ -230,16 +254,16 @@ public class Tamination {
     return retval;
   }
 
-  static int[] getCouples(Element tam)
+  static String[] getCouples(Element tam)
   {
-    int[] retval = {1,3,1,3,2,4,2,4,5,6,5,6};
+    String[] retval = {"1","3","1","3","2","4","2","4","5","6","5","6"};
     NodeList paths = tam.getElementsByTagName("path");
     for (int i=0; i<paths.getLength(); i++) {
       Element p = (Element)paths.item(i);
       String c = p.getAttribute("couples");
       if (c.length() > 0) {
-        retval[i*2] = Integer.valueOf(c.substring(0,1));
-        retval[i*2+1] = Integer.valueOf(c.substring(2,3));
+        retval[i*2] = c.substring(0,1);
+        retval[i*2+1] = c.substring(2,3);
       }
     }
     return retval;

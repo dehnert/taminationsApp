@@ -140,11 +140,63 @@ public class AnimationView extends SurfaceView implements SurfaceHolder.Callback
     }
 
     /**
+     *   Build an array of floats out of the parts of the animation
+     */
+    private float[] getPartsValues()
+    {
+      float[] retval = { -2.0f, 0.0f, beats-2.0f, beats };
+      if (parts.length() > 1) {
+        String[] t = parts.split(";");
+        retval = new float[t.length+4];
+        retval[0] = -2.0f;
+        retval[1] = 0.0f;
+        float b = 0.0f;
+        for (int i=0; i<t.length; i++) {
+          b += Float.valueOf(t[i]);
+          retval[i+2] = b;
+        }
+        retval[t.length+2] = beats - 2.0f;
+        retval[t.length+3] = beats;
+      }
+      return retval;
+    }
+
+    /**
+     *   Moves the animation to the next part
+     */
+    public synchronized void doNextPart()
+    {
+      float[] p = getPartsValues();
+      for (float x:p) {
+        if (x > beat) {
+          beat = x;
+          break;
+        }
+      }
+      dirtify();
+    }
+
+    /**
+     *   Moves the animation to the previous part
+     */
+    public synchronized void doPrevPart()
+    {
+      float[] p = getPartsValues();
+      for (int i=p.length-1; i>=0; i--) {
+        if (p[i] < beat) {
+          beat = p[i];
+          break;
+        }
+      }
+      dirtify();
+    }
+
+    /**
      *   Moves to the end of the animation, minus leadout
      */
     public synchronized void doEnd()
     {
-      beat = beats-2f;
+      beat = beats;
       dirtify();
     }
 
@@ -181,7 +233,7 @@ public class AnimationView extends SurfaceView implements SurfaceHolder.Callback
     public synchronized void setPhantomVisibility(boolean show)
     {
       for (Dancer d : dancers) {
-        d.hidden = d.gender == Dancer.PHANTOM && !show;
+        d.hidden = d.isPhantom() && !show;
       }
     }
 
@@ -307,10 +359,11 @@ public class AnimationView extends SurfaceView implements SurfaceHolder.Callback
         Rect candim = c.getClipBounds();
         cd.setBounds(candim);
         cd.draw(c);
-        //  Use dancer's coordinate system
+        //  Scale coordinate system to dancer's size
         float range = Math.min(candim.width(),candim.height());
         c.translate(candim.width()/2,candim.height()/2);
         float s = range/13.0f;
+        //  Flip and rotate
         c.scale(s,-s);
         c.rotate(90f);
         //  Draw grid if on
@@ -328,14 +381,8 @@ public class AnimationView extends SurfaceView implements SurfaceHolder.Callback
         //  Draw paths if requested
         if (showPaths) {
           for (Dancer d: dancers) {
-            if (!d.hidden) {
-              Paint ppath = new Paint();
-              //  The path color is a partly transparent version of the draw color
-              ppath.setColor(d.drawColor & 0x50ffffff);
-              ppath.setStyle(Style.STROKE);
-              ppath.setStrokeWidth(0.1f);
-              c.drawPath(d.pathpath,ppath);
-            }
+            if (!d.hidden)
+              d.drawPath(c);
           }
         }
         //  Draw handholds
@@ -350,7 +397,7 @@ public class AnimationView extends SurfaceView implements SurfaceHolder.Callback
               c.drawLine(loc.first,loc.second,0.0f,0.0f,hline);
               c.drawCircle(0.0f,0.0f,0.125f,hline);
             }
-            else if (d.rightdancer.number.compareTo(d.number) < 0) {
+            else if (d.rightdancer.compareTo(d) < 0) {
               Pair<Float,Float> loc2 = d.rightdancer.location();
               c.drawLine(loc.first, loc.second, loc2.first, loc2.second, hline);
               c.drawCircle((loc.first+loc2.first)/2f,
@@ -362,7 +409,7 @@ public class AnimationView extends SurfaceView implements SurfaceHolder.Callback
               c.drawLine(loc.first,loc.second,0.0f,0.0f,hline);
               c.drawCircle(0.0f,0.0f,0.125f,hline);
             }
-            else if (d.leftdancer.number.compareTo(d.number) < 0) {
+            else if (d.leftdancer.compareTo(d) < 0) {
               Pair<Float,Float> loc2 = d.leftdancer.location();
               c.drawLine(loc.first, loc.second, loc2.first, loc2.second, hline);
               c.drawCircle((loc.first+loc2.first)/2f,
@@ -530,8 +577,11 @@ public class AnimationView extends SurfaceView implements SurfaceHolder.Callback
       int[] dancerColor = { Color.RED, Color.GREEN,
                             Color.BLUE, Color.YELLOW,
                             Color.LTGRAY, Color.LTGRAY };
+      //  Get numbers for dancers and couples
+      //  This fetches any custom numbers that might be defined in
+      //  the animation to match a Callerlab or Ceder Chest illustration
       String[] numbers = Tamination.getNumbers(tam);
-      int[] couples = Tamination.getCouples(tam);
+      String[] couples = Tamination.getCouples(tam);
       if (geometry == Geometry.HEXAGON) {
         String[] hexnumbers = { "A","E","I",
                                 "B","F","J",
@@ -539,7 +589,9 @@ public class AnimationView extends SurfaceView implements SurfaceHolder.Callback
                                 "D","H","L",
                                 "u","v","w","x","y","z" };
         numbers = hexnumbers;
-        int[] hexcouples = { 1, 3, 5, 1, 3, 5, 2, 4, 6, 2, 4, 6, 7, 8, 7, 8, 7, 8 };
+        String[] hexcouples = { "1", "3", "5", "1", "3", "5",
+                                "2", "4", "6", "2", "4", "6",
+                                "7", "8", "7", "8", "7", "8" };
         couples = hexcouples;
         int[] hexcolor = { Color.RED, Color.GREEN,
                            Color.MAGENTA, Color.BLUE,
@@ -550,7 +602,7 @@ public class AnimationView extends SurfaceView implements SurfaceHolder.Callback
       else if (geometry == Geometry.BIGON) {
         String[] bigonnumbers = { "1", "2", "3", "4", "5", "6" };
         numbers = bigonnumbers;
-        int[] bigoncouples = { 1, 2, 3, 4, 5, 6 };
+        String[] bigoncouples = { "1", "2", "3", "4", "5", "6" };
         couples = bigoncouples;
       }
       int dnum = 0;
@@ -574,9 +626,8 @@ public class AnimationView extends SurfaceView implements SurfaceHolder.Callback
           Matrix m = new Matrix();
           m.postRotate(angle);
           m.postTranslate(x, y);
-          dancers[dnum] = new Dancer(numbers[dnum],
-                                     String.valueOf(couples[dnum]),g,
-                                     dancerColor[couples[dnum]-1],
+          dancers[dnum] = new Dancer(numbers[dnum],couples[dnum],g,
+                                     dancerColor[Integer.valueOf(couples[dnum])-1],
                                      m,geom,movelist);
           if (g == Dancer.PHANTOM && !showPhantoms)
             dancers[dnum].hidden = true;

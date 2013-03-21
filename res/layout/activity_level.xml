@@ -5,6 +5,12 @@
     android:orientation="vertical"
     tools:context=".LevelActivity" >
 
+    <TextView
+        android:text="@string/app_name"
+        style="@style/ActivityTitle"
+        android:textSize="36sp"
+         />
+
     <Button
         android:id="@+id/button_mainstream"
         android:layout_width="match_parent"

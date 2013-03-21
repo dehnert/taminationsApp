@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.bradchristie.taminationsapp"
-    android:versionCode="7"
-    android:versionName="1.0.7" >
+    android:versionCode="8"
+    android:versionName="1.0.8" >
 
     <uses-sdk
         android:minSdkVersion="8"
@@ -14,6 +14,7 @@
         android:label="@string/app_name" >
         <activity
             android:name="com.bradchristie.taminationsapp.LevelActivity"
+            android:theme="@android:style/Theme.Black.NoTitleBar"
             android:screenOrientation="portrait"
             android:configChanges="orientation"
             android:label="@string/app_name" >
@@ -26,6 +27,7 @@
             android:name="com.bradchristie.taminationsapp.CallActivity"
             android:screenOrientation="portrait"
             android:configChanges="orientation"
+            android:theme="@android:style/Theme.Black.NoTitleBar"
             android:label="@string/title_activity_call" >
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
@@ -35,12 +37,14 @@
             android:name="com.bradchristie.taminationsapp.AnimListActivity"
             android:screenOrientation="portrait"
             android:configChanges="orientation"
+            android:theme="@android:style/Theme.Black.NoTitleBar"
             android:label="@string/title_activity_anim_list" >
         </activity>
         <activity
             android:name="com.bradchristie.taminationsapp.AnimationActivity"
             android:screenOrientation="portrait"
             android:configChanges="orientation"
+            android:theme="@android:style/Theme.Black.NoTitleBar"
             android:label="@string/title_activity_animation" >
         </activity>
         <activity
@@ -51,6 +55,7 @@
         </activity>
         <activity
             android:name="com.bradchristie.taminationsapp.DefinitionActivity"
+            android:theme="@android:style/Theme.Black.NoTitleBar"
             android:label="@string/title_activity_definition" >
         </activity>
         <activity

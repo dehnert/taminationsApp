@@ -37,7 +37,7 @@ public abstract class Geometry
    * @param sym
    * @return
    */
-  abstract public Matrix pathMatrix(Dancer d, float b);
+  abstract public Matrix pathMatrix(Matrix starttx, Matrix tx, float b);
 
   /**
    * Draw a dancer-sized grid of the specific geometry
@@ -108,9 +108,8 @@ class BigonGeometry extends Geometry
     float r = MathF.sqrt(x*x+y*y);
     float startangle =
         MathF.toDegrees(MathF.atan2(matvals[Matrix.MSKEW_Y],matvals[Matrix.MSCALE_Y]));
-    float cangle = MathF.toRadians(180.0f);
-    float angle = MathF.atan2(y,x)+cangle;
-    float bigangle = angle*2.0f-cangle;
+    float angle = MathF.atan2(y,x)+MathF.PI;
+    float bigangle = angle*2.0f-MathF.PI;
     x = r*MathF.cos(bigangle);
     y = r*MathF.sin(bigangle);
     startangle += MathF.toDegrees(angle);
@@ -121,21 +120,21 @@ class BigonGeometry extends Geometry
   }
 
   @Override
-  public Matrix pathMatrix(Dancer d, float beat)
+  public Matrix pathMatrix(Matrix starttx, Matrix tx, float beat)
   {
     //  Get dancer's start angle and current angle
     float[] matvals = new float[9];
-    d.starttx.getValues(matvals);
+    starttx.getValues(matvals);
     float x = matvals[Matrix.MTRANS_X];
     float y = matvals[Matrix.MTRANS_Y];
     float a0 = MathF.atan2(y,x);
-    d.tx.getValues(matvals);
+    tx.getValues(matvals);
     x = matvals[Matrix.MTRANS_X];
     y = matvals[Matrix.MTRANS_Y];
     float a1 = MathF.atan2(y,x);
     if (beat <= 0.0)
-      this.prevangle = a1;
-    float wrap = MathF.round((a1-this.prevangle)/(MathF.PI*2.0f));
+      prevangle = a1;
+    float wrap = MathF.round((a1-prevangle)/(MathF.PI*2.0f));
     a1 -= wrap*MathF.PI*2;
     float a2 = a1 - a0;
     Matrix m = new Matrix();
@@ -185,7 +184,7 @@ class SquareGeometry extends Geometry
   }
 
   @Override
-  public Matrix pathMatrix(Dancer d, float b)
+  public Matrix pathMatrix(Matrix starttx, Matrix tx, float b)
   {
     //  No additional transform needed for squares
     return new Matrix();
@@ -213,6 +212,7 @@ class HexagonGeometry extends Geometry
   @Override
   public Matrix startMatrix(Matrix mat)
   {
+    //  TODO use radians instead of degrees?
     float a = 120f*rotnum;
     float[] matvals = new float[9];
     mat.getValues(matvals);
@@ -222,7 +222,7 @@ class HexagonGeometry extends Geometry
     float startangle =
         MathF.toDegrees(MathF.atan2(matvals[Matrix.MSKEW_Y],matvals[Matrix.MSCALE_Y]));
     float angle = MathF.toDegrees(MathF.atan2(y,x));
-    float dangle = angle < 0 ? -(180f+angle)/3f : (180f-angle)/3f;
+    float dangle = angle < 0.0f ? -(180f+angle)/3f : (180f-angle)/3f;
     x = r * MathF.cos(MathF.toRadians(angle+dangle+a));
     y = r * MathF.sin(MathF.toRadians(angle+dangle+a));
     startangle += a + dangle;
@@ -233,15 +233,15 @@ class HexagonGeometry extends Geometry
   }
 
   @Override
-  public Matrix pathMatrix(Dancer d, float beat)
+  public Matrix pathMatrix(Matrix starttx, Matrix tx, float beat)
   {
     //  Get dancer's start angle and current angle
     float[] matvals = new float[9];
-    d.starttx.getValues(matvals);
+    starttx.getValues(matvals);
     float x = matvals[Matrix.MTRANS_X];
     float y = matvals[Matrix.MTRANS_Y];
     float a0 = MathF.atan2(y,x);
-    d.tx.getValues(matvals);
+    tx.getValues(matvals);
     x = matvals[Matrix.MTRANS_X];
     y = matvals[Matrix.MTRANS_Y];
     float a1 = MathF.atan2(y,x);

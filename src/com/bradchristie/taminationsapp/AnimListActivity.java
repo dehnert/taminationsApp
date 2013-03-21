@@ -59,7 +59,7 @@ public class AnimListActivity extends Activity
       myview.setText((CharSequence)getItem(position));
       int d = difficulty.get(position);
       if (d==1)
-        myview.setBackgroundColor(0xffe0ffe0);
+        myview.setBackgroundColor(0xffe0e0f0);
       else if (d==2)
         myview.setBackgroundColor(0xffffffe0);
       else if (d==3)
@@ -86,9 +86,19 @@ public class AnimListActivity extends Activity
     super.onCreate(savedInstanceState);
     setContentView(R.layout.activity_animlist);
     SharedPreferences prefs = getSharedPreferences("Taminations",MODE_PRIVATE);
-    setTitle(prefs.getString("call",getString(android.R.string.untitled)));
+    //  Set the title
+    TextView titleView = (TextView)findViewById(R.id.animlist_title);
+    String titlestr = prefs.getString("call",getString(android.R.string.untitled));
+    if (titlestr.length() > 40)
+      titleView.setTextSize(18.0f);
+    else if (titlestr.length() > 16)
+      titleView.setTextSize(24.0f);
+    else
+      titleView.setTextSize(36.0f);
+    titleView.setText(titlestr);
+
+    //  Fetch the list of animations and build the table
     xmlname = prefs.getString("link",getString(android.R.string.untitled)).replace("html", "xml");
-    //  For now, ignore links to specific animations
     //  Read the xml file and build the list of animations
     Document doc = Tamination.getXMLAsset(this,xmlname);
     NodeList tams = doc.getElementsByTagName("tam");
@@ -169,10 +179,12 @@ public class AnimListActivity extends Activity
 
   public void onItemClick(AdapterView<?> parent, View v, int position, long id) {
     if (posanim.length == 0) {
+      //  Click on definition item of calls with no animations
       if (position >= 1)
         startActivity(new Intent(this,DefinitionActivity.class));
     }
     else if (posanim[position] >= 0) {
+      //  Save info and start animation activity
       SharedPreferences prefs = getSharedPreferences("Taminations",MODE_PRIVATE);
       prefs.edit().putInt("anim",posanim[position]).commit();
       prefs.edit().putString("xmlname",xmlname).commit();

@@ -12,7 +12,6 @@
     <string name="button_level_c1">C-1</string>
     <string name="button_level_c2">C-2</string>
     <string name="button_level_c3a">C-3A</string>
-    <string name="hello_world">Hello world!</string>
     <string name="title_activity_anim_list">AnimListActivity</string>
     <string name="title_activity_animation">AnimationActivity</string>
     <string name="title_activity_settings">Settings</string>
@@ -31,7 +30,7 @@
     <string name="button_animation_forward">&gt;|</string>
     <string name="button_animation_end">&gt;&gt;</string>
     <string name="button_animation_numbers">#</string>
-    <string name="title_activity_definition">DefinitionActivity</string>
+    <string name="title_activity_definition">Callerlab Definition</string>
     <string name="title_activity_about">About</string>
     <string name="label_difficulty_common">Common</string>
     <string name="label_difficulty_harder">Harder</string>

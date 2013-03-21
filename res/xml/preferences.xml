@@ -1,5 +1,5 @@
 
-<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android" >
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
 
     <ListPreference
         android:defaultValue="Normal"
@@ -47,4 +47,5 @@
           android:targetPackage="com.bradchristie.taminationsapp"
           android:targetClass="com.bradchristie.taminationsapp.AboutActivity" />
     </Preference>
+
 </PreferenceScreen>

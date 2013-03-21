@@ -31,7 +31,7 @@ import android.graphics.Path;
 import android.graphics.RectF;
 import android.util.Pair;
 
-public class Dancer {
+public class Dancer implements Comparable<Dancer> {
 
   static public final int BOY = 1;
   static public final int GIRL = 2;
@@ -41,31 +41,43 @@ public class Dancer {
   static public final int NUMBERS_COUPLES = 2;
   static private final RectF rect = new RectF(-0.5f, -0.5f, .5f, .5f);
 
-  public Geometry geom;
-  public Matrix starttx;
-  public int gender;
   public Matrix tx;
   public int hands;
-  public String number;
-  public String number_couple;
   public int showNumber = NUMBERS_OFF;
   public Dancer rightgrip;
   public Dancer leftgrip;
   public boolean hidden = false;
-  public List<Movement> movelist;
-  public List<Matrix> transformlist;
   public Dancer rightdancer;
   public Dancer leftdancer;
   public boolean rightHandVisibility;
   public boolean leftHandVisibility;
   public boolean rightHandNewVisibility;
   public boolean leftHandNewVisibility;
-  public Path pathpath;
-  public int fillColor;
-  public int drawColor;
 
+  private int gender;
+  private String number;
+  private String number_couple;
+  private Geometry geom;
+  private Matrix starttx;
+  private List<Movement> movelist;
+  private List<Matrix> transformlist;
+  private Path pathpath;
+  private int fillColor;
+  private int drawColor;
+
+  /**
+   *     Constructor for a new dancer
+   * @param n    Number to show when Number display is on
+   * @param nc   Number to show when Couples Number display is on
+   * @param g    Gender - boy, girl, phantom
+   * @param c    Base color
+   * @param mat  Transform for dancer's start position
+   * @param geometry  Square, Bigon, Hexagon
+   * @param moves   List of Movements for dancer's path
+   */
   public Dancer(String n, String nc, int g, int c, Matrix mat,
       Geometry geometry, List<Movement> moves) {
+    //  Save all the parameters
     number = n;
     number_couple = nc;
     gender = g;
@@ -94,6 +106,7 @@ public class Dancer {
       loc = location();
       pathpath.lineTo(loc.first, loc.second);
     }
+    //  Restore dancer to start position
     animate(-2.0f);
   }
 
@@ -101,6 +114,9 @@ public class Dancer {
     return gender == PHANTOM;
   }
 
+  /**
+   * @return  Total number of beats used by dancer's path
+   */
   public float beats() {
     float retval = 0f;
     for (Movement m : movelist)
@@ -108,18 +124,30 @@ public class Dancer {
     return retval;
   }
 
+  /**
+   *   Get dancer's location, presumably after animate has been called
+   * @return  (x,y) location
+   */
   public Pair<Float, Float> location() {
     float[] m = new float[9];
     tx.getValues(m);
     return new Pair<Float, Float>(m[Matrix.MTRANS_X], m[Matrix.MTRANS_Y]);
   }
 
+  /**
+   *   Used for hexagon handholds
+   * @return  True if dancer is close enough to center to make a center star
+   */
   public boolean inCenter()
   {
     Pair<Float,Float> loc = location();
     return MathF.sqrt(loc.first*loc.first + loc.second*loc.second) < 1.1f;
   }
 
+  /**
+   *   Move dancer to location along path
+   * @param beat
+   */
   public void animate(float beat) {
     float beatin = beat;
     // Be sure to reset grips at start
@@ -154,14 +182,35 @@ public class Dancer {
       // End of path
       hands = Movement.BOTHHANDS;
     // Modification for any special geometry
-    tx.postConcat(geom.pathMatrix(this,beatin));
+    tx.postConcat(geom.pathMatrix(this.starttx,this.tx,beatin));
   }
 
+  /**
+   *   Draw the entire dancer's path as a translucent colored line
+   * @param c  Canvas to draw to
+   */
+  public void drawPath(Canvas c)
+  {
+    Paint ppath = new Paint();
+    //  The path color is a partly transparent version of the draw color
+    ppath.setColor(drawColor & 0x50ffffff);
+    ppath.setStyle(Style.STROKE);
+    ppath.setStrokeWidth(0.1f);
+    c.drawPath(pathpath,ppath);
+  }
+
+  /**
+   *   Draw the dancer at its current location
+   * @param c  Canvas to draw to
+   */
   public void draw(Canvas c) {
+    //  On Android, anti-alias smoothing is not the default
     Paint p = new Paint(Paint.ANTI_ALIAS_FLAG);
+    //  Draw the head
     p.setStyle(Style.FILL);
     p.setColor(drawColor);
     c.drawCircle(0.5f, 0f, 0.33f, p);
+    //  Draw the body
     p.setColor(showNumber == NUMBERS_OFF ? fillColor : Color
         .veryBright(fillColor));
     if (gender == BOY)
@@ -170,6 +219,7 @@ public class Dancer {
       c.drawCircle(0f, 0f, .5f, p);
     else if (gender == PHANTOM)
       c.drawRoundRect(rect, 0.3f, 0.3f, p);
+    //  Draw the body outline
     p.setStyle(Style.STROKE);
     p.setStrokeWidth(0.1f);
     p.setColor(drawColor);
@@ -179,7 +229,11 @@ public class Dancer {
       c.drawCircle(0f, 0f, .5f, p);
     else if (gender == PHANTOM)
       c.drawRoundRect(rect, 0.3f, 0.3f, p);
+    //  Draw number if on
     if (showNumber != NUMBERS_OFF) {
+      //  The dancer is rotated relative to the display, but of course
+      //  the dancer number should not be rotated.
+      //  So the number needs to be transformed back
       float[] m = new float[9];
       tx.getValues(m);
       float angle = MathF.atan2(m[Matrix.MSKEW_X], m[Matrix.MSCALE_Y]);
@@ -196,6 +250,12 @@ public class Dancer {
       c.drawText(showNumber == NUMBERS_DANCERS ? number : number_couple,
           -textSize * .3f, textSize * .4f, p);
     }
+  }
+
+  @Override
+  public int compareTo(Dancer d)
+  {
+    return number.compareTo(d.number);
   }
 
 }

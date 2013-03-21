@@ -5,11 +5,34 @@
     android:orientation="vertical"
     tools:context=".AnimationActivity" >
 
-    <com.bradchristie.taminationsapp.AnimationView
-        android:id="@+id/animation"
-        android:layout_width="match_parent"
+    <TextView
+        android:id="@+id/animation_title"
+        android:text="@string/app_name"
+        style="@style/ActivityTitle" />
+
+    <RelativeLayout
+        android:layout_width="fill_parent"
         android:layout_height="0dp"
-        android:layout_weight="1" />
+        android:layout_weight="1" >
+
+        <com.bradchristie.taminationsapp.AnimationView
+            android:id="@+id/animation"
+            android:layout_width="fill_parent"
+            android:layout_height="fill_parent" />
+
+        <TextView
+            android:id="@+id/text_tamsays"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentTop="true"
+            android:textColor="#ff000000"
+            android:textStyle="italic"
+            android:background="#80ffffff"
+            android:text=""
+            android:textAppearance="?android:attr/textAppearanceMedium" />
+
+    </RelativeLayout>
 
     <SeekBar
         android:id="@+id/seekBar1"
@@ -26,50 +49,50 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content" >
 
-        <Button
+        <ImageButton
             android:id="@+id/button_rewind"
-            style="@style/BWButton"
+            android:src="@android:drawable/ic_media_rew"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:onClick="onButtonRewindClicked"
-            android:text="@string/button_animation_rewind" />
+            android:contentDescription="@string/button_animation_rewind" />
 
-        <Button
+        <ImageButton
             android:id="@+id/button_prev"
-            style="@style/BWButton"
+            android:src="@android:drawable/ic_media_previous"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:onClick="onButtonBackupClicked"
-            android:text="@string/button_animation_prev" />
+            android:contentDescription="@string/button_animation_prev" />
 
-        <Button
+        <ImageButton
             android:id="@+id/button_play"
-            style="@style/BWButton"
+            android:src="@drawable/button_play"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:onClick="onButtonPlayClicked"
-            android:text="@string/button_animation_play" />
+            android:contentDescription="@string/button_animation_play"/>
 
-        <Button
+        <ImageButton
             android:id="@+id/button_next"
-            style="@style/BWButton"
+            android:src="@android:drawable/ic_media_next"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:onClick="onButtonForwardClicked"
-            android:text="@string/button_animation_next" />
+            android:contentDescription="@string/button_animation_next" />
 
-        <Button
+        <ImageButton
             android:id="@+id/button_end"
-            style="@style/BWButton"
+            android:src="@android:drawable/ic_media_ff"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:onClick="onButtonEndClicked"
             android:layout_weight="1"
-            android:text="@string/button_animation_end" />
+            android:contentDescription="@string/button_animation_end" />
 
 
       </LinearLayout>

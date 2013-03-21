@@ -36,9 +36,16 @@ import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.ListView;
 import android.widget.SimpleAdapter;
+import android.widget.TextView;
 
 public class CallActivity extends Activity implements OnItemClickListener {
 
+  /**
+   *   This is an array of hashes, one array entry for each call,
+   *   in alphabetical order as given by the list in menus.xml
+   *   Each hash has two entries
+   *       "call" - the displayed name of the call
+   *       "link" - where to fetch the html and xml files for the call  */
   private ArrayList<HashMap<String,String>> mapping;
 
   @Override
@@ -48,27 +55,20 @@ public class CallActivity extends Activity implements OnItemClickListener {
     //  Set the title to the current dance level
     SharedPreferences prefs = getSharedPreferences("Taminations",MODE_PRIVATE);
     String levelname = prefs.getString("level",getString(android.R.string.untitled));
-    setTitle(levelname);
-
+    TextView titleView = (TextView)findViewById(R.id.call_title);
+    titleView.setText(levelname);
+    //  Fetch all the calls for this level and store in the array of hashes
     mapping = new ArrayList<HashMap<String,String>>();
     Document doc = Tamination.getXMLAsset(this,"src/menus.xml");
-    NodeList list1 = doc.getElementsByTagName("menulist");
-    for (int i=0; i<list1.getLength(); i++) {
-      Element e1 = (Element)list1.item(i);
-      if (e1.getAttribute("title").equals(levelname)) {
-        NodeList list2 = e1.getElementsByTagName("menuitem");
-        for (int j=0; j<list2.getLength(); j++) {
-          Element e2 = (Element)list2.item(j);
-          HashMap<String,String> map = new HashMap<String,String>();
-          map.put("call",e2.getAttribute("text"));
-          //  For now, ignore specific animations in links
-          map.put("link",e2.getAttribute("link").replaceAll("[\\?#].*",""));
-          mapping.add(map);
-        }
-      }
+    NodeList list1 = Tamination.evalXPath("/menu/menulist[@title='"+levelname+"']/menuitem",doc);
+    for (int j=0; j<list1.getLength(); j++) {
+      Element e1 = (Element)list1.item(j);
+      HashMap<String,String> map = new HashMap<String,String>();
+      map.put("call",e1.getAttribute("text"));
+      map.put("link",e1.getAttribute("link"));
+      mapping.add(map);
     }
-
-    //  Build the list of calls
+    //  Build the list of calls in the way Android wants it
     String[] from = { "call" };
     int[] to = { R.id.button_calllist };
     SimpleAdapter s = new SimpleAdapter(this,mapping,R.layout.calllist_item,from,to);
@@ -77,10 +77,13 @@ public class CallActivity extends Activity implements OnItemClickListener {
     lv.setOnItemClickListener(this);
   }
 
+  //  Process a click on one of the calls
   public void onItemClick(AdapterView<?> parent, View v, int position, long id) {
+    //  Save the call info
     SharedPreferences prefs = getSharedPreferences("Taminations",MODE_PRIVATE);
     prefs.edit().putString("call",mapping.get(position).get("call")).commit();
     prefs.edit().putString("link",mapping.get(position).get("link")).commit();
+    //  Start the next activity
     startActivity(new Intent(this,AnimListActivity.class));
   }
 
