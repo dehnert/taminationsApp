@@ -30,11 +30,11 @@ import android.view.View;
 
 public class SliderTicView extends View
 {
-  private float beats = 0f;
+  private double beats = 0f;
   private Rect candim = new Rect();
   private ColorDrawable cd = new ColorDrawable(0xff008000);
   private Paint p = new Paint();
-  private float[] parts = null;
+  private double[] parts = null;
 
   public SliderTicView(Context context, AttributeSet attrs)
   {
@@ -43,47 +43,47 @@ public class SliderTicView extends View
 
   protected void onDraw(Canvas c)
   {
-    float x = 0f;
+    double x = 0.0;
     //  Clear background
     c.getClipBounds(candim);
     cd.setBounds(candim);
     cd.draw(c);
-    if (beats > 0f) {
+    if (beats > 0.0) {
       //  Draw tic marks
       p.setColor(Color.WHITE);
       p.setStrokeWidth(0f);
-      for (float loc=1f; loc<beats; loc+=1f) {
-        x = (float)candim.left+(float)candim.width()*loc/beats;
-        c.drawLine(x, 0, x, 10, p);
+      for (double loc=1.0; loc<beats; loc+=1.0) {
+        x = candim.left+candim.width()*loc/beats;
+        c.drawLine((float)x, 0f, (float)x, 10f, p);
       }
       //  Draw tic labels
-      float y = 30f;
-      x = (float)candim.left+(float)candim.width()*2f/beats;
+      double y = 30.0;
+      x = candim.left+candim.width()*2f/beats;
       p.setTextSize(20f);
       p.setTextAlign(Paint.Align.CENTER);
-      c.drawText("Start",x,y,p);
-      x = (float)candim.left+(float)candim.width()*(beats-2f)/beats;
-      c.drawText("End",x,y,p);
+      c.drawText("Start",(float)x,(float)y,p);
+      x = candim.left+candim.width()*(beats-2.0)/beats;
+      c.drawText("End",(float)x,(float)y,p);
       if (parts != null) {
         String denom = String.valueOf(parts.length+1);
         for (int i=0; i<parts.length; i++) {
           String numer = String.valueOf(i+1);
-          x = (float)candim.left+(float)candim.width()*(2f+parts[i])/beats;
-          c.drawText(numer+"/"+denom,x,y,p);
+          x = candim.left+candim.width()*(2.0+parts[i])/beats;
+          c.drawText(numer+"/"+denom,(float)x,(float)y,p);
         }
       }
     }
   }
 
-  public void setTics(float b, String partstr)
+  public void setTics(double b, String partstr)
   {
     beats = b;
     if (partstr.length() > 0) {
       String[] t = partstr.split(";");
-      parts = new float[t.length];
-      float s = 0f;
+      parts = new double[t.length];
+      double s = 0f;
       for (int i=0; i<t.length; i++) {
-        float p = Float.valueOf(t[i]);
+        double p = Float.valueOf(t[i]);
         parts[i] = p + s;
         s += p;
       }
