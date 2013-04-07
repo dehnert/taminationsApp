@@ -44,11 +44,13 @@ public class AnimationActivity extends Activity
   private class AnimationUpdater implements Runnable
   {
     private int action;
-    private float loc;
-    public AnimationUpdater(int action, float loc)
+    private double loc;
+    private double beat;
+    public AnimationUpdater(int action, double loc, double beat)
     {
       this.action = action;
       this.loc = loc;
+      this.beat = beat;
     }
     public void run() {
       switch (action) {
@@ -63,6 +65,12 @@ public class AnimationActivity extends Activity
         SeekBar sb = (SeekBar)findViewById(R.id.seekBar1);
         float m = (float)sb.getMax();
         sb.setProgress((int)(loc*m));
+        //  Fade out any Taminator text
+        int a = (int)Math.floor(Math.max(-beat/2.01,0.0)*256.0);
+        TextView tamsaysview = (TextView)findViewById(R.id.text_tamsays);
+        //  setAlpha would be easier but not available for API 10
+        tamsaysview.setTextColor(a<<24);
+        tamsaysview.setBackgroundColor(((a*3/4)<<24) | 0x00ffffff);
         break;
       case ANIMATION_DONE :
         ImageButton playbutton = (ImageButton)findViewById(R.id.button_play);
@@ -200,9 +208,9 @@ public class AnimationActivity extends Activity
   }
 
   @Override
-  public void onAnimationChanged(int action, float loc)
+  public void onAnimationChanged(int action, double loc, double beat)
   {
-    AnimationUpdater a = new AnimationUpdater(action, loc);
+    AnimationUpdater a = new AnimationUpdater(action, loc, beat);
     runOnUiThread(a);
   }
 
@@ -218,8 +226,7 @@ public class AnimationActivity extends Activity
   {
     if (fromUser) {
       mAnimationThread = mAnimationView.getThread();
-      float loc = (float)progress * mAnimationThread.getBeats()
-                                  / (float)seekBar.getMax();
+      double loc = progress * mAnimationThread.getBeats() / seekBar.getMax();
       mAnimationThread.setLocation(loc);
     }
   }

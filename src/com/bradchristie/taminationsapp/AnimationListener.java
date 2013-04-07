@@ -26,6 +26,6 @@ public interface AnimationListener
   public static final int ANIMATION_PROGRESS = 2;
   public static final int ANIMATION_DONE = 3;
 
-  public void onAnimationChanged(int action, float loc);
+  public void onAnimationChanged(int action, double loc, double beat);
 
 }

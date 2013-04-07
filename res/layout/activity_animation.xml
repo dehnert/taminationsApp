@@ -28,7 +28,7 @@
             android:layout_alignParentTop="true"
             android:textColor="#ff000000"
             android:textStyle="italic"
-            android:background="#80ffffff"
+            android:background="#c0ffffff"
             android:text=""
             android:textAppearance="?android:attr/textAppearanceMedium" />
 

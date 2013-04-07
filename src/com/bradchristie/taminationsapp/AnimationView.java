@@ -37,7 +37,6 @@ import android.graphics.Paint.Style;
 import android.graphics.Rect;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Handler;
-import android.os.Message;
 import android.preference.PreferenceManager;
 import android.util.AttributeSet;
 import android.util.Pair;
@@ -68,8 +67,8 @@ public class AnimationView extends SurfaceView implements SurfaceHolder.Callback
     /** Context from application */
     private Context ctx;
     /** Total length of the animation */
-    private float beats = 0f;
-    private float speed = 500f;
+    private double beats = 0f;
+    private double speed = 500f;
     private AnimationListener listener = null;
     private boolean dirty = false;
     /** Parts string from formation, for passing to tic labeler  */
@@ -81,9 +80,9 @@ public class AnimationView extends SurfaceView implements SurfaceHolder.Callback
     /** Used to figure out elapsed time between frames */
     private long mLastTime;
     /** Current location in the animation */
-    private float beat = -2.0f;
+    private double beat = -2.0f;
     /** Previous location  */
-    private float prevbeat = -2.0f;
+    private double prevbeat = -2.0f;
 
     public AnimationThread(SurfaceHolder surfaceHolder, Context context,
         Handler handler) {
@@ -98,7 +97,7 @@ public class AnimationView extends SurfaceView implements SurfaceHolder.Callback
     {
       mLastTime = System.currentTimeMillis();
       if (beat > beats)
-        beat = -2f;
+        beat = -2.0;
       isAlive = true;
       isRunning = true;
       dirtify();
@@ -117,7 +116,7 @@ public class AnimationView extends SurfaceView implements SurfaceHolder.Callback
      */
     public synchronized void doRewind()
     {
-      beat = -2f;
+      beat = -2.0;
       dirtify();
     }
 
@@ -126,7 +125,7 @@ public class AnimationView extends SurfaceView implements SurfaceHolder.Callback
      */
     public synchronized void doBackup()
     {
-      beat = Math.max(beat-0.1f, -2f);
+      beat = Math.max(beat-0.1, -2.0);
       dirtify();
     }
 
@@ -135,27 +134,27 @@ public class AnimationView extends SurfaceView implements SurfaceHolder.Callback
      */
     public synchronized void doForward()
     {
-      beat = Math.min(beat+0.1f, beats);
+      beat = Math.min(beat+0.1, beats);
       dirtify();
     }
 
     /**
      *   Build an array of floats out of the parts of the animation
      */
-    private float[] getPartsValues()
+    private double[] getPartsValues()
     {
-      float[] retval = { -2.0f, 0.0f, beats-2.0f, beats };
-      if (parts.length() > 1) {
+      double[] retval = { -2.0f, 0.0f, beats-2.0f, beats };
+      if (parts.length() > 0) {
         String[] t = parts.split(";");
-        retval = new float[t.length+4];
-        retval[0] = -2.0f;
-        retval[1] = 0.0f;
-        float b = 0.0f;
+        retval = new double[t.length+4];
+        retval[0] = -2.0;
+        retval[1] = 0.0;
+        double b = 0.0;
         for (int i=0; i<t.length; i++) {
-          b += Float.valueOf(t[i]);
+          b += Double.valueOf(t[i]);
           retval[i+2] = b;
         }
-        retval[t.length+2] = beats - 2.0f;
+        retval[t.length+2] = beats - 2.0;
         retval[t.length+3] = beats;
       }
       return retval;
@@ -166,8 +165,8 @@ public class AnimationView extends SurfaceView implements SurfaceHolder.Callback
      */
     public synchronized void doNextPart()
     {
-      float[] p = getPartsValues();
-      for (float x:p) {
+      double[] p = getPartsValues();
+      for (double x:p) {
         if (x > beat) {
           beat = x;
           break;
@@ -181,7 +180,7 @@ public class AnimationView extends SurfaceView implements SurfaceHolder.Callback
      */
     public synchronized void doPrevPart()
     {
-      float[] p = getPartsValues();
+      double[] p = getPartsValues();
       for (int i=p.length-1; i>=0; i--) {
         if (p[i] < beat) {
           beat = p[i];
@@ -269,11 +268,11 @@ public class AnimationView extends SurfaceView implements SurfaceHolder.Callback
     public synchronized void setSpeed(String myspeed)
     {
       if (myspeed.equals("Slow"))
-        speed = 1500f;
+        speed = 1500.0;
       else if (myspeed.equals("Fast"))
-        speed = 200;
+        speed = 200.0;
       else
-        speed = 500;  // default normal speed
+        speed = 500.0;  // default normal speed
     }
 
     /**  Set hexagon geometry  */
@@ -291,9 +290,9 @@ public class AnimationView extends SurfaceView implements SurfaceHolder.Callback
     /**
      *   Return animation beats, including 2 beat intro
      */
-    public synchronized float getBeats()
+    public synchronized double getBeats()
     {
-      return beats+2f;
+      return beats+2.0;
     }
 
     /**
@@ -307,9 +306,9 @@ public class AnimationView extends SurfaceView implements SurfaceHolder.Callback
     /**
      *   Set location of animation
      */
-    public synchronized void setLocation(float loc)
+    public synchronized void setLocation(double loc)
     {
-      beat = loc - 2f;
+      beat = loc - 2.0;
       dirtify();
     }
 
@@ -333,7 +332,7 @@ public class AnimationView extends SurfaceView implements SurfaceHolder.Callback
           }
           if (listener != null)
             listener.onAnimationChanged(AnimationListener.ANIMATION_PROGRESS,
-                                        (beat+2f)/(beats+2f));
+                                        (beat+2.0)/(beats+2.0),beat);
           if (!isRunning)
             //  animation is not running, so don't chew up the CPU
             try {
@@ -450,11 +449,11 @@ public class AnimationView extends SurfaceView implements SurfaceHolder.Callback
       //  Move dancers
       //  For big jumps, move incrementally -
       //  this helps hexagon and bigon compute the right location
-      float delta = beat - prevbeat;
-      int incs = (int)MathF.ceil(MathF.abs(delta));
+      double delta = beat - prevbeat;
+      int incs = (int)Math.ceil(Math.abs(delta));
       for (int j=1; j<=incs; j++) {
         for (int i=0; i<dancers.length; i++)
-          dancers[i].animate(prevbeat + (float)j*delta/(float)incs);
+          dancers[i].animate(prevbeat + j*delta/incs);
       }
 
       //  Compute handholds
@@ -555,7 +554,7 @@ public class AnimationView extends SurfaceView implements SurfaceHolder.Callback
         else {
           doPause();
           if (listener != null)
-            listener.onAnimationChanged(AnimationListener.ANIMATION_DONE,1f);
+            listener.onAnimationChanged(AnimationListener.ANIMATION_DONE,1.0,beats);
         }
       }
     }
@@ -691,16 +690,14 @@ public class AnimationView extends SurfaceView implements SurfaceHolder.Callback
    * Callback invoked when the Surface has been created and is ready to be
    * used.
    */
+
+  static final Handler h = new Handler();
   @Override
   public void surfaceCreated(SurfaceHolder holder) {
     // start the thread here so that we don't busy-wait in run()
     // waiting for the surface to be created
     // create thread if needed
-    thread = new AnimationThread(holder, getContext(), new Handler() {
-      @Override
-      public void handleMessage(Message m) {
-      }
-    });
+    thread = new AnimationThread(holder, getContext(), h);
     SharedPreferences prefs =
         PreferenceManager.getDefaultSharedPreferences(getContext());
     thread.setGridVisibility(prefs.getBoolean("grid", false));
@@ -723,7 +720,7 @@ public class AnimationView extends SurfaceView implements SurfaceHolder.Callback
     thread.setPhantomVisibility(prefs.getBoolean("phantoms",false));
     thread.setListener(listener);
     if (listener != null)
-      listener.onAnimationChanged(AnimationListener.ANIMATION_READY,0f);
+      listener.onAnimationChanged(AnimationListener.ANIMATION_READY,0.0,0.0);
     thread.start();
   }
 
