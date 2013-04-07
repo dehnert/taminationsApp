@@ -1,9 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <TextView xmlns:android="http://schemas.android.com/apk/res/android"
-    android:textIsSelectable="false"
-    android:id="@+id/header_calllist"
+    android:id="@+id/button_calllist"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:clickable="false"
-    style="@style/ListHeader" >
+    style="@style/ListItem" >
 </TextView>

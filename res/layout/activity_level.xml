@@ -6,63 +6,239 @@
     tools:context=".LevelActivity" >
 
     <TextView
-        android:text="@string/app_name"
         style="@style/ActivityTitle"
-        android:textSize="36sp"
-         />
+        android:text="@string/app_name"
+        android:textSize="36sp" />
 
     <Button
-        android:id="@+id/button_mainstream"
+        android:id="@+id/button_basic_and_mainstream"
+        style="@style/LevelButton"
         android:layout_width="match_parent"
         android:layout_height="0dp"
+        android:layout_marginTop="1sp"
         android:layout_weight="1"
-        android:onClick="onClick"
-        style="@style/BigBWButton"
-        android:text="@string/button_level_mainstream" />
+        android:background="#ffc0c0ff"
+        android:onClick="onBasicAndMainstreamClick"
+        android:text="Basic and Mainstream" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1" >
+
+        <View
+            android:layout_width="20dp"
+            android:layout_height="match_parent"
+            android:background="#ffc0c0ff" />
+
+        <Button
+            android:id="@+id/button_basic_1"
+            style="@style/LevelButton"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginLeft="1sp"
+            android:layout_marginTop="1sp"
+            android:background="#ffe0e0ff"
+            android:onClick="onBasic1Click"
+            android:text="Basic 1" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1" >
+
+        <View
+            android:layout_width="20dp"
+            android:layout_height="match_parent"
+            android:background="#ffc0c0ff" />
+
+        <Button
+            android:id="@+id/button_basic_2"
+            style="@style/LevelButton"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginLeft="1sp"
+            android:layout_marginTop="1sp"
+            android:background="#ffe0e0ff"
+            android:onClick="onBasic2Click"
+            android:text="Basic 2" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1" >
+
+        <View
+            android:layout_width="20dp"
+            android:layout_height="match_parent"
+            android:background="#ffc0c0ff" />
+
+        <Button
+            android:id="@+id/button_mainstream"
+            style="@style/LevelButton"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginLeft="1sp"
+            android:layout_marginTop="1sp"
+            android:background="#ffe0e0ff"
+            android:onClick="onMainstreamClick"
+            android:text="Mainstream" />
+    </LinearLayout>
 
     <Button
         android:id="@+id/button_plus"
+        style="@style/LevelButton"
         android:layout_width="match_parent"
         android:layout_height="0dp"
+        android:layout_marginTop="1sp"
         android:layout_weight="1"
-        android:onClick="onClick"
-        style="@style/BigBWButton"
-        android:text="@string/button_level_plus" />
+        android:background="#ffc0ffc0"
+        android:onClick="onPlusClick"
+        android:text="Plus" />
 
     <Button
         android:id="@+id/button_advanced"
+        style="@style/LevelButton"
         android:layout_width="match_parent"
         android:layout_height="0dp"
+        android:layout_marginTop="1sp"
         android:layout_weight="1"
-        android:onClick="onClick"
-        style="@style/BigBWButton"
-        android:text="@string/button_level_advanced" />
+        android:background="#ffffe080"
+        android:onClick="onAdvancedClick"
+        android:text="Advanced" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1" >
+
+        <View
+            android:layout_width="20dp"
+            android:layout_height="match_parent"
+            android:background="#ffffe080" />
+
+        <Button
+            android:id="@+id/button_a_1"
+            style="@style/LevelButton"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginLeft="1sp"
+            android:layout_marginTop="1sp"
+            android:background="#fffff0c0"
+            android:onClick="onA1Click"
+            android:text="A-1" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1" >
+
+        <View
+            android:layout_width="20dp"
+            android:layout_height="match_parent"
+            android:background="#ffffe080" />
+
+        <Button
+            android:id="@+id/button_a_2"
+            style="@style/LevelButton"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginLeft="1sp"
+            android:layout_marginTop="1sp"
+            android:background="#fffff0c0"
+            android:onClick="onA2Click"
+            android:text="A-2" />
+    </LinearLayout>
 
     <Button
-        android:id="@+id/button_c1"
+        android:id="@+id/button_challenge"
+        style="@style/LevelButton"
         android:layout_width="match_parent"
         android:layout_height="0dp"
+        android:layout_marginTop="1sp"
         android:layout_weight="1"
-        android:onClick="onClick"
-        style="@style/BigBWButton"
-        android:text="@string/button_level_c1" />
+        android:background="#ffffc0c0"
+        android:onClick="onChallengeClick"
+        android:text="Challenge" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1" >
+
+        <View
+            android:layout_width="20dp"
+            android:layout_height="match_parent"
+            android:background="#ffffc0c0" />
+
+        <Button
+            android:id="@+id/button_c1"
+            style="@style/LevelButton"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginLeft="1sp"
+            android:layout_marginTop="1sp"
+            android:background="#ffffe0e0"
+            android:onClick="onC1Click"
+            android:text="C-1" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1" >
+
+        <View
+            android:layout_width="20dp"
+            android:layout_height="match_parent"
+            android:background="#ffffc0c0" />
+
+        <Button
+            android:id="@+id/button_c2"
+            style="@style/LevelButton"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginLeft="1sp"
+            android:layout_marginTop="1sp"
+            android:background="#ffffe0e0"
+            android:onClick="onC2Click"
+            android:text="C-2" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1" >
+
+        <View
+            android:layout_width="20dp"
+            android:layout_height="match_parent"
+            android:background="#ffffc0c0" />
+
+        <Button
+            android:id="@+id/button_c3a"
+            style="@style/LevelButton"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginLeft="1sp"
+            android:layout_marginTop="1sp"
+            android:background="#ffffe0e0"
+            android:onClick="onC3AClick"
+            android:text="C-3A" />
+    </LinearLayout>
 
     <Button
-        android:id="@+id/button_c2"
+        android:id="@+id/button_index"
+        style="@style/LevelButton"
         android:layout_width="match_parent"
         android:layout_height="0dp"
+        android:layout_marginTop="1sp"
         android:layout_weight="1"
-        android:onClick="onClick"
-        style="@style/BigBWButton"
-        android:text="@string/button_level_c2" />
-
-    <Button
-        android:id="@+id/button_c3a"
-        android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_weight="1"
-        android:onClick="onClick"
-        style="@style/BigBWButton"
-        android:text="@string/button_level_c3a" />
+        android:background="#ffc0c0c0"
+        android:onClick="onIndexClick"
+        android:text="Index of All Calls" />
 
 </LinearLayout>

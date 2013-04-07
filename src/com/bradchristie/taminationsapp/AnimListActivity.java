@@ -186,8 +186,8 @@ public class AnimListActivity extends Activity
     else if (posanim[position] >= 0) {
       //  Save info and start animation activity
       SharedPreferences prefs = getSharedPreferences("Taminations",MODE_PRIVATE);
-      prefs.edit().putInt("anim",posanim[position]).commit();
-      prefs.edit().putString("xmlname",xmlname).commit();
+      prefs.edit().putInt("anim",posanim[position])
+                  .putString("xmlname",xmlname).apply();
       startActivity(new Intent(this,AnimationActivity.class));
     }
   }

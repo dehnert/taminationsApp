@@ -1,0 +1,5 @@
+<resources xmlns:android="http://schemas.android.com/apk/res/android">
+  <style name="LevelButton" parent="LevelButtonBase">
+      <item name="android:textSize">18sp</item>
+  </style>
+</resources>

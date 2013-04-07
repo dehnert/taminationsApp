@@ -50,6 +50,19 @@
       <item name="android:textSize">40sp</item>
   </style>
 
+  <style name="LevelButtonBase">
+      <item name="android:background">#ffc0c0c0</item>
+      <item name="android:textColor">#ff000000</item>
+      <item name="android:textSize">18sp</item>
+      <item name="android:textStyle">bold</item>
+      <item name="android:gravity">left|center_vertical</item>
+      <item name="android:paddingLeft">10sp</item>
+  </style>
+
+  <style name="IndentedLevelButton" parent="LevelButton">
+      <item name="android:paddingLeft">30sp</item>
+  </style>
+
   <style name="ActivityTitle">
     <item name="android:layout_width">match_parent</item>
     <item name="android:layout_height">wrap_content</item>

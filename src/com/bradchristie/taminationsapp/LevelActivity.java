@@ -25,10 +25,8 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.View;
-import android.view.View.OnClickListener;
-import android.widget.TextView;
 
-public class LevelActivity extends Activity implements OnClickListener {
+public class LevelActivity extends Activity {
 
   @Override
   protected void onCreate(Bundle savedInstanceState) {
@@ -40,12 +38,67 @@ public class LevelActivity extends Activity implements OnClickListener {
    *  This handles clicks on the buttons for different levels.
    *  Display the screen listing calls for that level.
    */
-  @Override
-  public void onClick(View v) {
+
+  private void processClick(String level, String selector)
+  {
     SharedPreferences prefs = getSharedPreferences("Taminations",MODE_PRIVATE);
-    String lev = ((TextView)v).getText().toString();
-    prefs.edit().putString("level",lev).commit();
+    prefs.edit().putString("level", level)
+                .putString("selector", selector).apply();
     startActivity(new Intent(this,CallActivity.class));
   }
+
+  public void onBasicAndMainstreamClick(View v)
+  {
+    processClick("Basic and Mainstream","level='Basic and Mainstream'");
+  }
+  public void onBasic1Click(View v)
+  {
+    processClick("Basic 1","sublevel='Basic 1'");
+  }
+  public void onBasic2Click(View v)
+  {
+    processClick("Basic 2","sublevel='Basic 2'");
+  }
+  public void onMainstreamClick(View v)
+  {
+    processClick("Mainstream","sublevel='Mainstream'");
+  }
+  public void onPlusClick(View v)
+  {
+    processClick("Plus","level='Plus'");
+  }
+  public void onAdvancedClick(View v)
+  {
+    processClick("Advanced","level='Advanced'");
+  }
+  public void onA1Click(View v)
+  {
+    processClick("A-1","sublevel='A-1'");
+  }
+  public void onA2Click(View v)
+  {
+    processClick("A-2","sublevel='A-2'");
+  }
+  public void onChallengeClick(View v)
+  {
+    processClick("Challenge","level='Challenge'");
+  }
+  public void onC1Click(View v)
+  {
+    processClick("C-1","sublevel='C-1'");
+  }
+  public void onC2Click(View v)
+  {
+    processClick("C-2","sublevel='C-2'");
+  }
+  public void onC3AClick(View v)
+  {
+    processClick("C-3A","sublevel='C-3A'");
+  }
+  public void onIndexClick(View v)
+  {
+    processClick("Index of All Calls","level");
+  }
+
 
 }
