@@ -28,13 +28,13 @@ public class Handhold implements Comparable<Handhold> {
   public Dancer dancer2;
   public int hold1;
   public int hold2;
-  public float angle1;
-  public float angle2;
-  public float distance;
-  public float score;
+  public double angle1;
+  public double angle2;
+  public double distance;
+  public double score;
 
   public Handhold(Dancer d1, Dancer d2, int h1, int h2,
-                  float a1, float a2, float d, float s)
+                  double a1, double a2, double d, double s)
   {
     dancer1 = d1;
     dancer2 = d2;
@@ -63,93 +63,93 @@ public class Handhold implements Comparable<Handhold> {
     //  Check distance
     float[] t1 = new float[9];
     d1.tx.getValues(t1);
-    float x1 = t1[Matrix.MTRANS_X];
-    float y1 = t1[Matrix.MTRANS_Y];
+    double x1 = t1[Matrix.MTRANS_X];
+    double y1 = t1[Matrix.MTRANS_Y];
     float[] t2 = new float[9];
     d2.tx.getValues(t2);
-    float x2 = t2[Matrix.MTRANS_X];
-    float y2 = t2[Matrix.MTRANS_Y];
-    float dx = x2-x1;
-    float dy = y2-y1;
-    float dfactor1 = 0.1f;  // for distance up to 2.0
-    float dfactor2 = 2.0f;  // for distance past 2.0
-    float cutover = 2.0f;
+    double x2 = t2[Matrix.MTRANS_X];
+    double y2 = t2[Matrix.MTRANS_Y];
+    double dx = x2-x1;
+    double dy = y2-y1;
+    double dfactor1 = 0.1;  // for distance up to 2.0
+    double dfactor2 = 2.0;  // for distance past 2.0
+    double cutover = 2.0;
     if (geometry == Geometry.HEXAGON)
-      cutover = 2.5f;
+      cutover = 2.5;
     else if (geometry == Geometry.BIGON)
-      cutover = 3.7f;
-    float d = MathF.sqrt(dx*dx+dy*dy);
-    float dfactor0 = geometry == Geometry.HEXAGON ? 1.15f : 1.0f;
-    float d0 = d*dfactor0;
-    float score1 = d0 > cutover ? (d0-cutover)*dfactor2+2*dfactor1 : d0*dfactor1;
-    float score2 = score1;
+      cutover = 3.7;
+    double d = Math.sqrt(dx*dx+dy*dy);
+    double dfactor0 = geometry == Geometry.HEXAGON ? 1.15 : 1.0;
+    double d0 = d*dfactor0;
+    double score1 = d0 > cutover ? (d0-cutover)*dfactor2+2*dfactor1 : d0*dfactor1;
+    double score2 = score1;
     //  Angle between dancers
-    float a0 = (float)Math.atan2(dy,dx);
+    double a0 = Math.atan2(dy,dx);
     //  Angle each dancer is facing
-    float a1 = (float)Math.atan2(t1[Matrix.MSKEW_Y],t1[Matrix.MSCALE_Y]);
-    float a2 = (float)Math.atan2(t2[Matrix.MSKEW_Y],t2[Matrix.MSCALE_Y]);
+    double a1 = Math.atan2(t1[Matrix.MSKEW_Y],t1[Matrix.MSCALE_Y]);
+    double a2 = Math.atan2(t2[Matrix.MSKEW_Y],t2[Matrix.MSCALE_Y]);
     //  For each dancer, try left and right hands
     int h1 = 0;
     int h2 = 0;
-    float ah1 = 0f;
-    float ah2 = 0f;
-    float afactor1 = 0.2f;
-    float afactor2 = 1.0f;
+    double ah1 = 0.0;
+    double ah2 = 0.0;
+    double afactor1 = 0.2;
+    double afactor2 = 1.0;
     if (geometry == Geometry.BIGON)
       afactor2 = 0.6f;
     //  Dancer 1
-    float a = MathF.abs(MathF.IEEEremainder(MathF.abs(a1-a0+MathF.PI*3f/2f),MathF.PI*2f));
-    float ascore = a > MathF.PI/6f ? (a-MathF.PI/6f)*afactor2+MathF.PI/6f*afactor1
+    double a = Math.abs(Math.IEEEremainder(Math.abs(a1-a0+Math.PI*3.0/2.0),Math.PI*2.0));
+    double ascore = a > Math.PI/6.0 ? (a-Math.PI/6.0)*afactor2+Math.PI/6.0*afactor1
                                    : a*afactor1;
-    if (score1+ascore < 1.0f && (d1.hands & Movement.RIGHTHAND) != 0 &&
+    if (score1+ascore < 1.0 && (d1.hands & Movement.RIGHTHAND) != 0 &&
         d1.rightgrip==null || d1.rightgrip==d2) {
-      score1 = d1.rightgrip==d2 ? 0.0f : score1 + ascore;
+      score1 = d1.rightgrip==d2 ? 0.0 : score1 + ascore;
       h1 = Movement.RIGHTHAND;
-      ah1 = a1-a0+MathF.PI*3f/2f;
+      ah1 = a1-a0+Math.PI*3.0/2.0;
     } else {
-      a = MathF.abs(MathF.IEEEremainder(MathF.abs(a1-a0+MathF.PI/2f),MathF.PI*2f));
-      ascore = a > MathF.PI/6f ? (a-MathF.PI/6f)*afactor2+MathF.PI/6f*afactor1
+      a = Math.abs(Math.IEEEremainder(Math.abs(a1-a0+Math.PI/2.0),Math.PI*2.0));
+      ascore = a > Math.PI/6.0 ? (a-Math.PI/6.0)*afactor2+Math.PI/6.0*afactor1
                                : a*afactor1;
-      if (score1+ascore < 1.0f && (d1.hands & Movement.LEFTHAND) != 0 &&
+      if (score1+ascore < 1.0 && (d1.hands & Movement.LEFTHAND) != 0 &&
           d1.leftgrip==null || d1.leftgrip==d2) {
-        score1 = d1.leftgrip==d2 ? 0.0f : score1 + ascore;
+        score1 = d1.leftgrip==d2 ? 0.0 : score1 + ascore;
         h1 = Movement.LEFTHAND;
-        ah1 = a1-a0+MathF.PI/2f;
+        ah1 = a1-a0+Math.PI/2.0;
       } else
-        score1 = 10f;
+        score1 = 10.0;
     }
     //  Dancer 2
-    a = MathF.abs(MathF.IEEEremainder(MathF.abs(a2-a0+MathF.PI/2f),MathF.PI*2f));
-    ascore = a > MathF.PI/6f ? (a-MathF.PI/6f)*afactor2+MathF.PI/6f*afactor1
+    a = Math.abs(Math.IEEEremainder(Math.abs(a2-a0+Math.PI/2.0),Math.PI*2.0));
+    ascore = a > Math.PI/6.0 ? (a-Math.PI/6.0)*afactor2+Math.PI/6.0*afactor1
                              : a*afactor1;
-    if (score2+ascore < 1.0f && (d2.hands & Movement.RIGHTHAND) != 0 &&
+    if (score2+ascore < 1.0 && (d2.hands & Movement.RIGHTHAND) != 0 &&
         d2.rightgrip==null || d2.rightgrip==d1) {
-      score2 = d2.rightgrip==d1 ? 0.0f : score2 + ascore;
+      score2 = d2.rightgrip==d1 ? 0.0 : score2 + ascore;
       h2 = Movement.RIGHTHAND;
-      ah2 = a2-a0+MathF.PI/2f;
+      ah2 = a2-a0+Math.PI/2.0;
     } else {
-      a = MathF.abs(MathF.IEEEremainder(MathF.abs(a2-a0+MathF.PI*3f/2f),MathF.PI*2f));
-      ascore = a > MathF.PI/6f ? (a-MathF.PI/6f)*afactor2+MathF.PI/6f*afactor1
+      a = Math.abs(Math.IEEEremainder(Math.abs(a2-a0+Math.PI*3.0/2.0),Math.PI*2.0));
+      ascore = a > Math.PI/6.0 ? (a-Math.PI/6.0)*afactor2+Math.PI/6.0*afactor1
                                : a*afactor1;
-      if (score2+ascore < 1.0f && (d2.hands & Movement.LEFTHAND) != 0 &&
+      if (score2+ascore < 1.0 && (d2.hands & Movement.LEFTHAND) != 0 &&
           d2.leftgrip==null || d2.leftgrip==d1) {
-        score2 = d2.leftgrip==d1 ? 0.0f : score2 + ascore;
+        score2 = d2.leftgrip==d1 ? 0.0 : score2 + ascore;
         h2 = Movement.LEFTHAND;
-        ah2 = a2-a0+MathF.PI*3f/2f;
+        ah2 = a2-a0+Math.PI*3.0/2.0;
       } else
         score2 = 10f;
     }
 
     if (d1.rightgrip == d2 && d2.rightgrip == d1)
-      return new Handhold(d1,d2,Movement.RIGHTHAND,Movement.RIGHTHAND,ah1,ah2,d,0f);
+      return new Handhold(d1,d2,Movement.RIGHTHAND,Movement.RIGHTHAND,ah1,ah2,d,0.0);
     if (d1.rightgrip == d2 && d2.leftgrip == d1)
-      return new Handhold(d1,d2,Movement.RIGHTHAND,Movement.LEFTHAND,ah1,ah2,d,0f);
+      return new Handhold(d1,d2,Movement.RIGHTHAND,Movement.LEFTHAND,ah1,ah2,d,0.0);
     if (d1.leftgrip == d2 && d2.rightgrip == d1)
-      return new Handhold(d1,d2,Movement.LEFTHAND,Movement.RIGHTHAND,ah1,ah2,d,0f);
+      return new Handhold(d1,d2,Movement.LEFTHAND,Movement.RIGHTHAND,ah1,ah2,d,0.0);
     if (d1.leftgrip == d2 && d2.leftgrip == d1)
-      return new Handhold(d1,d2,Movement.LEFTHAND,Movement.LEFTHAND,ah1,ah2,d,0f);
+      return new Handhold(d1,d2,Movement.LEFTHAND,Movement.LEFTHAND,ah1,ah2,d,0.0);
 
-    if (score1 > 1.0f || score2 > 1.0f || score1+score2 > 1.2f)
+    if (score1 > 1.0 || score2 > 1.0 || score1+score2 > 1.2)
       return null;
     return new Handhold(d1,d2,h1,h2,ah1,ah2,d,score1+score2);
   }

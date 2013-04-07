@@ -20,7 +20,7 @@ public abstract class Geometry
   /**
    * used for computing dancer path
    */
-  protected float prevangle = 0.0f;
+  protected double prevangle = 0.0;
 
   public Geometry(int r)
   {
@@ -37,7 +37,7 @@ public abstract class Geometry
    * @param sym
    * @return
    */
-  abstract public Matrix pathMatrix(Matrix starttx, Matrix tx, float b);
+  abstract public Matrix pathMatrix(Matrix starttx, Matrix tx, double b);
 
   /**
    * Draw a dancer-sized grid of the specific geometry
@@ -103,42 +103,42 @@ class BigonGeometry extends Geometry
   {
     float[] matvals = new float[9];
     mat.getValues(matvals);
-    float x = matvals[Matrix.MTRANS_X];
-    float y = matvals[Matrix.MTRANS_Y];
-    float r = MathF.sqrt(x*x+y*y);
-    float startangle =
-        MathF.toDegrees(MathF.atan2(matvals[Matrix.MSKEW_Y],matvals[Matrix.MSCALE_Y]));
-    float angle = MathF.atan2(y,x)+MathF.PI;
-    float bigangle = angle*2.0f-MathF.PI;
-    x = r*MathF.cos(bigangle);
-    y = r*MathF.sin(bigangle);
-    startangle += MathF.toDegrees(angle);
+    double x = matvals[Matrix.MTRANS_X];
+    double y = matvals[Matrix.MTRANS_Y];
+    double r = Math.sqrt(x*x+y*y);
+    double startangle =
+        Math.toDegrees(Math.atan2(matvals[Matrix.MSKEW_Y],matvals[Matrix.MSCALE_Y]));
+    double angle = Math.atan2(y,x)+Math.PI;
+    double bigangle = angle*2.0f-Math.PI;
+    x = r*Math.cos(bigangle);
+    y = r*Math.sin(bigangle);
+    startangle += Math.toDegrees(angle);
     Matrix retval = new Matrix();
-    retval.postRotate(startangle);
-    retval.postTranslate(x,y);
+    retval.postRotate((float)startangle);
+    retval.postTranslate((float)x,(float)y);
     return retval;
   }
 
   @Override
-  public Matrix pathMatrix(Matrix starttx, Matrix tx, float beat)
+  public Matrix pathMatrix(Matrix starttx, Matrix tx, double beat)
   {
     //  Get dancer's start angle and current angle
     float[] matvals = new float[9];
     starttx.getValues(matvals);
-    float x = matvals[Matrix.MTRANS_X];
-    float y = matvals[Matrix.MTRANS_Y];
-    float a0 = MathF.atan2(y,x);
+    double x = matvals[Matrix.MTRANS_X];
+    double y = matvals[Matrix.MTRANS_Y];
+    double a0 = Math.atan2(y,x);
     tx.getValues(matvals);
     x = matvals[Matrix.MTRANS_X];
     y = matvals[Matrix.MTRANS_Y];
-    float a1 = MathF.atan2(y,x);
+    double a1 = Math.atan2(y,x);
     if (beat <= 0.0)
       prevangle = a1;
-    float wrap = MathF.round((a1-prevangle)/(MathF.PI*2.0f));
-    a1 -= wrap*MathF.PI*2;
-    float a2 = a1 - a0;
+    double wrap = Math.round((a1-prevangle)/(Math.PI*2.0f));
+    a1 -= wrap*Math.PI*2;
+    double a2 = a1 - a0;
     Matrix m = new Matrix();
-    m.postRotate(MathF.toDegrees(a2));
+    m.postRotate((float)Math.toDegrees(a2));
     prevangle = a1;
     return m;
   }
@@ -146,15 +146,15 @@ class BigonGeometry extends Geometry
   static public void drawGrid(Canvas c)
   {
     Paint pline = gridPaint();
-    for (float x1=-7.5f; x1<=7.5f; x1+=1.0f) {
+    for (double x1=-7.5f; x1<=7.5f; x1+=1.0f) {
       Path points = new Path();
-      points.moveTo(MathF.abs(x1),0.0f);
+      points.moveTo((float)Math.abs(x1),0.0f);
       for (float y1=0.2f; y1<=7.5f; y1+=0.2f) {
-        float a = 2.0f*MathF.atan2(y1,x1);
-        float r = MathF.sqrt(x1*x1+y1*y1);
-        float x = r*MathF.cos(a);
-        float y = r*MathF.sin(a);
-        points.lineTo(x,y);
+        double a = 2.0f*Math.atan2(y1,x1);
+        double r = Math.sqrt(x1*x1+y1*y1);
+        double x = r*Math.cos(a);
+        double y = r*Math.sin(a);
+        points.lineTo((float)x,(float)y);
       }
       c.drawPath(points,pline);
       Matrix m = new Matrix();
@@ -184,7 +184,7 @@ class SquareGeometry extends Geometry
   }
 
   @Override
-  public Matrix pathMatrix(Matrix starttx, Matrix tx, float b)
+  public Matrix pathMatrix(Matrix starttx, Matrix tx, double b)
   {
     //  No additional transform needed for squares
     return new Matrix();
@@ -216,43 +216,43 @@ class HexagonGeometry extends Geometry
     float a = 120f*rotnum;
     float[] matvals = new float[9];
     mat.getValues(matvals);
-    float x = matvals[Matrix.MTRANS_X];
-    float y = matvals[Matrix.MTRANS_Y];
-    float r = MathF.sqrt(x*x+y*y);
-    float startangle =
-        MathF.toDegrees(MathF.atan2(matvals[Matrix.MSKEW_Y],matvals[Matrix.MSCALE_Y]));
-    float angle = MathF.toDegrees(MathF.atan2(y,x));
-    float dangle = angle < 0.0f ? -(180f+angle)/3f : (180f-angle)/3f;
-    x = r * MathF.cos(MathF.toRadians(angle+dangle+a));
-    y = r * MathF.sin(MathF.toRadians(angle+dangle+a));
+    double x = matvals[Matrix.MTRANS_X];
+    double y = matvals[Matrix.MTRANS_Y];
+    double r = Math.sqrt(x*x+y*y);
+    double startangle =
+        Math.toDegrees(Math.atan2(matvals[Matrix.MSKEW_Y],matvals[Matrix.MSCALE_Y]));
+    double angle = Math.toDegrees(Math.atan2(y,x));
+    double dangle = angle < 0.0f ? -(180f+angle)/3f : (180f-angle)/3f;
+    x = r * Math.cos(Math.toRadians(angle+dangle+a));
+    y = r * Math.sin(Math.toRadians(angle+dangle+a));
     startangle += a + dangle;
     Matrix retval = new Matrix();
-    retval.postRotate(startangle);
-    retval.postTranslate(x,y);
+    retval.postRotate((float)startangle);
+    retval.postTranslate((float)x,(float)y);
     return retval;
   }
 
   @Override
-  public Matrix pathMatrix(Matrix starttx, Matrix tx, float beat)
+  public Matrix pathMatrix(Matrix starttx, Matrix tx, double beat)
   {
     //  Get dancer's start angle and current angle
     float[] matvals = new float[9];
     starttx.getValues(matvals);
-    float x = matvals[Matrix.MTRANS_X];
-    float y = matvals[Matrix.MTRANS_Y];
-    float a0 = MathF.atan2(y,x);
+    double x = matvals[Matrix.MTRANS_X];
+    double y = matvals[Matrix.MTRANS_Y];
+    double a0 = Math.atan2(y,x);
     tx.getValues(matvals);
     x = matvals[Matrix.MTRANS_X];
     y = matvals[Matrix.MTRANS_Y];
-    float a1 = MathF.atan2(y,x);
+    double a1 = Math.atan2(y,x);
     //  Correct for wrapping around +/- pi
     if (beat <= 0.0f)
       prevangle = a1;
-    float wrap = MathF.round((a1-prevangle)/(MathF.PI*2.0f));
-    a1 -= wrap*MathF.PI*2.0f;
-    float a2 = -(a1-a0)/3.0f;
+    double wrap = Math.round((a1-prevangle)/(Math.PI*2.0f));
+    a1 -= wrap*Math.PI*2.0f;
+    double a2 = -(a1-a0)/3.0f;
     Matrix m = new Matrix();
-    m.postRotate(MathF.toDegrees(a2));
+    m.postRotate((float)Math.toDegrees(a2));
     prevangle = a1;
     return m;
   }
@@ -261,17 +261,17 @@ class HexagonGeometry extends Geometry
   {
     //  Hex grid
     Paint pline = gridPaint();
-    for (float x0=0.5f; x0<=8.5f; x0+=1.0f) {
+    for (double x0=0.5f; x0<=8.5f; x0+=1.0f) {
       Path points = new Path();
       // moveto 0, x0
-      points.moveTo(0.0f,x0);
+      points.moveTo(0.0f,(float)x0);
       for (float y0=0.5f; y0<=8.5f; y0+=0.5f) {
-        float a = MathF.atan2(y0,x0)*2f/3f;
-        float r = MathF.sqrt(x0*x0+y0*y0);
-        float x = r*MathF.sin(a);
-        float y = r*MathF.cos(a);
+        double a = Math.atan2(y0,x0)*2f/3f;
+        double r = Math.sqrt(x0*x0+y0*y0);
+        double x = r*Math.sin(a);
+        double y = r*Math.cos(a);
         // lineto x,y
-        points.lineTo(x,y);
+        points.lineTo((float)x,(float)y);
       }
       //  rotate and reflect the result
       Path p = new Path();

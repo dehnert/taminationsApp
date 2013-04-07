@@ -141,15 +141,15 @@ public class Dancer implements Comparable<Dancer> {
   public boolean inCenter()
   {
     Pair<Float,Float> loc = location();
-    return MathF.sqrt(loc.first*loc.first + loc.second*loc.second) < 1.1f;
+    return Math.sqrt(loc.first*loc.first + loc.second*loc.second) < 1.1;
   }
 
   /**
    *   Move dancer to location along path
    * @param beat
    */
-  public void animate(float beat) {
-    float beatin = beat;
+  public void animate(double beat) {
+    double beatin = beat;
     // Be sure to reset grips at start
     if (beat == 0)
       rightgrip = leftgrip = null;
@@ -236,9 +236,9 @@ public class Dancer implements Comparable<Dancer> {
       //  So the number needs to be transformed back
       float[] m = new float[9];
       tx.getValues(m);
-      float angle = MathF.atan2(m[Matrix.MSKEW_X], m[Matrix.MSCALE_Y]);
+      double angle = Math.atan2(m[Matrix.MSKEW_X], m[Matrix.MSCALE_Y]);
       Matrix txtext = new Matrix();
-      txtext.postRotate(-angle * 180f / MathF.PI + 90f);
+      txtext.postRotate((float)(-angle * 180.0 / Math.PI + 90.0));
       txtext.postScale(1f, -1f);
       c.concat(txtext);
       p.setColor(Color.BLACK);

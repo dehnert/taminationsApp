@@ -34,19 +34,19 @@ public class Movement {
   static public final int GRIPBOTH =  7;
   static public final int ANYGRIP =  4;
 
-  public float beats;
+  public double beats;
   public int hands;
-  public float cx1;
-  public float cy1;
-  public float cx2;
-  public float cy2;
-  public float x2;
-  public float y2;
-  public float cx3;
-  public float cx4;
-  public float cy4;
-  public float x4;
-  public float y4;
+  public double cx1;
+  public double cy1;
+  public double cx2;
+  public double cy2;
+  public double x2;
+  public double y2;
+  public double cx3;
+  public double cx4;
+  public double cy4;
+  public double x4;
+  public double y4;
   public Bezier btranslate;
   public Bezier brotate;
 
@@ -62,8 +62,8 @@ public class Movement {
     return retval;
   }
 
-  public Movement(float beats, int hands, float cx1, float cy1,
-                  float cx2, float cy2, float x2, float y2)
+  public Movement(double beats, int hands, double cx1, double cy1,
+                  double cx2, double cy2, double x2, double y2)
   {
     this.beats = beats;
     this.hands = hands;
@@ -76,9 +76,9 @@ public class Movement {
     recalculate();
   }
 
-  public Movement(float beats, int hands, float cx1, float cy1,
-                  float cx2, float cy2, float x2, float y2,
-                  float cx3, float cx4, float cy4, float x4, float y4)
+  public Movement(double beats, int hands, double cx1, double cy1,
+                  double cx2, double cy2, double x2, double y2,
+                  double cx3, double cx4, double cy4, double x4, double y4)
 
   {
     this.beats = beats;
@@ -98,20 +98,20 @@ public class Movement {
 
   public Movement(Element elem)
   {
-    beats = Float.valueOf(elem.getAttribute("beats"));
+    beats = Double.valueOf(elem.getAttribute("beats"));
     hands = getHands(elem.getAttribute("hands"));
-    cx1 = Float.valueOf(elem.getAttribute("cx1"));
-    cy1 = Float.valueOf(elem.getAttribute("cy1"));
-    cx2 = Float.valueOf(elem.getAttribute("cx2"));
-    cy2 = Float.valueOf(elem.getAttribute("cy2"));
-    x2 = Float.valueOf(elem.getAttribute("x2"));
-    y2 = Float.valueOf(elem.getAttribute("y2"));
+    cx1 = Double.valueOf(elem.getAttribute("cx1"));
+    cy1 = Double.valueOf(elem.getAttribute("cy1"));
+    cx2 = Double.valueOf(elem.getAttribute("cx2"));
+    cy2 = Double.valueOf(elem.getAttribute("cy2"));
+    x2 = Double.valueOf(elem.getAttribute("x2"));
+    y2 = Double.valueOf(elem.getAttribute("y2"));
     if (elem.hasAttribute("cx3")) {
-      this.cx3 = Float.valueOf(elem.getAttribute("cx3"));
-      this.cx4 = Float.valueOf(elem.getAttribute("cx4"));
-      this.cy4 = Float.valueOf(elem.getAttribute("cy4"));
-      this.x4 = Float.valueOf(elem.getAttribute("x4"));
-      this.y4 = Float.valueOf(elem.getAttribute("y4"));
+      this.cx3 = Double.valueOf(elem.getAttribute("cx3"));
+      this.cx4 = Double.valueOf(elem.getAttribute("cx4"));
+      this.cy4 = Double.valueOf(elem.getAttribute("cy4"));
+      this.x4 = Double.valueOf(elem.getAttribute("x4"));
+      this.y4 = Double.valueOf(elem.getAttribute("y4"));
     } else {
       cx3 = cx1;
       cx4 = cx2;
@@ -127,9 +127,9 @@ public class Movement {
    * @param t  Time in beats
    * @return   Matrix for using with canvas
    */
-  public Matrix translate(float t)
+  public Matrix translate(double t)
   {
-    float tt = Math.min(Math.max(0,t),beats);
+    Double tt = Math.min(Math.max(0,t),beats);
     return btranslate.translate(tt/beats);
   };
 
@@ -138,16 +138,16 @@ public class Movement {
    * @param t  Time in beats
    * @return   Matrix for using with canvas
    */
-  public Matrix rotate(float t)
+  public Matrix rotate(double t)
   {
-    float tt = Math.min(Math.max(0,t),beats);
+    double tt = Math.min(Math.max(0,t),beats);
     return brotate.rotate(tt/beats);
   };
 
   public void recalculate()
   {
-    this.btranslate = new Bezier(0f,0f,cx1,cy1,cx2,cy2,x2,y2);
-    this.brotate = new Bezier(0f,0f,cx3,0f,cx4,cy4,x4,y4);
+    this.btranslate = new Bezier(0.0,0.0,cx1,cy1,cx2,cy2,x2,y2);
+    this.brotate = new Bezier(0.0,0.0,cx3,0.0,cx4,cy4,x4,y4);
   }
 
 }

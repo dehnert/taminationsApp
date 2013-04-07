@@ -24,23 +24,23 @@ import android.graphics.Matrix;
 
 public class Bezier {
 
-  private float x1;
-  private float y1;
-  private float ctrlx1;
-  private float ctrly1;
-  private float ctrlx2;
-  private float ctrly2;
-  private float x2;
-  private float y2;
-  private float ax;
-  private float bx;
-  private float cx;
-  private float ay;
-  private float by;
-  private float cy;
+  private double x1;
+  private double y1;
+  private double ctrlx1;
+  private double ctrly1;
+  private double ctrlx2;
+  private double ctrly2;
+  private double x2;
+  private double y2;
+  private double ax;
+  private double bx;
+  private double cx;
+  private double ay;
+  private double by;
+  private double cy;
 
-  Bezier(float x1, float y1, float ctrlx1, float ctrly1,
-         float ctrlx2, float ctrly2, float x2, float y2)
+  Bezier(double x1, double y1, double ctrlx1, double ctrly1,
+         double ctrlx2, double ctrly2, double x2, double y2)
   {
     this.x1 = x1;
     this.y1 = y1;
@@ -55,35 +55,34 @@ public class Bezier {
 
   private void calculatecoefficients()
   {
-    cx = 3.0f*(ctrlx1-x1);
-    bx = 3.0f*(ctrlx2-ctrlx1) - cx;
+    cx = 3.0*(ctrlx1-x1);
+    bx = 3.0*(ctrlx2-ctrlx1) - cx;
     ax = x2 - x1 - cx - bx;
 
-    cy = 3.0f*(ctrly1-y1);
-    by = 3.0f*(ctrly2-ctrly1) - cy;
+    cy = 3.0*(ctrly1-y1);
+    by = 3.0*(ctrly2-ctrly1) - cy;
     ay = y2 - y1 - cy - by;
   }
 
   //  Return the movement along the curve given "t" between 0 and 1
-  public Matrix translate(float t)
+  public Matrix translate(double t)
   {
-    float x = x1 + t*(cx + t*(bx + t*ax));
-    float y = y1 + t*(cy + t*(by + t*ay));
+    double x = x1 + t*(cx + t*(bx + t*ax));
+    double y = y1 + t*(cy + t*(by + t*ay));
     Matrix retval = new Matrix();
-    retval.postTranslate(x,y);
+    retval.postTranslate((float)x,(float)y);
     return retval;
   }
 
   //  Return the angle of the derivative given "t" between 0 and 1
-  public Matrix rotate(float t)
+  public Matrix rotate(double t)
   {
 
-    float x = cx + t*(2.0f*bx + t*3.0f*ax);
-    float y = cy + t*(2.0f*by + t*3.0f*ay);
-    //  No atan2 in FloatMath
+    double x = cx + t*(2.0*bx + t*3.0*ax);
+    double y = cy + t*(2.0*by + t*3.0*ay);
     double theta = Math.atan2(y,x);
     Matrix retval = new Matrix();
-    retval.postRotate((float)theta*180f/(float)Math.PI);
+    retval.postRotate((float)(theta*180.0/Math.PI));
     return retval;
   };
 
