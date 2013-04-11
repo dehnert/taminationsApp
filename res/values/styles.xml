@@ -34,7 +34,7 @@
 
   <style name="ListHeader" parent="ListItem">
     <item name="android:textColor">#ffffffff</item>
-    <item name="android:background">#ff606060</item>
+    <item name="android:background">#ff008000</item>
     <item name="android:clickable">false</item>
     <item name="android:paddingTop">6sp</item>
     <item name="android:paddingBottom">2sp</item>

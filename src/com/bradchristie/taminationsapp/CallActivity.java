@@ -29,9 +29,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
-import android.view.LayoutInflater;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.ArrayAdapter;
@@ -128,7 +126,7 @@ public class CallActivity extends Activity implements OnItemClickListener {
     //  Build the list from the array
     ListView lv = (ListView)findViewById(R.id.listview_calls);
     lv.setAdapter(cla);
-    if (cla.getCount() > 40)
+    if (cla.getCount() > 20)
       lv.setFastScrollEnabled(true);
     lv.setOnItemClickListener(this);
   }
@@ -139,7 +137,7 @@ public class CallActivity extends Activity implements OnItemClickListener {
     SharedPreferences prefs = getSharedPreferences("Taminations",MODE_PRIVATE);
     CallListItem item = cla.getItem(position);
     prefs.edit().putString("call",item.call)
-                .putString("link",item.link).apply();
+                .putString("link",item.link).commit();
     //  Start the next activity
     startActivity(new Intent(this,AnimListActivity.class));
   }

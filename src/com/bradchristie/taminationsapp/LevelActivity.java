@@ -43,13 +43,13 @@ public class LevelActivity extends Activity {
   {
     SharedPreferences prefs = getSharedPreferences("Taminations",MODE_PRIVATE);
     prefs.edit().putString("level", level)
-                .putString("selector", selector).apply();
+                .putString("selector", selector).commit();
     startActivity(new Intent(this,CallActivity.class));
   }
 
   public void onBasicAndMainstreamClick(View v)
   {
-    processClick("Basic and Mainstream","level='Basic and Mainstream'");
+    processClick("Basic and Mainstream","level='Basic and Mainstream' and @sublevel!='Styling'");
   }
   public void onBasic1Click(View v)
   {
@@ -97,7 +97,7 @@ public class LevelActivity extends Activity {
   }
   public void onIndexClick(View v)
   {
-    processClick("Index of All Calls","level");
+    processClick("Index of All Calls","level!='Info' and @sublevel!='Styling'");
   }
 
 

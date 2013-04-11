@@ -5,12 +5,6 @@
     <string name="menu_settings">Settings</string>
     <string name="menu_definition">Definition</string>
     <string name="title_activity_call">CallActivity</string>
-    <string name="button_level_mainstream">Mainstream</string>
-    <string name="button_level_plus">Plus</string>
-    <string name="button_level_advanced">Advanced</string>
-    <string name="button_level_c1">C-1</string>
-    <string name="button_level_c2">C-2</string>
-    <string name="button_level_c3a">C-3A</string>
     <string name="title_activity_anim_list">AnimListActivity</string>
     <string name="title_activity_animation">AnimationActivity</string>
     <string name="title_activity_settings">Settings</string>
