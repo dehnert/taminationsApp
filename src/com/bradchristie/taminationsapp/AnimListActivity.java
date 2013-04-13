@@ -59,11 +59,11 @@ public class AnimListActivity extends Activity
       myview.setText((CharSequence)getItem(position));
       int d = difficulty.get(position);
       if (d==1)
-        myview.setBackgroundColor(0xffe0e0f0);
+        myview.setBackgroundColor(0xffc0ffc0);
       else if (d==2)
-        myview.setBackgroundColor(0xffffffe0);
+        myview.setBackgroundColor(0xffffffc0);
       else if (d==3)
-        myview.setBackgroundColor(0xffffe0e0);
+        myview.setBackgroundColor(0xffffc0c0);
       else if (d==0)
         myview.setBackgroundColor(0xffffffff);
       return myview;
