@@ -20,28 +20,22 @@
 
 package com.bradchristie.taminationsapp;
 
-import org.w3c.dom.Document;
-import org.w3c.dom.Element;
-import org.w3c.dom.NodeList;
-
-import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.support.v4.app.FragmentActivity;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.ArrayAdapter;
-import android.widget.ListView;
 import android.widget.SectionIndexer;
-import android.widget.TextView;
 
-public class CallActivity extends Activity implements OnItemClickListener {
-
+public class CalllistActivity extends FragmentActivity
+                              implements OnItemClickListener, CallClickListener
+{
 
   private CallListAdapter cla;
-
   /**
    *   This is an array of hashes, one array entry for each call,
    *   in alphabetical order as given by the list in menus.xml
@@ -107,7 +101,9 @@ public class CallActivity extends Activity implements OnItemClickListener {
   @Override
   protected void onCreate(Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
-    setContentView(R.layout.activity_call);
+    setContentView(R.layout.activity_calllist);
+    return;
+    /*
     cla = new CallListAdapter(this,R.layout.calllist_item);
     //  Set the title to the current dance level
     SharedPreferences prefs = getSharedPreferences("Taminations",MODE_PRIVATE);
@@ -129,15 +125,22 @@ public class CallActivity extends Activity implements OnItemClickListener {
     if (cla.getCount() > 20)
       lv.setFastScrollEnabled(true);
     lv.setOnItemClickListener(this);
+    */
   }
 
   //  Process a click on one of the calls
   public void onItemClick(AdapterView<?> parent, View v, int position, long id) {
     //  Save the call info
-    SharedPreferences prefs = getSharedPreferences("Taminations",MODE_PRIVATE);
     CallListItem item = cla.getItem(position);
-    prefs.edit().putString("call",item.call)
-                .putString("link",item.link).commit();
+    onCallClick(item.call,item.link);
+  }
+
+  public void onCallClick(String call, String link)
+  {
+    SharedPreferences prefs = getSharedPreferences("Taminations",MODE_PRIVATE);
+    prefs.edit().putString("call",call)
+         .putString("link",link)
+         .putInt("anim",0).commit();
     //  Start the next activity
     startActivity(new Intent(this,AnimListActivity.class));
   }

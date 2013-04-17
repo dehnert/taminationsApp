@@ -20,14 +20,10 @@
 
 package com.bradchristie.taminationsapp;
 
-import org.w3c.dom.Document;
-import org.w3c.dom.Element;
-import org.w3c.dom.NodeList;
-
-import android.app.Activity;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.support.v4.app.FragmentActivity;
 import android.view.View;
 import android.widget.ImageButton;
 import android.widget.SeekBar;
@@ -35,7 +31,7 @@ import android.widget.TextView;
 
 import com.bradchristie.taminationsapp.AnimationView.AnimationThread;
 
-public class AnimationActivity extends Activity
+public class AnimationActivity extends FragmentActivity
              implements AnimationListener,
                         SharedPreferences.OnSharedPreferenceChangeListener,
                         SeekBar.OnSeekBarChangeListener
@@ -89,96 +85,10 @@ public class AnimationActivity extends Activity
   @Override
   protected void onCreate(Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
-    //  Remove title bar
     setContentView(R.layout.activity_animation);
-    // get handles to the AnimationView from XML, and its AnimationThread
     mAnimationView = (AnimationView)findViewById(R.id.animation);
-    mAnimationView.setAnimationListener(this);
-    SeekBar sb = (SeekBar)findViewById(R.id.seekBar1);
-    sb.setOnSeekBarChangeListener(this);
-    //  Load the animation xml file
-    SharedPreferences prefs = getSharedPreferences("Taminations",MODE_PRIVATE);
-    String xmlname = prefs.getString("xmlname",getString(android.R.string.untitled));
-    int anim = prefs.getInt("anim",0);
-    //  Read the xml file and select the requested animation
-    Document tamdoc = Tamination.getXMLAsset(this, xmlname);
-    Element tam = (Element)tamdoc.getElementsByTagName("tam").item(anim);
-    //  Set title and scale it to fit header space
-    TextView titleView = (TextView)findViewById(R.id.animation_title);
-    String titlestr = tam.getAttribute("title");
-    if (titlestr.length() > 40)
-      titleView.setTextSize(18.0f);
-    else if (titlestr.length() > 16)
-      titleView.setTextSize(24.0f);
-    else
-      titleView.setTextSize(36.0f);
-    titleView.setText(titlestr);
-    //  Display any Taminator quote
-    NodeList tamsayslist = tam.getElementsByTagName("taminator");
-    if (tamsayslist.getLength() > 0) {
-      Element tamsayselem = (Element)tamsayslist.item(0);
-      //  Clean up extra white space in the XML
-      String tamsays = tamsayselem.getTextContent().trim();
-      tamsays = tamsays.replaceAll("\\n\\s+", " ");
-      TextView tamsaysview = (TextView)findViewById(R.id.text_tamsays);
-      tamsaysview.setText(tamsays);
-    }
-
-    //  Pass the animation definition to the code that generates the animation
-    mAnimationView.setAnimation(tam);
-    //  Add hook for long-press on forward button
-    ImageButton bForward = (ImageButton)findViewById(R.id.button_end);
-    bForward.setOnLongClickListener(new View.OnLongClickListener() {
-        public boolean onLongClick(View v) {
-          mAnimationView.getThread().doEnd();
-          return true;
-        }
-      }
-    );
-    //  Add hook for long-press on prev button
-    ImageButton bPrev = (ImageButton)findViewById(R.id.button_rewind);
-    bPrev.setOnLongClickListener(new View.OnLongClickListener() {
-        public boolean onLongClick(View v) {
-          mAnimationView.getThread().doRewind();
-          return true;
-        }
-      }
-    );
-
   }
 
-  //  Handlers for button clicks
-  //  Rewind
-  public void onButtonRewindClicked(View v) {
-    mAnimationView.getThread().doPrevPart();
-  }
-  //  Backup
-  public void onButtonBackupClicked(View v) {
-    mAnimationView.getThread().doBackup();
-  }
-
-  //    Forward
-  public void onButtonForwardClicked(View v) {
-    mAnimationView.getThread().doForward();
-  }
-
-  //  End
-  public void onButtonEndClicked(View v) {
-    mAnimationView.getThread().doNextPart();
-  }
-  //  Play
-  public void onButtonPlayClicked(View v) {
-    ImageButton playbutton = (ImageButton)v;
-    mAnimationThread = mAnimationView.getThread();
-    if (mAnimationThread.running()) {
-      mAnimationThread.doPause();
-      playbutton.setSelected(false);
-    }
-    else {
-      mAnimationThread.doStart();
-      playbutton.setSelected(true);
-    }
-  }
 
   //  Definition
   public void onButtonDefinitionClicked(View v) {

@@ -1,0 +1,49 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    tools:context=".AnimListActivity" >
+
+    <TextView
+        android:id="@+id/animlist_title"
+        android:text="@string/app_name"
+        style="@style/ActivityTitle" />
+
+    <LinearLayout
+      android:layout_width="match_parent"
+      android:layout_height="wrap_content"
+      android:baselineAligned="false"
+      android:orientation="horizontal"      >
+      <fragment
+          android:id="@+id/fragment_animlist"
+          android:name="com.bradchristie.taminationsapp.AnimListFragment"
+          android:layout_width="0dp"
+          android:layout_height="match_parent"
+          android:layout_weight="1"
+          tools:layout="@layout/fragment_animlist" />
+      <View
+          android:layout_width="2dp"
+          android:layout_height="match_parent"
+          android:background="#ff000000"/>
+      <fragment
+          android:id="@+id/fragment_animation"
+          android:name="com.bradchristie.taminationsapp.AnimationFragment"
+          android:layout_width="0dp"
+          android:layout_height="match_parent"
+          android:layout_weight="1"
+          tools:layout="@layout/fragment_animation" />
+      <View
+          android:layout_width="2dp"
+          android:layout_height="match_parent"
+          android:background="#ff000000"/>
+      <fragment
+          android:id="@+id/fragment_definition"
+          android:name="com.bradchristie.taminationsapp.DefinitionFragment"
+          android:layout_width="0dp"
+          android:layout_height="match_parent"
+          android:layout_weight="1"
+          tools:layout="@layout/fragment_definition" />
+    </LinearLayout>
+
+</LinearLayout>

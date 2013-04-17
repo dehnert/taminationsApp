@@ -3,10 +3,10 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    tools:context=".LevelActivity" >
+    tools:context=".CallListActivity" >
 
-    <fragment android:name="com.bradchristie.taminationsapp.LevelFragment"
-              android:id="@+id/fragment_level"
+    <fragment android:name="com.bradchristie.taminationsapp.CalllistFragment"
+              android:id="@+id/fragment_calllist"
               android:layout_width="match_parent"
               android:layout_height="match_parent" />
 

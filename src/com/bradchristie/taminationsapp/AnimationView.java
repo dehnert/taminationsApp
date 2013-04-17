@@ -260,6 +260,7 @@ public class AnimationView extends SurfaceView implements SurfaceHolder.Callback
     {
       for (Dancer d : dancers)
         d.showNumber = numberem;
+      dirtify();
     }
 
     /**
@@ -634,6 +635,8 @@ public class AnimationView extends SurfaceView implements SurfaceHolder.Callback
           dnum++;
         }
       }
+      isRunning = false;
+      beat = -2.0;
       dirtify();
     }
 
@@ -669,6 +672,17 @@ public class AnimationView extends SurfaceView implements SurfaceHolder.Callback
   public void setAnimation(Element tam)
   {
     this.tam = tam;
+    if (thread != null) {
+      thread.setAnimation(tam);
+      //  Need to re-apply dancer numbers here because they get zapped
+      //  when dancers are re-created
+      if (numberpref.contains("1-8"))
+        thread.setNumbers(Dancer.NUMBERS_DANCERS);
+      else if (numberpref.contains("1-4"))
+        thread.setNumbers(Dancer.NUMBERS_COUPLES);
+      else
+        thread.setNumbers(Dancer.NUMBERS_OFF);
+    }
   }
 
   public void setAnimationListener(AnimationListener l)
@@ -690,16 +704,15 @@ public class AnimationView extends SurfaceView implements SurfaceHolder.Callback
    * Callback invoked when the Surface has been created and is ready to be
    * used.
    */
-
   static final Handler h = new Handler();
+  private String numberpref;
   @Override
   public void surfaceCreated(SurfaceHolder holder) {
-    // start the thread here so that we don't busy-wait in run()
-    // waiting for the surface to be created
-    // create thread if needed
     thread = new AnimationThread(holder, getContext(), h);
     SharedPreferences prefs =
         PreferenceManager.getDefaultSharedPreferences(getContext());
+    numberpref = prefs.getString("numbers2","");
+    setAnimation(tam);
     thread.setGridVisibility(prefs.getBoolean("grid", false));
     thread.setPathVisibility(prefs.getBoolean("paths", false));
     String geom = prefs.getString("geometry","None");
@@ -708,19 +721,12 @@ public class AnimationView extends SurfaceView implements SurfaceHolder.Callback
     else if (geom.equals("Bi-gon"))
       thread.setBigon(true);
     thread.setLoop(prefs.getBoolean("loop",false));
-    thread.setAnimation(tam);
-    String numberpref = prefs.getString("numbers2","");
-    if (numberpref.contains("1-8"))
-      thread.setNumbers(Dancer.NUMBERS_DANCERS);
-    else if (numberpref.contains("1-4"))
-      thread.setNumbers(Dancer.NUMBERS_COUPLES);
-    else
-      thread.setNumbers(Dancer.NUMBERS_OFF);
     thread.setSpeed(prefs.getString("speed", "Normal"));
     thread.setPhantomVisibility(prefs.getBoolean("phantoms",false));
     thread.setListener(listener);
     if (listener != null)
       listener.onAnimationChanged(AnimationListener.ANIMATION_READY,0.0,0.0);
+    // start the thread here, it will wait until Play is pressed
     thread.start();
   }
 

@@ -3,13 +3,12 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    tools:context=".CallActivity" >
+    tools:context=".CalllistFragment" >
 
     <TextView
         android:id="@+id/call_title"
         android:text="@string/app_name"
         style="@style/ActivityTitle"
-        android:textSize="36sp"
         />
 
     <ListView

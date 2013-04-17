@@ -20,13 +20,16 @@
 
 package com.bradchristie.taminationsapp;
 
-import android.app.Activity;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.support.v4.app.FragmentActivity;
 import android.view.View;
 
-public class LevelActivity extends Activity {
+public class LevelActivity extends FragmentActivity
+                           implements CallClickListener
+{
+
 
   @Override
   protected void onCreate(Bundle savedInstanceState) {
@@ -39,12 +42,31 @@ public class LevelActivity extends Activity {
    *  Display the screen listing calls for that level.
    */
 
-  private void processClick(String level, String selector)
+  public void processClick(String level, String selector)
   {
     SharedPreferences prefs = getSharedPreferences("Taminations",MODE_PRIVATE);
     prefs.edit().putString("level", level)
                 .putString("selector", selector).commit();
-    startActivity(new Intent(this,CallActivity.class));
+    if (findViewById(R.id.fragment_calllist) != null) {
+      //  Multi-fragment display - switch calllist fragment
+      CalllistFragment cf = (CalllistFragment)getSupportFragmentManager()
+                                    .findFragmentById(R.id.fragment_calllist);
+      cf.resetView();
+    } else
+      //  Single-fragment display - start calllist activity
+      startActivity(new Intent(this,CalllistActivity.class));
+  }
+
+  //  Process a click on one of the calls
+  public void onCallClick(String call, String link)
+  {
+    //  Save the call info
+    SharedPreferences prefs = getSharedPreferences("Taminations",MODE_PRIVATE);
+    prefs.edit().putString("call",call)
+                .putString("link",link)
+                .putInt("anim", 0).commit();
+    //  Start the next activity
+    startActivity(new Intent(this,AnimListActivity.class));
   }
 
   public void onBasicAndMainstreamClick(View v)

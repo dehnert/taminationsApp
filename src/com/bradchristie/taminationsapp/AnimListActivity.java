@@ -20,17 +20,15 @@
 
 package com.bradchristie.taminationsapp;
 
-import java.util.ArrayList;
-
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.NodeList;
 
-import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.support.v4.app.FragmentActivity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -40,24 +38,44 @@ import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.TextView;
 
-public class AnimListActivity extends Activity
+public class AnimListActivity extends FragmentActivity
        implements OnItemClickListener {
 
-  private class AnimListAdapter extends ArrayAdapter<String>
+  private class AnimListItem
+  {
+    public String name;
+    public String group;
+    public int resource;
+    public int difficulty;
+    public AnimListItem(String n, String g, int r, int d)
+    {
+      name = n;
+      group = g;
+      resource = r;
+      difficulty = d;
+    }
+    public String toString()
+    {
+      return name;
+    }
+  }
+
+  private class AnimListAdapter extends ArrayAdapter<AnimListItem>
   {
     private LayoutInflater mInflater;
-    private ArrayList<Integer> resources = new ArrayList<Integer>();
-    private ArrayList<Integer> difficulty = new ArrayList<Integer>();
     AnimListAdapter(Context context, int textViewResourceId)
     {
       super(context,textViewResourceId);
       mInflater = (LayoutInflater)context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
     }
-    public View getView (int position, View convertView, ViewGroup parent)
+
+    @Override
+    public View getView(int position, View convertView, ViewGroup parent)
     {
-      TextView myview = (TextView)mInflater.inflate(resources.get(position),parent,false);
-      myview.setText((CharSequence)getItem(position));
-      int d = difficulty.get(position);
+      AnimListItem item = getItem(position);
+      TextView myview = (TextView)mInflater.inflate(item.resource,parent,false);
+      myview.setText(item.toString());
+      int d = item.difficulty;
       if (d==1)
         myview.setBackgroundColor(0xffc0ffc0);
       else if (d==2)
@@ -69,17 +87,12 @@ public class AnimListActivity extends Activity
       return myview;
     }
 
-    public void add(String s, int r, int d)
-    {
-      resources.add(r);
-      difficulty.add(d);
-      add(s);
-    }
-
   }  // end of AnimListAdapter class
 
   private String xmlname;
   private int[] posanim;
+  private TextView titleView;
+  private AnimListAdapter adapter;
 
   @Override
   protected void onCreate(Bundle savedInstanceState) {
@@ -87,14 +100,17 @@ public class AnimListActivity extends Activity
     setContentView(R.layout.activity_animlist);
     SharedPreferences prefs = getSharedPreferences("Taminations",MODE_PRIVATE);
     //  Set the title
-    TextView titleView = (TextView)findViewById(R.id.animlist_title);
+    boolean multifragment = findViewById(R.id.animation) != null;
+    titleView = (TextView)findViewById(R.id.animlist_title);
     String titlestr = prefs.getString("call",getString(android.R.string.untitled));
-    if (titlestr.length() > 40)
-      titleView.setTextSize(18.0f);
-    else if (titlestr.length() > 16)
-      titleView.setTextSize(24.0f);
-    else
-      titleView.setTextSize(36.0f);
+    if (!multifragment) {
+      if (titlestr.length() > 40)
+        titleView.setTextSize(18.0f);
+      else if (titlestr.length() > 16)
+        titleView.setTextSize(24.0f);
+      else
+        titleView.setTextSize(36.0f);
+    }
     titleView.setText(titlestr);
 
     //  Fetch the list of animations and build the table
@@ -104,11 +120,12 @@ public class AnimListActivity extends Activity
     NodeList tams = doc.getElementsByTagName("tam");
     String prevtitle = "";
     String prevgroup = "";
-    AnimListAdapter s = new AnimListAdapter(this,R.layout.animlist_item);
+    adapter = new AnimListAdapter(this,R.layout.animlist_item);
     posanim = new int[tams.getLength()*2];
     for (int j=0; j<posanim.length; j++)
       posanim[j] = -1;
     int diffsum = 0;
+    int firstanim = -1;
     for (int i=0; i<tams.getLength(); i++) {
       Element tam = (Element)tams.item(i);
       if (tam.getAttribute("display").equals("none"))
@@ -127,41 +144,46 @@ public class AnimListActivity extends Activity
           if (group.matches("\\s+")) {
             //  Blank group, for calls with no common starting phrase
             //  Add a green separator unless it's the first group
-            if (s.getCount() > 0)
-              s.add(group,R.layout.animlist_separator,-1);
+            if (adapter.getCount() > 0)
+              adapter.add(new AnimListItem(group,"",R.layout.animlist_separator,-1));
           }
           else
             //  Named group e.g. "As Couples.."
             //  Add a header with the group name, which starts
             //  each call in the group
-            s.add(group,R.layout.animlist_header,-1);
+            adapter.add(new AnimListItem(group,"",R.layout.animlist_header,-1));
         }
         from = title.replace(group," ").trim();
       }
       else if (!title.equals(prevtitle))
         //  Not a group but a different call
         //  Put out a header with this call
-        s.add(title+" from",R.layout.animlist_header,-1);
+        adapter.add(new AnimListItem(title+" from","",R.layout.animlist_header,-1));
       prevtitle = title;
       prevgroup = group;
-      posanim[s.getCount()] = i;
+      posanim[adapter.getCount()] = i;
+      if (firstanim < 0)
+        firstanim = adapter.getCount();
       // Put out a selectable item
       if (group.matches("\\s+"))
-        s.add(from,R.layout.animlist_item,d);
+        adapter.add(new AnimListItem(from,"",R.layout.animlist_item,d));
+      else if (group.length() > 0)
+        adapter.add(new AnimListItem(from,group,R.layout.animlist_indenteditem,d));
       else
-        s.add(from,R.layout.animlist_indenteditem,d);
+        adapter.add(new AnimListItem(from,title+" from",R.layout.animlist_indenteditem,d));
     }
     if (tams.getLength() == 0) {
       //  Special handling if there are no animations for this call
       String title = "Sorry, there are no animations for " +
           prefs.getString("call",getString(android.R.string.untitled));
-      s.add(title,R.layout.animlist_header,-1);
-      title = "You can view the definition by tapping here.";
-      s.add(title,R.layout.animlist_item,0);
+      adapter.add(new AnimListItem(title,"",R.layout.animlist_header,-1));
+    } else {
+      AnimListItem item = adapter.getItem(firstanim);
+      titleView.setText(item.group+" "+item.name);
     }
     //  Build the list of animations
     ListView lv = (ListView)findViewById(R.id.listview_anim);
-    lv.setAdapter(s);
+    lv.setAdapter(adapter);
     lv.setOnItemClickListener(this);
     //  Show the difficulty legend only if difficulties are set
     View dv = findViewById(R.id.layout_difficulty);
@@ -188,6 +210,16 @@ public class AnimListActivity extends Activity
       SharedPreferences prefs = getSharedPreferences("Taminations",MODE_PRIVATE);
       prefs.edit().putInt("anim",posanim[position])
                   .putString("xmlname",xmlname).commit();
+      if (findViewById(R.id.animation) != null) {
+        //  Multi-fragment display - switch animation
+        AnimListItem item = adapter.getItem(position);
+        titleView.setText(item.group+" "+item.name);
+        AnimationFragment af = (AnimationFragment)getSupportFragmentManager()
+                                    .findFragmentById(R.id.fragment_animation);
+        af.resetAnimation();
+      }
+      else
+        //  Single fragment - start animation activity
       startActivity(new Intent(this,AnimationActivity.class));
     }
   }

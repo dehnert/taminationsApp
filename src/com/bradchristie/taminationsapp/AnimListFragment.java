@@ -20,24 +20,19 @@
 
 package com.bradchristie.taminationsapp;
 
-import android.content.SharedPreferences;
 import android.os.Bundle;
-import android.support.v4.app.FragmentActivity;
-import android.webkit.WebView;
+import android.support.v4.app.Fragment;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
 
-public class DefinitionActivity extends FragmentActivity {
+public class AnimListFragment extends Fragment
+{
 
-  @Override
-  protected void onCreate(Bundle savedInstanceState) {
-    super.onCreate(savedInstanceState);
-    setContentView(R.layout.activity_definition);
-    setTitle("Callerlab Definition");
-    SharedPreferences prefs = getSharedPreferences("Taminations",MODE_PRIVATE);
-    String name = prefs.getString("link",getString(android.R.string.untitled));
-    WebView defview = (WebView)findViewById(R.id.definitionView);
-    //  Turn on pinch-to-zoom, which is off(!) by default
-    defview.getSettings().setBuiltInZoomControls(true);
-    defview.loadUrl("file:///android_asset/" + name);
+  public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState)
+  {
+    // Inflate the layout for this fragment
+    return inflater.inflate(R.layout.fragment_animlist, container, false);
   }
 
 }
