@@ -12,6 +12,17 @@
 
         <com.bradchristie.taminationsapp.AnimationView
             android:id="@+id/animation"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentTop="true"
+            android:layout_width="fill_parent"
+            android:layout_height="fill_parent" />
+
+        <View
+            android:id="@+id/animation_cover"
+            android:background="#fffff0e0"
+            android:visibility="invisible"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentTop="true"
             android:layout_width="fill_parent"
             android:layout_height="fill_parent" />
 
@@ -90,5 +101,29 @@
             android:contentDescription="@string/button_animation_end" />
 
       </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" >
+
+        <Button
+            android:id="@+id/button_definition"
+            style="@style/BWButton"
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:layout_height="wrap_content"
+            android:onClick="onButtonDefinitionClicked"
+            android:text="@string/menu_definition" />
+
+        <Button
+            android:id="@+id/button_settings"
+            style="@style/BWButton"
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:layout_height="wrap_content"
+            android:onClick="onButtonSettingsClicked"
+            android:text="@string/menu_settings" />
+
+    </LinearLayout>
 
 </LinearLayout>

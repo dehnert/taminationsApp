@@ -4,7 +4,7 @@
 #  Requires $(TAMINATIONS) to be set to the location of that project
 
 OBJDIR = assets
-TAMDIRS = ms plus adv c1 c2 c3a src
+TAMDIRS = b1 b2 ms plus a1 a2 adv c1 c2 c3a src
 TAMTYPES = xml html png
 SRC = $(foreach dir,$(TAMDIRS),\
       $(foreach type,$(TAMTYPES),\

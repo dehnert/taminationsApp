@@ -24,10 +24,10 @@ import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.NodeList;
 
+import android.app.Activity;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.os.Bundle;
-import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -38,7 +38,7 @@ import android.widget.TextView;
 
 import com.bradchristie.taminationsapp.AnimationView.AnimationThread;
 
-public class AnimationFragment extends Fragment
+public class AnimationFragment extends RotationFragment
                                implements AnimationListener,
                                           SeekBar.OnSeekBarChangeListener
 
@@ -65,19 +65,30 @@ public class AnimationFragment extends Fragment
         break;
       case ANIMATION_PROGRESS :
         //  Position slider to current location
-        SeekBar sb = (SeekBar)getActivity().findViewById(R.id.seekBar1);
-        float m = (float)sb.getMax();
-        sb.setProgress((int)(loc*m));
-        //  Fade out any Taminator text
-        int a = (int)Math.floor(Math.max(-beat/2.01,0.0)*256.0);
-        TextView tamsaysview = (TextView)getActivity().findViewById(R.id.text_tamsays);
-        //  setAlpha would be easier but not available for API 10
-        tamsaysview.setTextColor(a<<24);
-        tamsaysview.setBackgroundColor(((a*3/4)<<24) | 0x00ffffff);
+        //  It's possible for this to be called as the fragment is swapped out,
+        //  so be extra special careful
+        Activity act = getActivity();
+        SeekBar sb = act == null ? null : (SeekBar)act.findViewById(R.id.seekBar1);
+        if (sb != null) {
+          float m = (float)sb.getMax();
+          sb.setProgress((int)(loc*m));
+          //  Fade out any Taminator text
+          int a = (int)Math.floor(Math.max(-beat/2.01,0.0)*256.0);
+          TextView tamsaysview = (TextView)getActivity().findViewById(R.id.text_tamsays);
+          //  setAlpha would be easier but not available for API 10
+          tamsaysview.setTextColor(a<<24);
+          tamsaysview.setBackgroundColor(((a*3/4)<<24) | 0x00ffffff);
+        }
         break;
       case ANIMATION_DONE :
         ImageButton playbutton = (ImageButton)getActivity().findViewById(R.id.button_play);
         playbutton.setSelected(false);
+        break;
+      case ANIMATION_PART :
+        //  A bit of a hack to pass the current part to the definition
+        act = getActivity();
+        if (act != null && act.getClass() == AnimListActivity.class)
+          ((AnimListActivity)act).setPart((int)loc);
         break;
       }
     }
@@ -87,9 +98,16 @@ public class AnimationFragment extends Fragment
   private AnimationThread mAnimationThread;
 
   /** A handle to the View in which the animation is running. */
-  private AnimationView mAnimationView;
+  public AnimationView mAnimationView;
 
   private View fragment;
+
+  public void readSettings(int setting)
+  {
+    mAnimationView.readSettings();
+    if (setting == AnimationSettingsListener.GEOMETRY_SETTING_CHANGED)
+      resetAnimation();
+  }
 
   public void resetAnimation()
   {
@@ -212,7 +230,9 @@ public class AnimationFragment extends Fragment
   public void onAnimationChanged(int action, double loc, double beat)
   {
     AnimationUpdater a = new AnimationUpdater(action, loc, beat);
-    getActivity().runOnUiThread(a);
+    Activity act = getActivity();
+    if (act != null)
+      act.runOnUiThread(a);
   }
 
 

@@ -6,7 +6,7 @@
     tools:context=".AnimListActivity" >
 
     <TextView
-        android:id="@+id/animlist_title"
+        android:id="@+id/title2"
         android:text="@string/app_name"
         style="@style/ActivityTitle" />
 

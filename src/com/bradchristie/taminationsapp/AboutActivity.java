@@ -20,11 +20,10 @@
 
 package com.bradchristie.taminationsapp;
 
-import android.app.Activity;
 import android.os.Bundle;
 import android.webkit.WebView;
 
-public class AboutActivity extends Activity {
+public class AboutActivity extends PortraitActivity {
 
   @Override
   protected void onCreate(Bundle savedInstanceState) {

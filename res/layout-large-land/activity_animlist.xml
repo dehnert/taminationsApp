@@ -1,0 +1,43 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:background="#ffc0c0c0"
+    tools:context=".AnimListActivity" >
+
+    <TextView
+        android:id="@+id/title2"
+        style="@style/ActivityTitle"
+        android:text="@string/app_name" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="horizontal"
+        android:baselineAligned="false" >
+
+        <fragment
+            android:id="@+id/fragment_animlist"
+            android:name="com.bradchristie.taminationsapp.AnimListFragment"
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:layout_height="match_parent"
+            tools:layout="@layout/fragment_animlist" />
+
+        <FrameLayout
+            android:id="@+id/fragment_animation"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1" />
+
+        <FrameLayout
+            android:id="@+id/fragment_definition"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:background="@android:color/white"
+            android:layout_weight="1" />
+
+    </LinearLayout>
+
+</LinearLayout>

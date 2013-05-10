@@ -20,7 +20,7 @@
 
   <style name="ListItem">
     <item name="android:layout_width">fill_parent</item>
-    <item name="android:textColor">#ff000000</item>
+    <item name="android:textColor">@color/text</item>
     <item name="android:background">#ffffffff</item>
     <item name="android:textSize">24sp</item>
     <item name="android:paddingLeft">4sp</item>
@@ -50,9 +50,8 @@
       <item name="android:textSize">40sp</item>
   </style>
 
-  <style name="LevelButton">
-      <item name="android:background">#ffc0c0c0</item>
-      <item name="android:textColor">#ff000000</item>
+  <style name="LevelButtonBase">
+      <item name="android:textColor">@color/text</item>
       <item name="android:textSize">18sp</item>
       <item name="android:textStyle">bold</item>
       <item name="android:gravity">left|center_vertical</item>
@@ -86,4 +85,18 @@
     <item name="android:textColor">#ff000000</item>
   </style>
 
+  <style name="Settings0">
+    <item name="android:layout_width">match_parent</item>
+    <item name="android:layout_height">wrap_content</item>
+  </style>
+
+  <style name="Settings1" parent="Settings0">
+    <item name="android:background">#ff808080</item>
+    <item name="android:paddingBottom">6sp</item>
+  </style>
+
+  <style name="Settings2" parent="Settings0">
+      <item name="android:background">#fff0f0f0</item>
+      <item name="android:paddingLeft">10sp</item>
+  </style>
 </resources>

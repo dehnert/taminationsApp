@@ -5,6 +5,11 @@
     android:orientation="vertical"
     tools:context=".CallListActivity" >
 
+    <TextView
+        android:id="@+id/title"
+        style="@style/ActivityTitle"
+        android:text="@string/app_name" />
+
     <fragment android:name="com.bradchristie.taminationsapp.CalllistFragment"
               android:id="@+id/fragment_calllist"
               android:layout_width="match_parent"

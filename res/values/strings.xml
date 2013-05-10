@@ -18,4 +18,5 @@
     <string name="label_difficulty_common">Common</string>
     <string name="label_difficulty_harder">Harder</string>
     <string name="label_difficulty_expert">Expert</string>
+
 </resources>

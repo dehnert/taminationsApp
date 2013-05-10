@@ -1,0 +1,19 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    tools:context=".AnimationActivity" >
+
+    <TextView
+        android:id="@+id/animation_title"
+        android:text="Settings"
+        style="@style/ActivityTitle" />
+
+    <fragment android:name="com.bradchristie.taminationsapp.SettingsFragment"
+              android:id="@+id/fragment_settings"
+              android:layout_width="match_parent"
+              android:layout_height="0dp"
+              android:layout_weight="1" />
+
+</LinearLayout>

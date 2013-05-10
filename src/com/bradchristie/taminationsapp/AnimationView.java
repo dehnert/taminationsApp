@@ -37,7 +37,6 @@ import android.graphics.Paint.Style;
 import android.graphics.Rect;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Handler;
-import android.preference.PreferenceManager;
 import android.util.AttributeSet;
 import android.util.Pair;
 import android.view.SurfaceHolder;
@@ -48,6 +47,9 @@ public class AnimationView extends SurfaceView implements SurfaceHolder.Callback
 
   class AnimationThread extends Thread {
 
+    private static final double SLOWSPEED = 1500.0;
+    private static final double NORMALSPEED = 500.0;
+    private static final double FASTSPEED = 200.0;
     /** Indicate whether the surface has been created & is ready to draw */
     private boolean isAlive = true;
     /** Indicate if the animation is running */
@@ -73,6 +75,8 @@ public class AnimationView extends SurfaceView implements SurfaceHolder.Callback
     private boolean dirty = false;
     /** Parts string from formation, for passing to tic labeler  */
     private String parts;
+    private double[] partbeats;
+    private int currentpart;
 
     /** Handle to the surface manager object we interact with */
     private SurfaceHolder mSurfaceHolder;
@@ -231,8 +235,10 @@ public class AnimationView extends SurfaceView implements SurfaceHolder.Callback
      */
     public synchronized void setPhantomVisibility(boolean show)
     {
-      for (Dancer d : dancers) {
-        d.hidden = d.isPhantom() && !show;
+      if (dancers != null) {
+        for (Dancer d : dancers) {
+          d.hidden = d.isPhantom() && !show;
+        }
       }
     }
 
@@ -269,24 +275,29 @@ public class AnimationView extends SurfaceView implements SurfaceHolder.Callback
     public synchronized void setSpeed(String myspeed)
     {
       if (myspeed.equals("Slow"))
-        speed = 1500.0;
+        speed = SLOWSPEED;
       else if (myspeed.equals("Fast"))
-        speed = 200.0;
+        speed = FASTSPEED;
       else
-        speed = 500.0;  // default normal speed
+        speed = NORMALSPEED;  // default normal speed
     }
 
     /**  Set hexagon geometry  */
-    public synchronized void setHexagon(boolean ishex)
+    public synchronized void setHexagon()
     {
       geometry = Geometry.HEXAGON;
     }
 
     /**  Set bigon geometry  */
-    public synchronized void setBigon(boolean isbigon)
+    public synchronized void setBigon()
     {
       geometry = Geometry.BIGON;
     }
+    public synchronized void setSquare()
+    {
+      geometry = Geometry.SQUARE;
+    }
+
 
     /**
      *   Return animation beats, including 2 beat intro
@@ -317,7 +328,7 @@ public class AnimationView extends SurfaceView implements SurfaceHolder.Callback
      *   Called when a change is made that affects the display.
      *   Tell the display to redraw even if the animation is not running.
      */
-    private void dirtify()
+    public synchronized void dirtify()
     {
       dirty = true;
       notify();
@@ -359,8 +370,20 @@ public class AnimationView extends SurfaceView implements SurfaceHolder.Callback
         Rect candim = c.getClipBounds();
         cd.setBounds(candim);
         cd.draw(c);
-        //  Scale coordinate system to dancer's size
         float range = Math.min(candim.width(),candim.height());
+        //  Note Loop and dancer speed
+        Paint p = new Paint();
+        p.setColor(Color.BLACK);
+        p.setTextSize(range/15.0f);
+        String infostr = "";
+        if (speed == SLOWSPEED)
+          infostr = "Slow ";
+        else if (speed == FASTSPEED)
+          infostr = "Fast ";
+        if (loop)
+          infostr += "Loop";
+        c.drawText(infostr, 10.0f, candim.height()-20.0f, p);
+        //  Scale coordinate system to dancer's size
         c.translate(candim.width()/2,candim.height()/2);
         float s = range/13.0f;
         //  Flip and rotate
@@ -455,6 +478,19 @@ public class AnimationView extends SurfaceView implements SurfaceHolder.Callback
       for (int j=1; j<=incs; j++) {
         for (int i=0; i<dancers.length; i++)
           dancers[i].animate(prevbeat + j*delta/incs);
+      }
+      //  Find the current part, and send a message if it's changed
+      int thispart = 0;
+      for (int i=0; i<partbeats.length; i++) {
+        if (partbeats[i] < beat)
+          thispart = i;
+      }
+      if (beat < 0 || beat > beats)
+        thispart = 0;
+      if (thispart != currentpart) {
+        currentpart = thispart;
+        if (listener != null)
+          listener.onAnimationChanged(AnimationListener.ANIMATION_PART,currentpart,beats);
       }
 
       //  Compute handholds
@@ -635,6 +671,8 @@ public class AnimationView extends SurfaceView implements SurfaceHolder.Callback
           dnum++;
         }
       }
+      partbeats = getPartsValues();
+      currentpart = 0;
       isRunning = false;
       beat = -2.0;
       dirtify();
@@ -709,20 +747,7 @@ public class AnimationView extends SurfaceView implements SurfaceHolder.Callback
   @Override
   public void surfaceCreated(SurfaceHolder holder) {
     thread = new AnimationThread(holder, getContext(), h);
-    SharedPreferences prefs =
-        PreferenceManager.getDefaultSharedPreferences(getContext());
-    numberpref = prefs.getString("numbers2","");
-    setAnimation(tam);
-    thread.setGridVisibility(prefs.getBoolean("grid", false));
-    thread.setPathVisibility(prefs.getBoolean("paths", false));
-    String geom = prefs.getString("geometry","None");
-    if (geom.equals("Hexagon"))
-      thread.setHexagon(true);
-    else if (geom.equals("Bi-gon"))
-      thread.setBigon(true);
-    thread.setLoop(prefs.getBoolean("loop",false));
-    thread.setSpeed(prefs.getString("speed", "Normal"));
-    thread.setPhantomVisibility(prefs.getBoolean("phantoms",false));
+    readSettings();
     thread.setListener(listener);
     if (listener != null)
       listener.onAnimationChanged(AnimationListener.ANIMATION_READY,0.0,0.0);
@@ -730,9 +755,37 @@ public class AnimationView extends SurfaceView implements SurfaceHolder.Callback
     thread.start();
   }
 
+  public void readSettings()
+  {
+    SharedPreferences prefs =
+        getContext().getSharedPreferences("Taminations", Context.MODE_PRIVATE);
+    numberpref = prefs.getString("numbers2","");
+    thread.setGridVisibility(prefs.getBoolean("grid", false));
+    thread.setPathVisibility(prefs.getBoolean("paths", false));
+    String geom = prefs.getString("geometry","None");
+    if (geom.equals("Hexagon"))
+      thread.setHexagon();
+    else if (geom.equals("Bi-gon"))
+      thread.setBigon();
+    else
+      thread.setSquare();
+    thread.setLoop(prefs.getBoolean("loop",false));
+    thread.setSpeed(prefs.getString("speed", "Normal"));
+    thread.setPhantomVisibility(prefs.getBoolean("phantoms",false));
+    setAnimation(tam);
+    if (listener != null)
+      listener.onAnimationChanged(AnimationListener.ANIMATION_DONE,0.0,0.0);
+  }
+
   @Override
   public void surfaceChanged(SurfaceHolder holder, int format, int width,
       int height) {
+  }
+
+  public void onDraw(Canvas c)
+  {
+    if (thread != null)
+      thread.dirtify();
   }
 
   /**

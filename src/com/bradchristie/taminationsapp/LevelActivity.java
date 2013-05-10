@@ -23,38 +23,59 @@ package com.bradchristie.taminationsapp;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
-import android.support.v4.app.FragmentActivity;
 import android.view.View;
 
-public class LevelActivity extends FragmentActivity
+public class LevelActivity extends RotationActivity
                            implements CallClickListener
 {
 
+  View selectedView = null;
 
   @Override
   protected void onCreate(Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
     setContentView(R.layout.activity_level);
+    if (findViewById(R.id.fragment_calllist) != null) {
+      //  Multi-fragment display - switch calllist fragment
+      AboutFragment af = new AboutFragment();
+      replaceFragment(af,R.id.fragment_calllist);
+    }
+  }
+
+  protected void onResume()
+  {
+    super.onResume();
+    if (isPortrait() && selectedView != null) {
+      selectedView.setSelected(false);
+      selectedView = null;
+    }
   }
 
   /**
    *  This handles clicks on the buttons for different levels.
    *  Display the screen listing calls for that level.
    */
-
-  public void processClick(String level, String selector)
+  private void highlightClick(View v)
   {
+    if (selectedView != null)
+      selectedView.setSelected(false);
+    v.setSelected(true);
+    selectedView = v;
+  }
+  private void processClick(View v, String level, String selector)
+  {
+    highlightClick(v);
     SharedPreferences prefs = getSharedPreferences("Taminations",MODE_PRIVATE);
     prefs.edit().putString("level", level)
                 .putString("selector", selector).commit();
-    if (findViewById(R.id.fragment_calllist) != null) {
-      //  Multi-fragment display - switch calllist fragment
-      CalllistFragment cf = (CalllistFragment)getSupportFragmentManager()
-                                    .findFragmentById(R.id.fragment_calllist);
-      cf.resetView();
-    } else
+    if (isPortrait()) {
       //  Single-fragment display - start calllist activity
       startActivity(new Intent(this,CalllistActivity.class));
+    } else {
+      //  Multi-fragment display - switch calllist fragment
+      CalllistFragment cf = new CalllistFragment();
+      replaceFragment(cf,R.id.fragment_calllist);
+    }
   }
 
   //  Process a click on one of the calls
@@ -71,56 +92,67 @@ public class LevelActivity extends FragmentActivity
 
   public void onBasicAndMainstreamClick(View v)
   {
-    processClick("Basic and Mainstream","level='Basic and Mainstream' and @sublevel!='Styling'");
+    processClick(v,"Basic and Mainstream","level='Basic and Mainstream' and @sublevel!='Styling'");
   }
   public void onBasic1Click(View v)
   {
-    processClick("Basic 1","sublevel='Basic 1'");
+    processClick(v,"Basic 1","sublevel='Basic 1'");
   }
   public void onBasic2Click(View v)
   {
-    processClick("Basic 2","sublevel='Basic 2'");
+    processClick(v,"Basic 2","sublevel='Basic 2'");
   }
   public void onMainstreamClick(View v)
   {
-    processClick("Mainstream","sublevel='Mainstream'");
+    processClick(v,"Mainstream","sublevel='Mainstream'");
   }
   public void onPlusClick(View v)
   {
-    processClick("Plus","level='Plus'");
+    processClick(v,"Plus","level='Plus'");
   }
   public void onAdvancedClick(View v)
   {
-    processClick("Advanced","level='Advanced'");
+    processClick(v,"Advanced","level='Advanced'");
   }
   public void onA1Click(View v)
   {
-    processClick("A-1","sublevel='A-1'");
+    processClick(v,"A-1","sublevel='A-1'");
   }
   public void onA2Click(View v)
   {
-    processClick("A-2","sublevel='A-2'");
+    processClick(v,"A-2","sublevel='A-2'");
   }
   public void onChallengeClick(View v)
   {
-    processClick("Challenge","level='Challenge'");
+    processClick(v,"Challenge","level='Challenge'");
   }
   public void onC1Click(View v)
   {
-    processClick("C-1","sublevel='C-1'");
+    processClick(v,"C-1","sublevel='C-1'");
   }
   public void onC2Click(View v)
   {
-    processClick("C-2","sublevel='C-2'");
+    processClick(v,"C-2","sublevel='C-2'");
   }
   public void onC3AClick(View v)
   {
-    processClick("C-3A","sublevel='C-3A'");
+    processClick(v,"C-3A","sublevel='C-3A'");
   }
   public void onIndexClick(View v)
   {
-    processClick("Index of All Calls","level!='Info' and @sublevel!='Styling'");
+    processClick(v,"Index of All Calls","level!='Info' and @sublevel!='Styling'");
   }
+  public void onAboutClick(View v)
+  {
+    highlightClick(v);
+    if (findViewById(R.id.fragment_calllist) != null) {
+      //  Multi-fragment display - switch calllist fragment
+      AboutFragment af = new AboutFragment();
+      replaceFragment(af,R.id.fragment_calllist);
+    } else
+      //  Single-fragment display - start calllist activity
+      startActivity(new Intent(this,AboutActivity.class));
 
+  }
 
 }

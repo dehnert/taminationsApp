@@ -28,7 +28,6 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.os.Bundle;
-import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -39,7 +38,7 @@ import android.widget.ListView;
 import android.widget.SectionIndexer;
 import android.widget.TextView;
 
-public class CalllistFragment extends Fragment implements OnItemClickListener
+public class CalllistFragment extends RotationFragment implements OnItemClickListener
 {
   private CallListAdapter cla;
   private View fragment;
@@ -58,8 +57,7 @@ public class CalllistFragment extends Fragment implements OnItemClickListener
     SharedPreferences prefs = getActivity().getSharedPreferences("Taminations",Activity.MODE_PRIVATE);
     String levelname = prefs.getString("level","Basic and Mainstream");
     String selector = prefs.getString("selector","level=Mainstream");
-    TextView titleView = (TextView)fragment.findViewById(R.id.call_title);
-    titleView.setText(levelname);
+    setTitle("Taminations - "+levelname);
     //  Fetch all the calls for this level and store in the array of objects
     Document doc = Tamination.getXMLAsset(getActivity(),"src/calls.xml");
     NodeList list1 = Tamination.evalXPath("/calls/call[@"+selector+"]",doc);
@@ -158,13 +156,13 @@ public class CalllistFragment extends Fragment implements OnItemClickListener
       CallListItem item = getItem(position);
       myview.setText(item.toString());
       if (item.level.equals("Basic and Mainstream"))
-        myview.setBackgroundColor(0xffc0c0ff);
+        myview.setBackgroundColor(0xffe0e0ff);
       else if (item.level.equals("Plus"))
-        myview.setBackgroundColor(0xffc0ffc0);
+        myview.setBackgroundColor(0xffe0ffe0);
       else if (item.level.equals("Advanced"))
-        myview.setBackgroundColor(0xffffe080);
+        myview.setBackgroundColor(0xfffff0c0);
       else if (item.level.equals("Challenge"))
-        myview.setBackgroundColor(0xffffc0c0);
+        myview.setBackgroundColor(0xffffe0e0);
       return myview;
     }
 

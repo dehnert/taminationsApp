@@ -20,17 +20,20 @@
 
 package com.bradchristie.taminationsapp;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.os.Bundle;
-import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.webkit.WebView;
 
-public class DefinitionFragment extends Fragment
+@SuppressLint("SetJavaScriptEnabled")
+public class DefinitionFragment extends RotationFragment
 {
+
+  private WebView defview;
 
   public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState)
   {
@@ -38,11 +41,37 @@ public class DefinitionFragment extends Fragment
     View fragment = inflater.inflate(R.layout.fragment_definition, container, false);
     SharedPreferences prefs = getActivity().getSharedPreferences("Taminations",Context.MODE_PRIVATE);
     String name = prefs.getString("link",getString(android.R.string.untitled));
-    WebView defview = (WebView)fragment.findViewById(R.id.definitionView);
+    defview = (WebView)fragment.findViewById(R.id.definitionView);
     //  Turn on pinch-to-zoom, which is off(!) by default
     defview.getSettings().setBuiltInZoomControls(true);
+    defview.getSettings().setJavaScriptEnabled(true);
     defview.loadUrl("file:///android_asset/" + name);
+    String jsfunction =
+    "    function setPart(part)    { "+
+    "      var nodes = document.getElementsByTagName('span'); "+
+    "      for (var i=0; i<nodes.length; i++) { "+
+    "        var elem = nodes.item(i); "+
+    "        var classstr = ' '+elem.className+' '; "+
+    "        classstr = classstr.replace('definition-highlight',''); "+
+    "        var teststr = ' '+classstr+' '+elem.id+' '; "+
+    "        if (teststr.indexOf(' '+currentcall+part+' ') > 0 || "+
+    "            teststr.indexOf('Part'+part+' ') > 0) "+
+    "          classstr += 'definition-highlight'; "+
+    "        classstr = classstr.replace(/^\\s+|\\s+$/g,''); "+
+    "        elem.className = classstr;      }   }  ";
+    defview.loadUrl("javascript:"+jsfunction);
+
+
     return fragment;
   }
 
+
+  public void setPart(int part)
+  {
+    SharedPreferences prefs = getActivity().getSharedPreferences("Taminations",Context.MODE_PRIVATE);
+    String name = prefs.getString("title",getString(android.R.string.untitled));
+    name = name.replaceAll("\\s+", "");
+    defview.loadUrl("javascript:currentcall='"+name+"'");
+    defview.loadUrl("javascript:setPart("+part+")");
+  }
 }

@@ -24,14 +24,13 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
-import android.support.v4.app.FragmentActivity;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.ArrayAdapter;
 import android.widget.SectionIndexer;
 
-public class CalllistActivity extends FragmentActivity
+public class CalllistActivity extends PortraitActivity
                               implements OnItemClickListener, CallClickListener
 {
 
@@ -103,29 +102,6 @@ public class CalllistActivity extends FragmentActivity
     super.onCreate(savedInstanceState);
     setContentView(R.layout.activity_calllist);
     return;
-    /*
-    cla = new CallListAdapter(this,R.layout.calllist_item);
-    //  Set the title to the current dance level
-    SharedPreferences prefs = getSharedPreferences("Taminations",MODE_PRIVATE);
-    String levelname = prefs.getString("level",getString(android.R.string.untitled));
-    String selector = prefs.getString("selector",getString(android.R.string.untitled));
-    TextView titleView = (TextView)findViewById(R.id.call_title);
-    titleView.setText(levelname);
-    //  Fetch all the calls for this level and store in the array of objects
-    Document doc = Tamination.getXMLAsset(this,"src/calls.xml");
-    NodeList list1 = Tamination.evalXPath("/calls/call[@"+selector+"]",doc);
-    for (int j=0; j<list1.getLength(); j++) {
-      Element e1 = (Element)list1.item(j);
-      CallListItem item = new CallListItem(e1.getAttribute("text"),e1.getAttribute("link"));
-      cla.add(item);
-    }
-    //  Build the list from the array
-    ListView lv = (ListView)findViewById(R.id.listview_calls);
-    lv.setAdapter(cla);
-    if (cla.getCount() > 20)
-      lv.setFastScrollEnabled(true);
-    lv.setOnItemClickListener(this);
-    */
   }
 
   //  Process a click on one of the calls

@@ -22,10 +22,9 @@ package com.bradchristie.taminationsapp;
 
 import android.content.SharedPreferences;
 import android.os.Bundle;
-import android.support.v4.app.FragmentActivity;
 import android.webkit.WebView;
 
-public class DefinitionActivity extends FragmentActivity {
+public class DefinitionActivity extends PortraitActivity {
 
   @Override
   protected void onCreate(Bundle savedInstanceState) {

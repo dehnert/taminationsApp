@@ -23,7 +23,6 @@ package com.bradchristie.taminationsapp;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
-import android.support.v4.app.FragmentActivity;
 import android.view.View;
 import android.widget.ImageButton;
 import android.widget.SeekBar;
@@ -31,7 +30,7 @@ import android.widget.TextView;
 
 import com.bradchristie.taminationsapp.AnimationView.AnimationThread;
 
-public class AnimationActivity extends FragmentActivity
+public class AnimationActivity extends PortraitActivity
              implements AnimationListener,
                         SharedPreferences.OnSharedPreferenceChangeListener,
                         SeekBar.OnSeekBarChangeListener
@@ -86,6 +85,8 @@ public class AnimationActivity extends FragmentActivity
   protected void onCreate(Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
     setContentView(R.layout.activity_animation);
+    SharedPreferences prefs = getSharedPreferences("Taminations",MODE_PRIVATE);
+    setTitle(prefs.getString("name","no title"));
     mAnimationView = (AnimationView)findViewById(R.id.animation);
   }
 

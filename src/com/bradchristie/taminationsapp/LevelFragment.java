@@ -20,14 +20,13 @@
 
 package com.bradchristie.taminationsapp;
 
+//  Use the backward-compatibility library to support Android 2
 import android.os.Bundle;
-import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-//  Use the backward-compatibility library to support Android 2
 
-public class LevelFragment extends Fragment
+public class LevelFragment extends RotationFragment
 {
 
   public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState)
