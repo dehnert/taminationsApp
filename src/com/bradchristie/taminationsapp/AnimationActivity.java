@@ -24,6 +24,7 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.SeekBar;
 import android.widget.TextView;
@@ -87,6 +88,11 @@ public class AnimationActivity extends PortraitActivity
     setContentView(R.layout.activity_animation);
     SharedPreferences prefs = getSharedPreferences("Taminations",MODE_PRIVATE);
     setTitle(prefs.getString("name","no title"));
+    String xmlname = prefs.getString("link", getString(android.R.string.untitled))
+        .replace("html", "xml");
+    String level = xmlname.split("/")[0];
+    Button levelButton = (Button)findViewById(R.id.button_level);
+    levelButton.setText(Tamination.levelDir2Name(level));
     mAnimationView = (AnimationView)findViewById(R.id.animation);
   }
 

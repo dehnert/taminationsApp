@@ -104,6 +104,17 @@ public class CalllistActivity extends PortraitActivity
     return;
   }
 
+  protected void onResume()
+  {
+    super.onResume();
+    SharedPreferences prefs = getSharedPreferences("Taminations",MODE_PRIVATE);
+    String upto = prefs.getString("navigateupto", "");
+    if (upto.equals("CalllistActivity"))
+      prefs.edit().remove("navigateupto").commit();
+    else if (upto.length() > 0)
+      finish();
+  }
+
   //  Process a click on one of the calls
   public void onItemClick(AdapterView<?> parent, View v, int position, long id) {
     //  Save the call info

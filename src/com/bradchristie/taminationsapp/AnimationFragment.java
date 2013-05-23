@@ -118,36 +118,27 @@ public class AnimationFragment extends RotationFragment
     //  Read the xml file and select the requested animation
     Document tamdoc = Tamination.getXMLAsset(getActivity(), xmlname);
     Element tam = (Element)tamdoc.getElementsByTagName("tam").item(anim);
-    //  Set title and scale it to fit header space
-    TextView titleView = (TextView)fragment.findViewById(R.id.animation_title);
-    if (titleView != null) {
-      String titlestr = tam.getAttribute("title");
-      if (titlestr.length() > 40)
-        titleView.setTextSize(18.0f);
-      else if (titlestr.length() > 16)
-        titleView.setTextSize(24.0f);
-      else
-        titleView.setTextSize(36.0f);
-      titleView.setText(titlestr);
-    }
+    if (tam != null)
+      setTitle(tam.getAttribute("title"));
     //  Display any Taminator quote
-    NodeList tamsayslist = tam.getElementsByTagName("taminator");
-    if (tamsayslist.getLength() > 0) {
-      Element tamsayselem = (Element)tamsayslist.item(0);
-      //  Clean up extra white space in the XML
-      String tamsays = tamsayselem.getTextContent().trim();
-      tamsays = tamsays.replaceAll("\\n\\s+", " ");
-      TextView tamsaysview = (TextView)fragment.findViewById(R.id.text_tamsays);
-      tamsaysview.setText(tamsays);
+    if (tam != null) {
+      NodeList tamsayslist = tam.getElementsByTagName("taminator");
+      if (tamsayslist.getLength() > 0) {
+        Element tamsayselem = (Element)tamsayslist.item(0);
+        //  Clean up extra white space in the XML
+        String tamsays = tamsayselem.getTextContent().trim();
+        tamsays = tamsays.replaceAll("\\n\\s+", " ");
+        TextView tamsaysview = (TextView)fragment.findViewById(R.id.text_tamsays);
+        tamsaysview.setText(tamsays);
+      }
+
+      //  Pass the animation definition to the code that generates the animation
+      mAnimationView.setAnimation(tam);
+      //  Reset the slider display
+      SliderTicView ticView = (SliderTicView)getActivity().findViewById(R.id.slidertics);
+      if (ticView != null)
+        ticView.setTics(mAnimationThread.getBeats(),mAnimationThread.getParts());
     }
-
-    //  Pass the animation definition to the code that generates the animation
-    mAnimationView.setAnimation(tam);
-    //  Reset the slider display
-    SliderTicView ticView = (SliderTicView)getActivity().findViewById(R.id.slidertics);
-    if (ticView != null)
-      ticView.setTics(mAnimationThread.getBeats(),mAnimationThread.getParts());
-
   }
 
   @Override
@@ -161,7 +152,8 @@ public class AnimationFragment extends RotationFragment
     sb.setOnSeekBarChangeListener(this);
     resetAnimation();
     //  Add listeners for buttons
-    fragment.findViewById(R.id.button_rewind).setOnClickListener(new OnClickListener() {
+    View rewindButton = fragment.findViewById(R.id.button_rewind);
+    rewindButton.setOnClickListener(new OnClickListener() {
       public void onClick(View v) {
         mAnimationView.getThread().doPrevPart();
       }
@@ -178,7 +170,8 @@ public class AnimationFragment extends RotationFragment
         mAnimationView.getThread().doForward();
       }
     });
-    fragment.findViewById(R.id.button_end).setOnClickListener(new OnClickListener() {
+    View endButton = fragment.findViewById(R.id.button_end);
+    endButton.setOnClickListener(new OnClickListener() {
       public void onClick(View v) {
         mAnimationView.getThread().doNextPart();
       }
@@ -197,7 +190,7 @@ public class AnimationFragment extends RotationFragment
       }
     });
     //  Add hook for long-press on forward button
-    forwardButton.setOnLongClickListener(new View.OnLongClickListener() {
+    endButton.setOnLongClickListener(new View.OnLongClickListener() {
         public boolean onLongClick(View v) {
           mAnimationView.getThread().doEnd();
           return true;
@@ -205,7 +198,7 @@ public class AnimationFragment extends RotationFragment
       }
     );
     //  Add hook for long-press on prev button
-    prevButton.setOnLongClickListener(new View.OnLongClickListener() {
+    rewindButton.setOnLongClickListener(new View.OnLongClickListener() {
         public boolean onLongClick(View v) {
           mAnimationView.getThread().doRewind();
           return true;

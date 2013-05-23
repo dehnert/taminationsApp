@@ -6,10 +6,37 @@
     android:background="#ffc0c0c0"
     tools:context=".AnimListActivity" >
 
-    <TextView
-        android:id="@+id/title2"
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
         style="@style/ActivityTitle"
-        android:text="@string/app_name" />
+        android:orientation="horizontal"
+        android:baselineAligned="false" >
+
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/ic_launcher"
+            android:onClick="onLogoClicked"
+            android:contentDescription="logo" />
+
+        <TextView
+            android:id="@+id/title2"
+            style="@style/ActivityTitleText"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="@string/app_name" />
+
+        <Button
+            android:id="@+id/button_level"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:onClick="onLevelClicked"
+            android:text="Level" />
+
+    </LinearLayout>
+
 
     <LinearLayout
         android:layout_width="match_parent"

@@ -235,6 +235,7 @@ public class AnimationView extends SurfaceView implements SurfaceHolder.Callback
      */
     public synchronized void setPhantomVisibility(boolean show)
     {
+      showPhantoms = show;
       if (dancers != null) {
         for (Dancer d : dancers) {
           d.hidden = d.isPhantom() && !show;
@@ -264,9 +265,11 @@ public class AnimationView extends SurfaceView implements SurfaceHolder.Callback
      */
     public synchronized void setNumbers(int numberem)
     {
-      for (Dancer d : dancers)
-        d.showNumber = numberem;
-      dirtify();
+      if (dancers != null) {
+        for (Dancer d : dancers)
+          d.showNumber = numberem;
+        dirtify();
+      }
     }
 
     /**
@@ -401,6 +404,8 @@ public class AnimationView extends SurfaceView implements SurfaceHolder.Callback
           c.drawLine(0.0f,-0.5f,0.0f,0.5f,pline);
           c.drawLine(-0.5f,0.0f,0.5f,0.0f,pline);
         }
+        if (tam == null)
+          return;
         //  Draw paths if requested
         if (showPaths) {
           for (Dancer d: dancers) {
@@ -464,6 +469,8 @@ public class AnimationView extends SurfaceView implements SurfaceHolder.Callback
      * Called at the start of draw().
      */
     private void updateDancers() {
+      if (tam == null)
+        return;
       //  Update the animation time
       long now = System.currentTimeMillis();
       long diff = now - mLastTime;
@@ -598,6 +605,8 @@ public class AnimationView extends SurfaceView implements SurfaceHolder.Callback
 
     public synchronized void setAnimation(Element tam)
     {
+      if (tam == null)  // sanity check
+        return;
       Element formation = null;
       Tamination.loadMoves(ctx);
       NodeList tlist = tam.getElementsByTagName("formation");
@@ -710,7 +719,7 @@ public class AnimationView extends SurfaceView implements SurfaceHolder.Callback
   public void setAnimation(Element tam)
   {
     this.tam = tam;
-    if (thread != null) {
+    if (thread != null && tam != null) {
       thread.setAnimation(tam);
       //  Need to re-apply dancer numbers here because they get zapped
       //  when dancers are re-created
@@ -749,7 +758,7 @@ public class AnimationView extends SurfaceView implements SurfaceHolder.Callback
     thread = new AnimationThread(holder, getContext(), h);
     readSettings();
     thread.setListener(listener);
-    if (listener != null)
+    if (listener != null && tam != null)
       listener.onAnimationChanged(AnimationListener.ANIMATION_READY,0.0,0.0);
     // start the thread here, it will wait until Play is pressed
     thread.start();
@@ -772,8 +781,9 @@ public class AnimationView extends SurfaceView implements SurfaceHolder.Callback
     thread.setLoop(prefs.getBoolean("loop",false));
     thread.setSpeed(prefs.getString("speed", "Normal"));
     thread.setPhantomVisibility(prefs.getBoolean("phantoms",false));
-    setAnimation(tam);
-    if (listener != null)
+    if (tam != null)
+      setAnimation(tam);
+    if (listener != null && tam != null)
       listener.onAnimationChanged(AnimationListener.ANIMATION_DONE,0.0,0.0);
   }
 

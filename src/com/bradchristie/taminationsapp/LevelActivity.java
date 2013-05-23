@@ -35,9 +35,13 @@ public class LevelActivity extends RotationActivity
   protected void onCreate(Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
     setContentView(R.layout.activity_level);
+    setTitle("Taminations");
     if (findViewById(R.id.fragment_calllist) != null) {
       //  Multi-fragment display - switch calllist fragment
-      AboutFragment af = new AboutFragment();
+      RotationFragment af = new AboutFragment();
+      SharedPreferences prefs = getSharedPreferences("Taminations",MODE_PRIVATE);
+      if (!prefs.getString("level", "").equals(""))
+        af = new CalllistFragment();
       replaceFragment(af,R.id.fragment_calllist);
     }
   }
@@ -45,10 +49,15 @@ public class LevelActivity extends RotationActivity
   protected void onResume()
   {
     super.onResume();
-    if (isPortrait() && selectedView != null) {
-      selectedView.setSelected(false);
-      selectedView = null;
+    if (isPortrait()) {
+      setTitle("Taminations");
+      if (selectedView != null) {
+        selectedView.setSelected(false);
+        selectedView = null;
+      }
     }
+    SharedPreferences prefs = getSharedPreferences("Taminations",MODE_PRIVATE);
+    prefs.edit().remove("navigateupto").commit();
   }
 
   /**

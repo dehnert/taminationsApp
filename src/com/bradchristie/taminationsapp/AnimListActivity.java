@@ -35,6 +35,7 @@ import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
 import android.widget.ListView;
 import android.widget.TextView;
 
@@ -77,21 +78,27 @@ public class AnimListActivity extends RotationActivity
           false);
       myview.setText(item.toString());
       int d = item.difficulty;
-      if (d == 1)
+      if (d == 0)
+        myview.setBackgroundResource(R.drawable.animlist_background_default);
+      else if (d == 1)
         myview.setBackgroundResource(R.drawable.animlist_background_common);
       else if (d == 2)
         myview.setBackgroundResource(R.drawable.animlist_background_harder);
       else if (d == 3)
         myview.setBackgroundResource(R.drawable.animlist_background_difficult);
-      else if (d == 0)
-        myview.setBackgroundResource(R.drawable.animlist_background_default);
       if (position == 1)
         myview.setSelected(true);
       //  Hack for showing 1st item as selected
       if (selectedView == null && d >= 0 && !isPortrait()) {
         firstViewBackground = myview.getBackground();
-        myview.setBackgroundResource(R.drawable.animlist_background_selected);
-        myview.setTextColor(0xffffffff);
+        if (d == 0)
+          myview.setBackgroundResource(R.drawable.background_default_selected);
+        else if (d == 1)
+          myview.setBackgroundResource(R.drawable.background_common_selected);
+        else if (d == 2)
+          myview.setBackgroundResource(R.drawable.background_harder_selected);
+        else if (d == 3)
+          myview.setBackgroundResource(R.drawable.background_difficult_selected);
         selectedView = myview;
       }
       return myview;
@@ -113,34 +120,32 @@ public class AnimListActivity extends RotationActivity
   protected void onCreate(Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
     setContentView(R.layout.activity_animlist);
+    // Read the xml file with the list of animations
     SharedPreferences prefs = getSharedPreferences("Taminations", MODE_PRIVATE);
+    xmlname = prefs.getString("link", getString(android.R.string.untitled))
+        .replace("html", "xml");
+    Document doc = Tamination.getXMLAsset(this, xmlname);
+    NodeList tams = doc.getElementsByTagName("tam");
     multifragment = findViewById(R.id.fragment_animation) != null;
-    titleView = (TextView) findViewById(R.id.title2);
+    titleView = (TextView)findViewById(R.id.title2);
     String titlestr = prefs.getString("call",
         getString(android.R.string.untitled));
     if (multifragment) {
-      animfrag = new AnimationFragment();
-      replaceFragment(animfrag, R.id.fragment_animation);
+      if (tams.getLength() > 0) {
+        animfrag = new AnimationFragment();
+        replaceFragment(animfrag, R.id.fragment_animation);
+      }
       deffrag = new DefinitionFragment();
       replaceFragment(deffrag, R.id.fragment_definition);
-    } else {
-      if (titlestr.length() > 40)
-        titleView.setTextSize(18.0f);
-      else if (titlestr.length() > 16)
-        titleView.setTextSize(24.0f);
-      else
-        titleView.setTextSize(36.0f);
     }
-    titleView.setText(titlestr);
+    setTitle(titlestr);
+    String level = xmlname.split("/")[0];
+    Button levelButton = (Button)findViewById(R.id.button_level);
+    levelButton.setText(Tamination.levelDir2Name(level));
     selectedView = null;
     firstViewBackground = null;
 
     // Fetch the list of animations and build the table
-    xmlname = prefs.getString("link", getString(android.R.string.untitled))
-        .replace("html", "xml");
-    // Read the xml file and build the list of animations
-    Document doc = Tamination.getXMLAsset(this, xmlname);
-    NodeList tams = doc.getElementsByTagName("tam");
     String prevtitle = "";
     String prevgroup = "";
     adapter = new AnimListAdapter(this, R.layout.animlist_item);
@@ -247,12 +252,21 @@ public class AnimListActivity extends RotationActivity
   protected void onResume()
   {
     super.onResume();
+    /*
+    SharedPreferences prefs = getSharedPreferences("Taminations",MODE_PRIVATE);
+    String upto = prefs.getString("navigateupto", "");
+    if (upto.equals("AnimListActivity"))
+      prefs.edit().remove("navigateupto").commit();
+    else if (upto.length() > 0)
+      finish();
+      */
     if (isPortrait()) {
       if (selectedView != null)
         selectedView.setSelected(false);
       selectedView = null;
     }
   }
+
 
   public void settingsChanged(int setting)
   {
@@ -264,7 +278,6 @@ public class AnimListActivity extends RotationActivity
     //  Handle hack for 1st item selection
     if (firstViewBackground != null) {
       selectedView.setBackgroundDrawable(firstViewBackground);
-      selectedView.setTextColor(getResources().getColorStateList(R.color.text));
       firstViewBackground = null;
     }
     v.setSelected(true);

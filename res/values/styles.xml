@@ -20,7 +20,7 @@
 
   <style name="ListItem">
     <item name="android:layout_width">fill_parent</item>
-    <item name="android:textColor">@color/text</item>
+    <item name="android:textColor">#ff000000</item>
     <item name="android:background">#ffffffff</item>
     <item name="android:textSize">24sp</item>
     <item name="android:paddingLeft">4sp</item>
@@ -62,11 +62,7 @@
       <item name="android:paddingLeft">30sp</item>
   </style>
 
-  <style name="ActivityTitle">
-    <item name="android:layout_width">match_parent</item>
-    <item name="android:layout_height">wrap_content</item>
-    <item name="android:background">@drawable/title</item>
-    <item name="android:drawableLeft">@drawable/ic_launcher</item>
+  <style name="ActivityTitleText">
     <item name="android:gravity">center</item>
     <item name="android:maxLines">2</item>
     <item name="android:shadowColor">#c0000000</item>
@@ -76,6 +72,14 @@
     <item name="android:textAppearance">?android:attr/textAppearanceLarge</item>
     <item name="android:textColor">#ffffffff</item>
   </style>
+
+  <style name="ActivityTitle" parent="ActivityTitleText">
+    <item name="android:layout_width">match_parent</item>
+    <item name="android:layout_height">wrap_content</item>
+    <item name="android:background">@drawable/title</item>
+    <item name="android:drawableLeft">@drawable/ic_launcher</item>
+  </style>
+
 
   <style name="Difficulty">
     <item name="android:layout_width">0dp</item>

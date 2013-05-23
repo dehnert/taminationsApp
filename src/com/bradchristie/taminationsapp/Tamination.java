@@ -21,6 +21,7 @@ package com.bradchristie.taminationsapp;
 
 import java.io.InputStream;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 import javax.xml.parsers.DocumentBuilder;
@@ -269,5 +270,24 @@ public class Tamination {
     return retval;
   }
 
+  static String levelDir2Name(String dir)
+  {
+    @SuppressWarnings("serial")
+    HashMap<String,String>levelnames =
+        new HashMap<String,String>() {
+      {
+        put("b1","Basic 1");
+        put("b2","Basic 2");
+        put("ms","Mainstream");
+        put("plus","Plus");
+        put("a1","A-1");
+        put("a2","A-2");
+        put("c1","C-1");
+        put("c2","C-2");
+        put("c3a","C-3A");
+      }
+    };
+    return levelnames.get(dir);
+  }
 
 }

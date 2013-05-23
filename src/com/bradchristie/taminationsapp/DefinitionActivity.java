@@ -22,7 +22,9 @@ package com.bradchristie.taminationsapp;
 
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.view.View;
 import android.webkit.WebView;
+import android.widget.Button;
 
 public class DefinitionActivity extends PortraitActivity {
 
@@ -33,10 +35,16 @@ public class DefinitionActivity extends PortraitActivity {
     setTitle("Callerlab Definition");
     SharedPreferences prefs = getSharedPreferences("Taminations",MODE_PRIVATE);
     String name = prefs.getString("link",getString(android.R.string.untitled));
+    String xmlname = prefs.getString("link", getString(android.R.string.untitled))
+        .replace("html", "xml");
+    String level = xmlname.split("/")[0];
+    Button levelButton = (Button)findViewById(R.id.button_level);
+    levelButton.setText(Tamination.levelDir2Name(level));
     WebView defview = (WebView)findViewById(R.id.definitionView);
     //  Turn on pinch-to-zoom, which is off(!) by default
     defview.getSettings().setBuiltInZoomControls(true);
     defview.loadUrl("file:///android_asset/" + name);
   }
+
 
 }

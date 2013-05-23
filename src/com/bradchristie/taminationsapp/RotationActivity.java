@@ -21,6 +21,7 @@
 package com.bradchristie.taminationsapp;
 
 
+import android.content.SharedPreferences;
 import android.content.pm.ActivityInfo;
 import android.content.res.Configuration;
 import android.os.Bundle;
@@ -61,6 +62,33 @@ public class RotationActivity extends FragmentActivity
       setTitle(title);
   }
 
+  protected void onResume()
+  {
+    super.onResume();
+    SharedPreferences prefs = getSharedPreferences("Taminations",MODE_PRIVATE);
+    String upto = prefs.getString("navigateupto", "");
+    if (upto.equals(getClass().getSimpleName()) || isTaskRoot())
+      prefs.edit().remove("navigateupto").commit();
+    else if (upto.length() > 0)
+      finish();
+  }
+
+  public void onLogoClicked(View v)
+  {
+    //  not available for Android 2
+    //navigateUpTo(new Intent(this, LevelActivity.class));
+    SharedPreferences prefs = getSharedPreferences("Taminations",MODE_PRIVATE);
+    prefs.edit().putString("navigateupto", "LevelActivity").commit();
+    finish();
+  }
+
+  public void onLevelClicked(View v)
+  {
+    SharedPreferences prefs = getSharedPreferences("Taminations",MODE_PRIVATE);
+    prefs.edit().putString("navigateupto", "CalllistActivity").commit();
+    finish();
+  }
+
   public boolean isPortrait()
   {
     Configuration config = getResources().getConfiguration();
@@ -71,8 +99,17 @@ public class RotationActivity extends FragmentActivity
   {
     title = t;
     TextView titleView = (TextView)findViewById(R.id.title);
-    if (titleView != null)
+    if (titleView != null) {
+      if (isPortrait()) {
+        if (title.length() > 40)
+          titleView.setTextSize(18.0f);
+        else if (title.length() > 16)
+          titleView.setTextSize(24.0f);
+        else
+          titleView.setTextSize(36.0f);
+      }
       titleView.setText(title);
+    }
   }
 
   public void replaceFragment(RotationFragment replacement, int id)

@@ -5,10 +5,30 @@
     android:orientation="vertical"
     tools:context=".CallListActivity" >
 
-    <TextView
-        android:id="@+id/title"
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
         style="@style/ActivityTitle"
-        android:text="@string/app_name" />
+        android:orientation="horizontal"
+        android:baselineAligned="false" >
+
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/ic_launcher"
+            android:onClick="onLogoClicked"
+            android:contentDescription="logo" />
+
+        <TextView
+            android:id="@+id/title"
+            style="@style/ActivityTitleText"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="@string/app_name" />
+
+    </LinearLayout>
+
 
     <fragment android:name="com.bradchristie.taminationsapp.CalllistFragment"
               android:id="@+id/fragment_calllist"
