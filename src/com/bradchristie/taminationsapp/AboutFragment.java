@@ -26,6 +26,10 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.webkit.WebView;
 
+/**
+ *     The About fragment loads content from an html file and displays it.
+ *
+ */
 public class AboutFragment extends RotationFragment
 {
   public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState)

@@ -21,16 +21,17 @@
 package com.bradchristie.taminationsapp;
 
 import android.os.Bundle;
-import android.webkit.WebView;
 
+/**
+ * The About activity just loads the About fragment
+ *
+ */
 public class AboutActivity extends PortraitActivity {
 
   @Override
   protected void onCreate(Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
     setContentView(R.layout.activity_about);
-    WebView defview = (WebView)findViewById(R.id.aboutWebView);
-    defview.loadUrl("file:///android_asset/info/about.html");
   }
 
 }

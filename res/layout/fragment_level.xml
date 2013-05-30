@@ -14,7 +14,7 @@
         android:layout_marginTop="1sp"
         android:layout_weight="1"
         android:background="@drawable/level_background_bms"
-        android:onClick="onBasicAndMainstreamClick"
+        android:onClick="processClick"
         android:text="Basic and Mainstream" />
 
     <LinearLayout
@@ -35,7 +35,7 @@
             android:layout_marginLeft="1sp"
             android:layout_marginTop="1sp"
             android:background="@drawable/level_background_b1b2"
-            android:onClick="onBasic1Click"
+            android:onClick="processClick"
             android:text="Basic 1" />
     </LinearLayout>
 
@@ -57,7 +57,7 @@
             android:layout_marginLeft="1sp"
             android:layout_marginTop="1sp"
             android:background="@drawable/level_background_b1b2"
-            android:onClick="onBasic2Click"
+            android:onClick="processClick"
             android:text="Basic 2" />
     </LinearLayout>
 
@@ -79,7 +79,7 @@
             android:layout_marginLeft="1sp"
             android:layout_marginTop="1sp"
             android:background="@drawable/level_background_b1b2"
-            android:onClick="onMainstreamClick"
+            android:onClick="processClick"
             android:text="Mainstream" />
     </LinearLayout>
 
@@ -91,7 +91,7 @@
         android:layout_marginTop="1sp"
         android:layout_weight="1"
         android:background="@drawable/level_background_plus"
-        android:onClick="onPlusClick"
+        android:onClick="processClick"
         android:text="Plus" />
 
     <Button
@@ -102,7 +102,7 @@
         android:layout_marginTop="1sp"
         android:layout_weight="1"
         android:background="@drawable/level_background_adv"
-        android:onClick="onAdvancedClick"
+        android:onClick="processClick"
         android:text="Advanced" />
 
     <LinearLayout
@@ -123,7 +123,7 @@
             android:layout_marginLeft="1sp"
             android:layout_marginTop="1sp"
             android:background="@drawable/level_background_a1a2"
-            android:onClick="onA1Click"
+            android:onClick="processClick"
             android:text="A-1" />
     </LinearLayout>
 
@@ -145,7 +145,7 @@
             android:layout_marginLeft="1sp"
             android:layout_marginTop="1sp"
             android:background="@drawable/level_background_a1a2"
-            android:onClick="onA2Click"
+            android:onClick="processClick"
             android:text="A-2" />
     </LinearLayout>
 
@@ -157,7 +157,7 @@
         android:layout_marginTop="1sp"
         android:layout_weight="1"
         android:background="@drawable/level_background_challenge"
-        android:onClick="onChallengeClick"
+        android:onClick="processClick"
         android:text="Challenge" />
 
     <LinearLayout
@@ -178,7 +178,7 @@
             android:layout_marginLeft="1sp"
             android:layout_marginTop="1sp"
             android:background="@drawable/level_background_c1c2"
-            android:onClick="onC1Click"
+            android:onClick="processClick"
             android:text="C-1" />
     </LinearLayout>
 
@@ -200,7 +200,7 @@
             android:layout_marginLeft="1sp"
             android:layout_marginTop="1sp"
             android:background="@drawable/level_background_c1c2"
-            android:onClick="onC2Click"
+            android:onClick="processClick"
             android:text="C-2" />
     </LinearLayout>
 
@@ -222,7 +222,7 @@
             android:layout_marginLeft="1sp"
             android:layout_marginTop="1sp"
             android:background="@drawable/level_background_c1c2"
-            android:onClick="onC3AClick"
+            android:onClick="processClick"
             android:text="C-3A" />
     </LinearLayout>
 
@@ -234,7 +234,7 @@
         android:layout_marginTop="1sp"
         android:layout_weight="1"
         android:background="@drawable/level_background_index"
-        android:onClick="onIndexClick"
+        android:onClick="processClick"
         android:text="Index of All Calls" />
 
     <Button

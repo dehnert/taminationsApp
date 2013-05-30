@@ -21,6 +21,8 @@
 package com.bradchristie.taminationsapp;
 
 
+import com.bradchristie.taminationsapp.LevelActivity.LevelData;
+
 import android.content.SharedPreferences;
 import android.content.pm.ActivityInfo;
 import android.content.res.Configuration;
@@ -85,6 +87,9 @@ public class RotationActivity extends FragmentActivity
   public void onLevelClicked(View v)
   {
     SharedPreferences prefs = getSharedPreferences("Taminations",MODE_PRIVATE);
+    LevelData d = LevelData.find((String) (((TextView)v).getText()));
+    prefs.edit().putString("level",d.name)
+                .putString("selector",d.selector).commit();
     prefs.edit().putString("navigateupto", "CalllistActivity").commit();
     finish();
   }

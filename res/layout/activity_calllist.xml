@@ -29,10 +29,11 @@
 
     </LinearLayout>
 
-
-    <fragment android:name="com.bradchristie.taminationsapp.CalllistFragment"
-              android:id="@+id/fragment_calllist"
-              android:layout_width="match_parent"
-              android:layout_height="match_parent" />
+    <FrameLayout
+        android:id="@+id/fragment_calllist"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_weight="2"
+        android:background="@android:color/white" />
 
 </LinearLayout>

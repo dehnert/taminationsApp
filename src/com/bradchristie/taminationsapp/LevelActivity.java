@@ -24,10 +24,52 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.TextView;
 
 public class LevelActivity extends RotationActivity
                            implements CallClickListener
 {
+
+  public static class LevelData
+  {
+    public String name;
+    public String dir;
+    public String selector;
+    public int id;
+    public LevelData(String n, String d, String s, int i)
+    {
+      name = n;
+      dir = d;
+      selector = s;
+      id = i;
+    }
+    private static final LevelData data[] = {
+      new LevelData("Basic and Mainstream","","level='Basic and Mainstream' and @sublevel!='Styling'",R.id.button_basic_and_mainstream),
+      new LevelData("Basic 1","b1","sublevel='Basic 1'",R.id.button_basic_1),
+      new LevelData("Basic 2","b2","sublevel='Basic 2'",R.id.button_basic_2),
+      new LevelData("Mainstream","ms","sublevel='Mainstream'",R.id.button_mainstream),
+      new LevelData("Plus","plus","level='Plus'",R.id.button_plus),
+      new LevelData("Advanced","","level='Advanced'",R.id.button_advanced),
+      new LevelData("A-1","a1","sublevel='A-1'",R.id.button_a_1),
+      new LevelData("A-2","a2","sublevel='A-2'",R.id.button_a_2),
+      new LevelData("Challenge","","level='Challenge'",R.id.button_challenge),
+      new LevelData("C-1","c1","sublevel='C-1'",R.id.button_c1),
+      new LevelData("C-2","c2","sublevel='C-2'",R.id.button_c2),
+      new LevelData("C-3A","c3a","sublevel='C-3A'",R.id.button_c3a),
+      new LevelData("All Calls","","level!='Info' and @sublevel!='Styling'",R.id.button_index),
+      new LevelData("Index of All Calls","","level!='Info' and @sublevel!='Styling'",R.id.button_index)
+    };
+    public static LevelData find(String s)
+    {
+      for (LevelData d: data) {
+        if (d.name.equalsIgnoreCase(s) ||
+            d.dir.equalsIgnoreCase(s) ||
+            d.selector.equalsIgnoreCase(s))
+          return d;
+      }
+      return null;
+    }
+  }
 
   View selectedView = null;
 
@@ -49,6 +91,8 @@ public class LevelActivity extends RotationActivity
   protected void onResume()
   {
     super.onResume();
+    SharedPreferences prefs = getSharedPreferences("Taminations",MODE_PRIVATE);
+    prefs.edit().remove("navigateupto").commit();
     if (isPortrait()) {
       setTitle("Taminations");
       if (selectedView != null) {
@@ -56,8 +100,13 @@ public class LevelActivity extends RotationActivity
         selectedView = null;
       }
     }
-    SharedPreferences prefs = getSharedPreferences("Taminations",MODE_PRIVATE);
-    prefs.edit().remove("navigateupto").commit();
+    else {
+      CalllistFragment cf = new CalllistFragment();
+      replaceFragment(cf,R.id.fragment_calllist);
+      String level = prefs.getString("level", "Basic and Mainstream");
+      int id = LevelData.find(level).id;
+      highlightClick(findViewById(id));
+    }
   }
 
   /**
@@ -71,12 +120,13 @@ public class LevelActivity extends RotationActivity
     v.setSelected(true);
     selectedView = v;
   }
-  private void processClick(View v, String level, String selector)
+  public void processClick(View v)
   {
     highlightClick(v);
+    LevelData d = LevelData.find((String) ((TextView)v).getText());
     SharedPreferences prefs = getSharedPreferences("Taminations",MODE_PRIVATE);
-    prefs.edit().putString("level", level)
-                .putString("selector", selector).commit();
+    prefs.edit().putString("level",d.name)
+                .putString("selector",d.selector).commit();
     if (isPortrait()) {
       //  Single-fragment display - start calllist activity
       startActivity(new Intent(this,CalllistActivity.class));
@@ -99,58 +149,6 @@ public class LevelActivity extends RotationActivity
     startActivity(new Intent(this,AnimListActivity.class));
   }
 
-  public void onBasicAndMainstreamClick(View v)
-  {
-    processClick(v,"Basic and Mainstream","level='Basic and Mainstream' and @sublevel!='Styling'");
-  }
-  public void onBasic1Click(View v)
-  {
-    processClick(v,"Basic 1","sublevel='Basic 1'");
-  }
-  public void onBasic2Click(View v)
-  {
-    processClick(v,"Basic 2","sublevel='Basic 2'");
-  }
-  public void onMainstreamClick(View v)
-  {
-    processClick(v,"Mainstream","sublevel='Mainstream'");
-  }
-  public void onPlusClick(View v)
-  {
-    processClick(v,"Plus","level='Plus'");
-  }
-  public void onAdvancedClick(View v)
-  {
-    processClick(v,"Advanced","level='Advanced'");
-  }
-  public void onA1Click(View v)
-  {
-    processClick(v,"A-1","sublevel='A-1'");
-  }
-  public void onA2Click(View v)
-  {
-    processClick(v,"A-2","sublevel='A-2'");
-  }
-  public void onChallengeClick(View v)
-  {
-    processClick(v,"Challenge","level='Challenge'");
-  }
-  public void onC1Click(View v)
-  {
-    processClick(v,"C-1","sublevel='C-1'");
-  }
-  public void onC2Click(View v)
-  {
-    processClick(v,"C-2","sublevel='C-2'");
-  }
-  public void onC3AClick(View v)
-  {
-    processClick(v,"C-3A","sublevel='C-3A'");
-  }
-  public void onIndexClick(View v)
-  {
-    processClick(v,"Index of All Calls","level!='Info' and @sublevel!='Styling'");
-  }
   public void onAboutClick(View v)
   {
     highlightClick(v);

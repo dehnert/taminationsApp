@@ -109,8 +109,11 @@ public class CalllistActivity extends PortraitActivity
     super.onResume();
     SharedPreferences prefs = getSharedPreferences("Taminations",MODE_PRIVATE);
     String upto = prefs.getString("navigateupto", "");
-    if (upto.equals("CalllistActivity"))
+    CalllistFragment cf = new CalllistFragment();
+    replaceFragment(cf,R.id.fragment_calllist);
+    if (upto.equals("CalllistActivity")) {
       prefs.edit().remove("navigateupto").commit();
+    }
     else if (upto.length() > 0)
       finish();
   }

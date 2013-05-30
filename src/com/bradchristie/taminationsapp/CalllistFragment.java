@@ -56,7 +56,7 @@ public class CalllistFragment extends RotationFragment implements OnItemClickLis
     //  Set the title to the current dance level
     SharedPreferences prefs = getActivity().getSharedPreferences("Taminations",Activity.MODE_PRIVATE);
     String levelname = prefs.getString("level","Basic and Mainstream");
-    String selector = prefs.getString("selector","level=Mainstream");
+    String selector = prefs.getString("selector","level='Basic and Mainstream' and @sublevel!='Styling'");
     setTitle("Taminations - "+levelname);
     //  Fetch all the calls for this level and store in the array of objects
     Document doc = Tamination.getXMLAsset(getActivity(),"src/calls.xml");

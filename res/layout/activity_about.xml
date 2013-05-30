@@ -4,11 +4,13 @@
     android:layout_height="match_parent"
     tools:context=".AboutActivity" >
 
-    <WebView
-        android:id="@+id/aboutWebView"
+    <fragment
+        android:id="@+id/fragment_level"
+        android:name="com.bradchristie.taminationsapp.AboutFragment"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_centerHorizontal="true"
-        android:layout_centerVertical="true" />
+        android:layout_centerVertical="true"
+        tools:layout="@layout/fragment_level" />
 
 </RelativeLayout>
