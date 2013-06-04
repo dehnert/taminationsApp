@@ -32,6 +32,7 @@ public class SettingsActivity extends PortraitActivity
   {
     super.onCreate(savedInstanceState);
     setContentView(R.layout.activity_settings);
+    setTitle("Settings");
   }
 
 }

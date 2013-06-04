@@ -59,15 +59,18 @@ public class AnimationFragment extends RotationFragment
       switch (action) {
       case ANIMATION_READY :
         //  Tell the tic view where to put the tic marks
-        SliderTicView ticView = (SliderTicView)getActivity().findViewById(R.id.slidertics);
-        mAnimationThread = mAnimationView.getThread();
-        ticView.setTics(mAnimationThread.getBeats(),mAnimationThread.getParts());
+        Activity act = getActivity();
+        SliderTicView ticView = act==null ? null : (SliderTicView)getActivity().findViewById(R.id.slidertics);
+        if (ticView != null) {
+          mAnimationThread = mAnimationView.getThread();
+          ticView.setTics(mAnimationThread.getBeats(),mAnimationThread.getParts());
+        }
         break;
       case ANIMATION_PROGRESS :
         //  Position slider to current location
         //  It's possible for this to be called as the fragment is swapped out,
         //  so be extra special careful
-        Activity act = getActivity();
+        act = getActivity();
         SeekBar sb = act == null ? null : (SeekBar)act.findViewById(R.id.seekBar1);
         if (sb != null) {
           float m = (float)sb.getMax();
@@ -81,8 +84,10 @@ public class AnimationFragment extends RotationFragment
         }
         break;
       case ANIMATION_DONE :
-        ImageButton playbutton = (ImageButton)getActivity().findViewById(R.id.button_play);
-        playbutton.setSelected(false);
+        act = getActivity();
+        ImageButton playbutton = act==null ? null : (ImageButton)getActivity().findViewById(R.id.button_play);
+        if (playbutton != null)
+          playbutton.setSelected(false);
         break;
       case ANIMATION_PART :
         //  A bit of a hack to pass the current part to the definition

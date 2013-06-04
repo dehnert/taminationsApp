@@ -22,7 +22,6 @@ package com.bradchristie.taminationsapp;
 
 import android.content.SharedPreferences;
 import android.os.Bundle;
-import android.view.View;
 import android.webkit.WebView;
 import android.widget.Button;
 
@@ -32,7 +31,6 @@ public class DefinitionActivity extends PortraitActivity {
   protected void onCreate(Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
     setContentView(R.layout.activity_definition);
-    setTitle("Callerlab Definition");
     SharedPreferences prefs = getSharedPreferences("Taminations",MODE_PRIVATE);
     String name = prefs.getString("link",getString(android.R.string.untitled));
     String xmlname = prefs.getString("link", getString(android.R.string.untitled))
@@ -40,6 +38,8 @@ public class DefinitionActivity extends PortraitActivity {
     String level = xmlname.split("/")[0];
     Button levelButton = (Button)findViewById(R.id.button_level);
     levelButton.setText(Tamination.levelDir2Name(level));
+    String titlestr = prefs.getString("call",getString(android.R.string.untitled));
+    setTitle(titlestr);
     WebView defview = (WebView)findViewById(R.id.definitionView);
     //  Turn on pinch-to-zoom, which is off(!) by default
     defview.getSettings().setBuiltInZoomControls(true);
