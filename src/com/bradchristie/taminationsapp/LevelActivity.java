@@ -57,7 +57,8 @@ public class LevelActivity extends RotationActivity
       new LevelData("C-2","c2","sublevel='C-2'",R.id.button_c2),
       new LevelData("C-3A","c3a","sublevel='C-3A'",R.id.button_c3a),
       new LevelData("All Calls","","level!='Info' and @sublevel!='Styling'",R.id.button_index),
-      new LevelData("Index of All Calls","","level!='Info' and @sublevel!='Styling'",R.id.button_index)
+      new LevelData("Index of All Calls","","level!='Info' and @sublevel!='Styling'",R.id.button_index),
+      new LevelData("Search Calls","","",R.id.button_search)
     };
     public static LevelData find(String s)
     {
@@ -104,8 +105,14 @@ public class LevelActivity extends RotationActivity
       CalllistFragment cf = new CalllistFragment();
       replaceFragment(cf,R.id.fragment_calllist);
       String level = prefs.getString("level", "Basic and Mainstream");
-      int id = LevelData.find(level).id;
-      highlightClick(findViewById(id));
+      LevelData data = LevelData.find(level);
+      if (data != null) {
+        int id = data.id;
+        highlightClick(findViewById(id));
+      }
+      else
+        //  Search
+        highlightClick(null);
     }
   }
 
@@ -117,7 +124,8 @@ public class LevelActivity extends RotationActivity
   {
     if (selectedView != null)
       selectedView.setSelected(false);
-    v.setSelected(true);
+    if (v != null)
+      v.setSelected(true);
     selectedView = v;
   }
   public void processClick(View v)
@@ -125,15 +133,18 @@ public class LevelActivity extends RotationActivity
     highlightClick(v);
     LevelData d = LevelData.find((String) ((TextView)v).getText());
     SharedPreferences prefs = getSharedPreferences("Taminations",MODE_PRIVATE);
-    prefs.edit().putString("level",d.name)
-                .putString("selector",d.selector).commit();
-    if (isPortrait()) {
-      //  Single-fragment display - start calllist activity
-      startActivity(new Intent(this,CalllistActivity.class));
-    } else {
-      //  Multi-fragment display - switch calllist fragment
-      CalllistFragment cf = new CalllistFragment();
-      replaceFragment(cf,R.id.fragment_calllist);
+    prefs.edit().putString("level",d.name).putString("selector",d.selector).commit();
+    if (d.name.equals("Search Calls"))
+      onSearchRequested();
+    else {
+      if (isPortrait()) {
+        //  Single-fragment display - start calllist activity
+        startActivity(new Intent(this,CalllistActivity.class));
+      } else {
+        //  Multi-fragment display - switch calllist fragment
+        CalllistFragment cf = new CalllistFragment();
+        replaceFragment(cf,R.id.fragment_calllist);
+      }
     }
   }
 

@@ -20,6 +20,8 @@
 
 package com.bradchristie.taminationsapp;
 
+import android.app.Activity;
+import android.app.SearchManager;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -99,9 +101,14 @@ public class CalllistActivity extends PortraitActivity
 
   @Override
   protected void onCreate(Bundle savedInstanceState) {
+    Intent intent = getIntent();
+    if (Intent.ACTION_SEARCH.equals(intent.getAction())) {
+      String query = intent.getStringExtra(SearchManager.QUERY);
+      SharedPreferences prefs = getSharedPreferences("Taminations",Activity.MODE_PRIVATE);
+      prefs.edit().putString("level","Search Calls").putString("selector", query).commit();
+    }
     super.onCreate(savedInstanceState);
     setContentView(R.layout.activity_calllist);
-    return;
   }
 
   protected void onResume()

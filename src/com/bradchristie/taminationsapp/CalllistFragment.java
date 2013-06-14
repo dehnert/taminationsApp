@@ -24,6 +24,8 @@ import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.NodeList;
 
+import com.bradchristie.taminationsapp.LevelActivity.LevelData;
+
 import android.app.Activity;
 import android.content.Context;
 import android.content.SharedPreferences;
@@ -57,13 +59,21 @@ public class CalllistFragment extends RotationFragment implements OnItemClickLis
     SharedPreferences prefs = getActivity().getSharedPreferences("Taminations",Activity.MODE_PRIVATE);
     String levelname = prefs.getString("level","Basic and Mainstream");
     String selector = prefs.getString("selector","level='Basic and Mainstream' and @sublevel!='Styling'");
-    setTitle("Taminations - "+levelname);
+    String query = null;
+    if (levelname.equals("Search Calls")) {
+      query = selector;
+      selector = LevelData.find("All Calls").selector;
+      setTitle("Taminations - "+levelname+": "+query);
+    } else
+      setTitle("Taminations - "+levelname);
     //  Fetch all the calls for this level and store in the array of objects
     Document doc = Tamination.getXMLAsset(getActivity(),"src/calls.xml");
     NodeList list1 = Tamination.evalXPath("/calls/call[@"+selector+"]",doc);
     cla = new CallListAdapter(getActivity(),R.layout.calllist_item);
     for (int j=0; j<list1.getLength(); j++) {
       Element e1 = (Element)list1.item(j);
+      if (query != null && !e1.getAttribute("text").toLowerCase().contains(query))
+        continue;
       CallListItem item = new CallListItem(e1.getAttribute("text"),
                                            e1.getAttribute("level"),
                                            e1.getAttribute("link"));
