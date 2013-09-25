@@ -60,19 +60,15 @@ div.ending-formation,
 div.timing,
 div.styling,
 div.comments,
-div.command-examples
+div.command-examples,
+div.teaching-tip
 {
   margin: 10px;
 }
 
-div.command-examples
-{
-  font-style: italic;
-  /*white-space: pre;*/
-}
-
 div.command-examples > p
 {
+  font-style: italic;
   margin: 0 0 0 20px;
   text-indent: -20px;
 }
@@ -83,7 +79,8 @@ div.ending-formation > b,
 div.timing > b,
 div.styling > b,
 div.comments > b,
-div.command-examples > b
+div.command-examples > b,
+div.teaching-tip > b
 {
   font-family: Helvetica, Arial, Sans Serif;
   font-weight: bold;
