@@ -96,8 +96,9 @@ public class RotationActivity extends FragmentActivity
 
   public boolean isPortrait()
   {
-    Configuration config = getResources().getConfiguration();
-    return config.orientation == Configuration.ORIENTATION_PORTRAIT;
+    return getResources().getConfiguration().orientation
+                          == Configuration.ORIENTATION_PORTRAIT ||
+           getResources().getBoolean(R.bool.portrait_only);
   }
 
   public void setTitle(String t)
