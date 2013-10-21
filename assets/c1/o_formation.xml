@@ -1,3 +1,5 @@
+<?xml version="1.0"?>
+<!DOCTYPE tamination SYSTEM "tamination.dtd">
 <tamination><tam formation="O Trade By" group="&quot;O&quot;" title="&quot;O&quot; Chase Right">
     <path>
       <move select="Run Right" />
@@ -458,6 +460,60 @@
     </path>
   </tam>
 
+  <tam formation="O Eight Chain Thru" from="" group="&quot;O&quot; (C-1)" title="&quot;O&quot; (C-1) Cross and Turn">
+    <path>
+      <move beats=".5" scaleX=".5" scaleY=".5" select="Forward" />
+      <move beats="4" hands="right" scaleX="1.5" scaleY="4" select="Extend Right" />
+    </path>
+    <path>
+      <move select="U-Turn Left" />
+    </path>
+    <path>
+      <move beats=".5" scaleX=".5" scaleY=".5" select="Forward" />
+      <move beats="4" hands="right" scaleX="1.5" scaleY="4" select="Extend Right" />
+    </path>
+    <path>
+      <move select="U-Turn Left" />
+    </path>
+  </tam>
+
+<tam formation="O Eight Chain Thru" from="" group="&quot;O&quot; (C-1)" title="&quot;O&quot; (C-1) Reverse Cross and Turn">
+    <path>
+      <move select="U-Turn Right" />
+    </path>
+    <path>
+      <move beats=".5" scaleX=".5" scaleY=".5" select="Forward" />
+      <move beats="4" hands="left" scaleX="1.5" scaleY="4" select="Extend Left" />
+    </path>
+    <path>
+      <move select="U-Turn Right" />
+    </path>
+    <path>
+      <move beats=".5" scaleX=".5" scaleY=".5" select="Forward" />
+      <move beats="4" hands="left" scaleX="1.5" scaleY="4" select="Extend Left" />
+    </path>
+  </tam>
+
+<tam formation="O Trade By" from="" group="&quot;O&quot; (C-1)" title="&quot;O&quot; (C-1) Shakedown">
+    <path>
+      <move offsetY="-1" select="Quarter Right" />
+      <move offsetX="1" select="Quarter Right" />
+      <move select="Quarter Right" />
+    </path>
+    <path>
+      <move offsetX="-1" offsetY="-2" select="U-Turn Right" />
+      <move offsetX="1" select="Quarter Right" />
+    </path>
+    <path>
+      <move beats="3" scaleX=".5" scaleY="3" select="Lead Right" />
+      <move offsetX="3" scaleY=".25" select="Flip Right" />
+    </path>
+    <path>
+      <move offsetX="-1" select="U-Turn Right" />
+      <move beats="2" scaleY="2" select="Lead Right" />
+    </path>
+  </tam>
+
   <tam formation="O Eight Chain Thru" from="" group="&quot;O&quot; (C-1)" title="&quot;O&quot; (C-1) Wheel Fan Thru">
     <path>
       <move beats="2" offsetX="1.1" offsetY="-1.4" select="HalfHinge Right" />
@@ -518,61 +574,7 @@
     </path>
   </tam>
 
-  <tam formation="O Trade By" from="" group="&quot;O&quot; (C-1)" title="&quot;O&quot; (C-1) Shakedown">
-    <path>
-      <move offsetY="-1" select="Quarter Right" />
-      <move offsetX="1" select="Quarter Right" />
-      <move select="Quarter Right" />
-    </path>
-    <path>
-      <move offsetX="-1" offsetY="-2" select="U-Turn Right" />
-      <move offsetX="1" select="Quarter Right" />
-    </path>
-    <path>
-      <move beats="3" scaleX=".5" scaleY="3" select="Lead Right" />
-      <move offsetX="3" scaleY=".25" select="Flip Right" />
-    </path>
-    <path>
-      <move offsetX="-1" select="U-Turn Right" />
-      <move beats="2" scaleY="2" select="Lead Right" />
-    </path>
-  </tam>
-
-  <tam formation="O Eight Chain Thru" from="" group="&quot;O&quot; (C-1)" title="&quot;O&quot; (C-1) Reverse Cross and Turn">
-    <path>
-      <move select="U-Turn Right" />
-    </path>
-    <path>
-      <move beats=".5" scaleX=".5" scaleY=".5" select="Forward" />
-      <move beats="4" hands="left" scaleX="1.5" scaleY="4" select="Extend Left" />
-    </path>
-    <path>
-      <move select="U-Turn Right" />
-    </path>
-    <path>
-      <move beats=".5" scaleX=".5" scaleY=".5" select="Forward" />
-      <move beats="4" hands="left" scaleX="1.5" scaleY="4" select="Extend Left" />
-    </path>
-  </tam>
-
-<tam formation="O Eight Chain Thru" from="" group="&quot;O&quot; (C-1)" title="&quot;O&quot; (C-1) Cross and Turn">
-    <path>
-      <move beats=".5" scaleX=".5" scaleY=".5" select="Forward" />
-      <move beats="4" hands="right" scaleX="1.5" scaleY="4" select="Extend Right" />
-    </path>
-    <path>
-      <move select="U-Turn Left" />
-    </path>
-    <path>
-      <move beats=".5" scaleX=".5" scaleY=".5" select="Forward" />
-      <move beats="4" hands="right" scaleX="1.5" scaleY="4" select="Extend Right" />
-    </path>
-    <path>
-      <move select="U-Turn Left" />
-    </path>
-  </tam>
-
-<tam formation="O Trade By" group="&quot;O&quot; (C-2)" title="&quot;O&quot; (C-2) Turn to a Line">
+  <tam formation="O Trade By" group="&quot;O&quot; (C-2)" title="&quot;O&quot; (C-2) Turn to a Line">
     <path>
       <move select="Flip Right" />
     </path>

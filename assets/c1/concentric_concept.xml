@@ -1,3 +1,5 @@
+<?xml version="1.0"?>
+<!DOCTYPE tamination SYSTEM "tamination.dtd">
 <tamination><tam formation="Magic Column RH" group="From columns, Concentric" title="From columns, Concentric Box Counter Rotate">
     <path>
       <move beats="5" hands="left" select="Counter Rotate Left 4 -2" />

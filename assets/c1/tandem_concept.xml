@@ -1,3 +1,5 @@
+<?xml version="1.0"?>
+<!DOCTYPE tamination SYSTEM "tamination.dtd">
 <tamination><tam formation="Two-Faced Lines RH" group="Tandem" title="Tandem Bend the Line">
     <path>
       <move beats="3" hands="right" offsetX="1" select="Counter Rotate Right 2 0" />

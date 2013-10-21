@@ -1,0 +1,2127 @@
+<?xml version="1.0"?>
+<!DOCTYPE tamination SYSTEM "tamination.dtd">
+<tamination><tam formation="Lines Facing Out" from="" group="As Couples" parts="" title="As Couples Chase Right">
+    <path>
+      <move offsetX="-2" reflect="-1" select="Beau Wheel" />
+      <move hands="left" select="Forward 2" />
+      <move beats="3" hands="left" select="Run Right" />
+    </path>
+    <path>
+      <move offsetX="-2" reflect="-1" select="Belle Wheel" />
+      <move hands="right" select="Forward 2" />
+      <move beats="3" hands="right" scaleX="3" scaleY="3" select="Run Right" />
+    </path>
+    <path>
+      <move beats="3" hands="left" select="Run Right" />
+      <move hands="left" select="Forward 4" />
+    </path>
+    <path>
+      <move beats="3" hands="right" scaleX="3" scaleY="3" select="Run Right" />
+      <move hands="right" select="Forward 4" />
+    </path>
+  </tam>
+
+  <tam formation="Tidal Line RH" from="" group="As Couples" parts="" title="As Couples Centers Cross Run">
+    <path>
+      <move select="Dodge Right" />
+    </path>
+    <path>
+      <move select="Dodge Right" />
+    </path>
+    <path>
+      <move hands="right" scaleX="2" scaleY="2.5" select="Run Right" />
+    </path>
+    <path>
+      <move hands="left" scaleY="1.5" select="Run Right" />
+    </path>
+  </tam>
+
+  <tam formation="Tidal Line RH" from="" group="As Couples" parts="" title="As Couples Crossfire">
+    <path>
+      <move beats="4" hands="right" offsetX="2" scaleX="3.25" scaleY="3.25" select="Run Right" />
+    </path>
+    <path>
+      <move beats="4" hands="left" offsetX="2" scaleX="1.75" scaleY="1.75" select="Run Right" />
+    </path>
+    <path>
+      <move scaleX="1.5" scaleY="1.5" select="Swing Right" />
+      <move beats="2" hands="right" scaleX="2" scaleY="1.5" select="Extend Left" />
+    </path>
+    <path>
+      <move scaleX=".5" scaleY=".5" select="Swing Right" />
+      <move beats="2" hands="left" scaleX="2" scaleY=".5" select="Extend Left" />
+    </path>
+  </tam>
+
+  <tam formation="Normal Lines" from="" group="As Couples" parts="" title="As Couples Dixie Style to a Wave">
+    <path>
+      <move beats="3" hands="right" offsetX="-1" select="Dodge Right" />
+      <move beats="3" hands="right" scaleY="2" select="Extend Right" />
+      <move beats="2" hands="both" scaleX=".5" select="Hinge Left" />
+    </path>
+    <path>
+      <move beats="3" hands="left" offsetX="-1" select="Dodge Right" />
+      <move beats="3" hands="left" scaleY="2" select="Extend Right" />
+      <move beats="2" scaleX="1.5" scaleY="3" select="Hinge Left" />
+    </path>
+    <path>
+      <move beats="3" hands="gripright" scaleX="2" scaleY="2.5" select="Extend Left" />
+      <move beats="3" hands="gripright" scaleX="2" scaleY="2.5" select="Extend Right" />
+      <move beats="2" hands="both" scaleX=".5" select="Hinge Left" />
+    </path>
+    <path>
+      <move beats="3" hands="gripleft" scaleX="2" scaleY="3.5" select="Extend Left" />
+      <move beats="3" hands="gripleft" scaleX="2" scaleY="3.5" select="Extend Right" />
+      <move beats="2" scaleX="1.5" scaleY="3" select="Hinge Left" />
+    </path>
+  </tam>
+
+  <tam formation="Two-Faced Tidal Line RH" from="" group="As Couples" parts="" title="As Couples Explode the Wave">
+    <path>
+      <move beats="3" scaleX="3.5" scaleY="3.5" select="Lead Right" />
+      <move beats="2" hands="right" scaleX="2" scaleY=".5" select="Extend Right" />
+    </path>
+    <path>
+      <move beats="3" scaleX="2.5" scaleY="2.5" select="Lead Right" />
+      <move beats="2" hands="left" scaleX="2" scaleY="1.5" select="Extend Right" />
+    </path>
+    <path>
+      <move beats="3" scaleX="1.5" scaleY="1.5" select="Hinge Left" />
+      <move beats="2" hands="left" scaleX="2" scaleY="1.5" select="Extend Right" />
+    </path>
+    <path>
+      <move beats="3" scaleX=".5" scaleY=".5" select="Hinge Left" />
+      <move beats="2" hands="right" scaleX="2" scaleY=".5" select="Extend Right" />
+    </path>
+  </tam>
+
+  <tam formation="Two-Faced Tidal Line RH" from="" group="As Couples" parts="" title="As Couples Fan the Top">
+    <path>
+      <move beats="4.5" scaleX="3.5" scaleY="3.5" select="Lead Right" />
+    </path>
+    <path>
+      <move beats="4.5" scaleX="2.5" scaleY="2.5" select="Lead Right" />
+    </path>
+    <path>
+      <move scaleX="1.5" scaleY="1.5" select="Swing Left" />
+      <move scaleX="1.5" scaleY="1.5" select="Hinge Left" />
+    </path>
+    <path>
+      <move scaleX=".5" scaleY=".5" select="Swing Left" />
+      <move scaleX=".5" scaleY=".5" select="Hinge Left" />
+    </path>
+  </tam>
+
+  <tam formation="Two-Faced Tidal Line RH" from="" group="As Couples" parts="" title="As Couples Ends Fold">
+    <path>
+      <move hands="right" offsetX="2" offsetY="-.5" select="Run Right" />
+    </path>
+    <path>
+      <move hands="left" offsetX="2" offsetY=".5" select="U-Turn Right" />
+    </path>
+    <path>
+      <move hands="left" scaleY=".75" select="Dodge Right" />
+    </path>
+    <path>
+      <move hands="both" scaleY=".25" select="Dodge Right" />
+    </path>
+  </tam>
+
+  <tam formation="Two-Faced Tidal Line RH" from="" group="As Couples" parts="" title="As Couples Ends Cross Fold">
+    <path>
+      <move beats="5" hands="right" offsetX="2" offsetY="-4.5" select="Run Right" />
+    </path>
+    <path>
+      <move beats="5" hands="left" offsetX="2" offsetY="-3.5" select="U-Turn Right" />
+    </path>
+    <path>
+      <move beats="5" hands="left" scaleY=".75" select="Dodge Right" />
+    </path>
+    <path>
+      <move beats="5" hands="both" scaleY=".25" select="Dodge Right" />
+    </path>
+  </tam>
+
+  <tam formation="Normal Lines" from="" group="As Couples" parts="" title="As Couples Flutterwheel">
+    <path>
+      <move beats="2" hands="right" select="Stand" />
+      <move beats="3" hands="right" select="Extend Right" />
+      <move beats="3" hands="right" offsetY="1" select="Counter Rotate Right 3 -1" />
+      <move beats="3" hands="right" offsetX="2" offsetY="1" select="Counter Rotate Right 3 -1" />
+    </path>
+    <path>
+      <move beats="2" hands="left" select="Stand" />
+      <move beats="3" hands="left" select="Forward" />
+      <move beats="3" hands="both" offsetY="1" select="Counter Rotate Right 2 0" />
+      <move beats="3" hands="both" offsetX="1" offsetY="1" select="Counter Rotate Right 2 0" />
+    </path>
+    <path>
+      <move beats="2" hands="gripright" scaleX="2" scaleY="2.5" select="Extend Left" />
+      <move offsetX="1" offsetY="-.5" reflect="-1" scaleX=".5" scaleY=".5" select="Belle Wheel" />
+      <move beats="3" hands="both" select="Counter Rotate Right 1 2" />
+      <move beats="3" hands="both" select="Counter Rotate Right 1 2" />
+    </path>
+    <path>
+      <move beats="2" hands="gripleft" scaleX="2" scaleY="3.5" select="Extend Left" />
+      <move offsetX="1" offsetY="-.5" reflect="-1" scaleX=".5" scaleY=".5" select="Beau Wheel" />
+      <move beats="3" hands="left" select="Counter Rotate Right 0 3" />
+      <move beats="3" hands="left" offsetX="-1" select="Counter Rotate Right 0 3" />
+    </path>
+  </tam>
+
+  <tam formation="Two-Faced Lines RH" from="" group="As Couples" parts="" title="As Couples Follow Your Neighbor">
+    <path>
+      <move beats="2" hands="right" scaleX="2" scaleY="1.5" select="Extend Right" />
+      <move scaleX="1.5" scaleY="1.5" select="Swing Right" />
+      <move scaleX="1.5" scaleY="1.5" select="Hinge Right" />
+    </path>
+    <path>
+      <move beats="2" hands="left" scaleX="2" scaleY=".5" select="Extend Right" />
+      <move scaleX=".5" scaleY=".5" select="Swing Right" />
+      <move scaleX=".5" scaleY=".5" select="Hinge Right" />
+    </path>
+    <path>
+      <move beats="2" hands="left" select="Lead Right" />
+      <move offsetY=".5" select="U-Turn Right" />
+    </path>
+    <path>
+      <move beats="2" hands="right" scaleX="2" scaleY="3" select="Lead Right" />
+      <move offsetY=".5" select="Run Right" />
+    </path>
+  </tam>
+
+  <tam formation="Normal Lines" from="" group="As Couples" parts="" title="As Couples Half Sashay">
+    <path>
+      <move hands="right" offsetX="-.5" select="Dodge Right" />
+      <move hands="right" offsetX=".5" select="Dodge Right" />
+    </path>
+    <path>
+      <move hands="left" offsetX="-.5" select="Dodge Right" />
+      <move hands="left" offsetX=".5" select="Dodge Right" />
+    </path>
+    <path>
+      <move beats="3" hands="right" scaleY="2" select="Extend Left" />
+      <move hands="right" offsetX="-1" select="Dodge Left" />
+    </path>
+    <path>
+      <move beats="3" hands="left" scaleY="2" select="Extend Left" />
+      <move hands="left" offsetX="-1" select="Dodge Left" />
+    </path>
+  </tam>
+
+  <tam group="As Couples" title="As Couples Ladies Center as the Men Sashay">
+     <formation>
+      <dancer angle="-22.5" gender="boy" x="-2.414" y="1" />
+      <dancer angle="247.5" gender="girl" x="1" y="2.414" />
+      <dancer angle="22.5" gender="boy" x="-2.414" y="-1" />
+      <dancer angle="292.5" gender="girl" x="-1" y="2.414" />
+    </formation>
+    <path>
+      <move select="Sxtnth Left" />
+      <move select="cl" />
+      <move select="cl" />
+      <move select="cl" />
+      <move select="cl" />
+      <move select="Sxtnth Right" />
+    </path>
+    <path>
+      <move beats="2" hands="right" offsetY=".2" scaleX="2" select="Forward" />
+      <move beats=".5" select="Stand" />
+      <move beats="2" hands="right" offsetY="-.2" scaleX="2" select="Back" />
+    </path>
+    <path>
+      <move select="Sxtnth Left" />
+      <move select="cl" />
+      <move select="cl" />
+      <move select="cl" />
+      <move select="cl" />
+      <move select="Sxtnth Right" />
+    </path>
+    <path>
+      <move beats="2" hands="left" offsetY="-.2" scaleX="2" select="Forward" />
+      <move beats=".5" select="Stand" />
+      <move beats="2" hands="left" offsetY=".2" scaleX="2" select="Back" />
+    </path>
+  </tam>
+
+  <tam formation="Two-Faced Tidal Line RH" from="" group="As Couples" parts="" title="As Couples Linear Cycle">
+    <path>
+      <move scaleX="1.5" scaleY="1.5" select="Hinge Right" />
+      <move select="Forward 4" />
+      <move beats="4" hands="right" scaleX="1.5" scaleY="2.25" select="Run Right" />
+    </path>
+    <path>
+      <move scaleX=".5" scaleY=".5" select="Hinge Right" />
+      <move select="Forward 4" />
+      <move beats="4" hands="left" scaleX=".5" scaleY=".75" select="Run Right" />
+    </path>
+    <path>
+      <move scaleX=".5" scaleY=".5" select="Hinge Right" />
+      <move scaleX=".5" scaleY=".5" select="Run Right" />
+      <move select="Forward 4" />
+      <move offsetY=".5" reflect="-1" select="Beau Wheel" />
+    </path>
+    <path>
+      <move scaleX="1.5" scaleY="1.5" select="Hinge Right" />
+      <move scaleX="1.5" scaleY="1.5" select="Run Right" />
+      <move select="Forward 4" />
+      <move offsetY="1.5" reflect="-1" select="Belle Wheel" />
+    </path>
+  </tam>
+
+  <tam formation="Normal Lines" from="" group="As Couples" parts="" title="As Couples Pass the Ocean">
+    <path>
+      <move beats="2" hands="right" scaleX="2" scaleY=".5" select="Extend Left" />
+      <move beats="4" hands="right" scaleX="3.5" scaleY="3.5" select="Lead Right" />
+    </path>
+    <path>
+      <move beats="2" hands="left" scaleX="2" scaleY="1.5" select="Extend Left" />
+      <move beats="4" hands="left" scaleX="2.5" scaleY="2.5" select="Lead Right" />
+    </path>
+    <path>
+      <move beats="2" hands="right" scaleX="2" scaleY=".5" select="Extend Left" />
+      <move beats="4" hands="right" scaleX=".5" scaleY=".5" select="Lead Left" />
+    </path>
+    <path>
+      <move beats="2" hands="left" scaleX="2" scaleY="1.5" select="Extend Left" />
+      <move beats="4" hands="left" scaleX="1.5" scaleY="1.5" select="Lead Left" />
+    </path>
+  </tam>
+
+  <tam formation="Two-Faced Lines RH" from="" group="As Couples" parts="" title="As Couples Peel Off">
+    <path>
+      <move beats="5" hands="gripright" offsetX="2" offsetY="-.5" select="Beau Wheel" />
+    </path>
+    <path>
+      <move beats="5" hands="gripleft" offsetX="2" offsetY="-1.5" select="Belle Wheel" />
+    </path>
+    <path>
+      <move beats="5" hands="gripleft" offsetX="-2" offsetY=".5" select="Belle Wheel" />
+    </path>
+    <path>
+      <move beats="5" hands="gripright" offsetX="-2" offsetY="1.5" select="Beau Wheel" />
+    </path>
+  </tam>
+
+  <tam formation="Two-Faced Lines RH" from="" group="As Couples" parts="" title="As Couples Peel the Top">
+    <path>
+      <move beats="2" hands="right" scaleX="2" scaleY="1.5" select="Extend Right" />
+      <move scaleX="1.5" scaleY="1.5" select="Swing Right" />
+      <move scaleX="1.5" scaleY="1.5" select="Hinge Right" />
+    </path>
+    <path>
+      <move beats="2" hands="left" scaleX="2" scaleY=".5" select="Extend Right" />
+      <move scaleX=".5" scaleY=".5" select="Swing Right" />
+      <move scaleX=".5" scaleY=".5" select="Hinge Right" />
+    </path>
+    <path>
+      <move hands="gripleft" offsetX="-2" offsetY=".5" select="Belle Wheel" />
+      <move beats="3.5" scaleX="3.5" scaleY="3.5" select="Lead Left" />
+    </path>
+    <path>
+      <move hands="gripright" offsetX="-2" offsetY="1.5" select="Beau Wheel" />
+      <move beats="3.5" scaleX="2.5" scaleY="2.5" select="Lead Left" />
+    </path>
+  </tam>
+
+  <tam formation="Two-Faced Tidal Line RH" from="" group="As Couples" parts="" title="As Couples Recycle">
+    <path>
+      <move beats="4" scaleX="3" scaleY="3.5" select="Lead Right" />
+      <move beats="4" hands="right" offsetX="3" offsetY="-1" select="Quarter Right" />
+    </path>
+    <path>
+      <move beats="4" scaleX="2" scaleY="2.5" select="Lead Right" />
+      <move beats="4" hands="left" offsetX="1" select="Quarter Right" />
+    </path>
+    <path>
+      <move beats="4" offsetX="-1" offsetY="-.5" reflect="-1" scaleX=".5" scaleY=".5" select="Beau Wheel" />
+      <move beats="4" hands="gripleft" offsetX="1" reflect="-1" select="Beau Wheel" />
+    </path>
+    <path>
+      <move beats="4" offsetX="-1" offsetY="-.5" reflect="-1" scaleX=".5" scaleY=".5" select="Belle Wheel" />
+      <move beats="4" hands="gripright" offsetX="1" offsetY="1" reflect="-1" select="Belle Wheel" />
+    </path>
+  </tam>
+
+  <tam formation="Normal Lines" from="" group="As Couples" parts="" title="As Couples Right and Left Thru">
+    <path>
+      <move beats="2" hands="right" scaleX="2" scaleY=".5" select="Extend Left" />
+      <move beats="2" hands="right" scaleX="2" scaleY="2" select="Extend Right" />
+      <move scaleX="1.75" scaleY="2.25" select="Beau Wheel" />
+    </path>
+    <path>
+      <move beats="2" hands="left" scaleX="2" scaleY="1.5" select="Extend Left" />
+      <move beats="2" hands="right" scaleX="2" scaleY="2" select="Extend Right" />
+      <move hands="both" scaleX=".58" scaleY=".75" select="Beau Wheel" />
+    </path>
+    <path>
+      <move beats="2" hands="right" scaleX="2" scaleY=".5" select="Extend Left" />
+      <move select="Forward 2" />
+      <move hands="both" scaleX=".58" scaleY=".75" select="Belle Wheel" />
+    </path>
+    <path>
+      <move beats="2" hands="left" scaleX="2" scaleY="1.5" select="Extend Left" />
+      <move select="Forward 2" />
+      <move scaleX="1.75" scaleY="2.25" select="Belle Wheel" />
+    </path>
+  </tam>
+
+  <tam formation="Tidal Line RH" from="" group="As Couples" parts="" title="As Couples Centers Run">
+    <path>
+      <move select="Dodge Right" />
+    </path>
+    <path>
+      <move select="Dodge Right" />
+    </path>
+    <path>
+      <move hands="right" scaleY=".5" select="Run Left" />
+    </path>
+    <path>
+      <move hands="left" scaleX="2" scaleY="1.5" select="Run Left" />
+    </path>
+  </tam>
+
+  <tam formation="Two-Faced Lines RH" from="" group="As Couples" parts="" title="As Couples Scoot Back">
+    <path>
+      <move beats="2" hands="right" scaleX="2" scaleY="1.5" select="Extend Right" />
+      <move scaleX="1.5" scaleY="1.5" select="Swing Right" />
+      <move beats="2" hands="right" scaleX="2" scaleY="1.5" select="Extend Left" />
+    </path>
+    <path>
+      <move beats="2" hands="left" scaleX="2" scaleY=".5" select="Extend Right" />
+      <move scaleX=".5" scaleY=".5" select="Swing Right" />
+      <move beats="2" hands="left" scaleX="2" scaleY=".5" select="Extend Left" />
+    </path>
+    <path>
+      <move beats="5" hands="left" select="Run Right" />
+    </path>
+    <path>
+      <move beats="5" hands="right" scaleX="2.5" scaleY="3" select="Run Right" />
+    </path>
+  </tam>
+
+  <tam group="As Couples" title="As Couples Slide Thru">
+     <formation>
+      <dancer angle="0" gender="boy" x="-2" y="3" />
+      <dancer angle="0" gender="girl" x="-2" y="-1" />
+      <dancer angle="0" gender="boy" x="-2" y="1" />
+      <dancer angle="0" gender="girl" x="-2" y="-3" />
+    </formation>
+    <path>
+      <move beats="2" hands="right" scaleX="2" scaleY=".5" select="Extend Left" />
+      <move beats="2" hands="right" scaleX="3" scaleY="1.5" select="Lead Right" />
+    </path>
+    <path>
+      <move beats="2" hands="right" scaleX="2" scaleY=".5" select="Extend Left" />
+      <move beats="2" hands="right" offsetX="1" offsetY="-1.5" select="Quarter Left" />
+    </path>
+    <path>
+      <move beats="2" hands="left" scaleX="2" scaleY="1.5" select="Extend Left" />
+      <move beats="2" hands="left" scaleY=".5" select="Lead Right" />
+    </path>
+    <path>
+      <move beats="2" hands="left" scaleX="2" scaleY="1.5" select="Extend Left" />
+      <move beats="2" hands="left" offsetX="3" offsetY="-.5" select="Quarter Left" />
+    </path>
+  </tam>
+
+  <tam formation="Two-Faced Tidal Line RH" from="" group="As Couples" parts="" title="As Couples Spin the Top">
+    <path>
+      <move scaleX="1.5" scaleY="1.5" select="Swing Right" />
+      <move scaleX=".5" scaleY=".5" select="Swing Left" />
+      <move scaleX=".5" scaleY=".5" select="Hinge Left" />
+    </path>
+    <path>
+      <move scaleX=".5" scaleY=".5" select="Swing Right" />
+      <move scaleX="1.5" scaleY="1.5" select="Swing Left" />
+      <move scaleX="1.5" scaleY="1.5" select="Hinge Left" />
+    </path>
+    <path>
+      <move scaleX=".5" scaleY=".5" select="Swing Right" />
+      <move beats="4.5" scaleX="2.5" scaleY="2.5" select="Lead Right" />
+    </path>
+    <path>
+      <move scaleX="1.5" scaleY="1.5" select="Swing Right" />
+      <move beats="4.5" scaleX="3.5" scaleY="3.5" select="Lead Right" />
+    </path>
+  </tam>
+
+  <tam formation="Normal Lines" from="" group="As Couples" parts="" title="As Couples Square Thru">
+    <path>
+      <move beats="2" hands="right" scaleX="2" scaleY=".5" select="Extend Left" />
+      <move beats="3" scaleX="1.5" scaleY="3.5" select="Lead Right" />
+      <move beats="3" scaleX="3.5" scaleY="1.5" select="Lead Right" />
+      <move beats="3" scaleX="1.5" scaleY="3.5" select="Lead Right" />
+      <move beats="2" hands="right" scaleX="2" scaleY="1.5" select="Extend Left" />
+    </path>
+    <path>
+      <move beats="2" hands="left" scaleX="2" scaleY="1.5" select="Extend Left" />
+      <move beats="3" scaleX=".5" scaleY="2.5" select="Lead Right" />
+      <move beats="3" scaleX="2.5" scaleY=".5" select="Lead Right" />
+      <move beats="3" scaleX=".5" scaleY="2.5" select="Lead Right" />
+      <move beats="2" hands="left" scaleX="2" scaleY=".5" select="Extend Left" />
+    </path>
+    <path>
+      <move beats="2" hands="right" scaleX="2" scaleY=".5" select="Extend Left" />
+      <move beats="3" scaleX="2.5" scaleY=".5" select="Lead Left" />
+      <move beats="3" scaleX=".5" scaleY="2.5" select="Lead Left" />
+      <move beats="3" scaleX="2.5" scaleY=".5" select="Lead Left" />
+      <move beats="2" hands="right" scaleX="2" scaleY="1.5" select="Extend Left" />
+    </path>
+    <path>
+      <move beats="2" hands="left" scaleX="2" scaleY="1.5" select="Extend Left" />
+      <move beats="3" scaleX="3.5" scaleY="1.5" select="Lead Left" />
+      <move beats="3" scaleX="1.5" scaleY="3.5" select="Lead Left" />
+      <move beats="3" scaleX="3.5" scaleY="1.5" select="Lead Left" />
+      <move beats="2" hands="left" scaleX="2" scaleY=".5" select="Extend Left" />
+    </path>
+  </tam>
+
+  <tam formation="Two-Faced Tidal Line RH" from="" group="As Couples" parts="" title="As Couples Swing Thru">
+    <path>
+      <move scaleX="1.5" scaleY="1.5" select="Swing Right" />
+      <move scaleX=".5" scaleY=".5" select="Swing Left" />
+    </path>
+    <path>
+      <move scaleX=".5" scaleY=".5" select="Swing Right" />
+      <move scaleX="1.5" scaleY="1.5" select="Swing Left" />
+    </path>
+    <path>
+      <move scaleX=".5" scaleY=".5" select="Swing Right" />
+    </path>
+    <path>
+      <move scaleX="1.5" scaleY="1.5" select="Swing Right" />
+    </path>
+  </tam>
+
+  <tam formation="Normal Lines" from="" group="As Couples" parts="" title="As Couples Touch a Quarter">
+    <path>
+      <move beats="2" hands="right" scaleX="2" scaleY=".5" select="Extend Left" />
+      <move beats="2" hands="right" scaleX="3" scaleY="1.5" select="Lead Right" />
+    </path>
+    <path>
+      <move beats="2" hands="left" scaleX="2" scaleY="1.5" select="Extend Left" />
+      <move beats="2" hands="both" scaleY=".5" select="Lead Right" />
+    </path>
+    <path>
+      <move beats="2" hands="right" scaleX="2" scaleY=".5" select="Extend Left" />
+      <move beats="2" hands="right" scaleX="3" scaleY="1.5" select="Lead Right" />
+    </path>
+    <path>
+      <move beats="2" hands="left" scaleX="2" scaleY="1.5" select="Extend Left" />
+      <move beats="2" hands="both" scaleY=".5" select="Lead Right" />
+    </path>
+  </tam>
+
+  <tam formation="Two-Faced Tidal Line RH" from="" group="As Couples" parts="" title="As Couples Trade the Wave">
+    <path>
+      <move beats="4" hands="right" scaleX="3.5" scaleY="2.5" select="Run Right" />
+    </path>
+    <path>
+      <move beats="4" hands="left" scaleX="2.5" scaleY="1.5" select="Run Right" />
+    </path>
+    <path>
+      <move beats="4" hands="right" scaleX="1.5" scaleY="2.5" select="Run Left" />
+    </path>
+    <path>
+      <move beats="4" hands="left" scaleX=".5" scaleY="1.5" select="Run Left" />
+    </path>
+  </tam>
+
+  <tam formation="Lines Facing Out" from="" group="As Couples" parts="" title="As Couples U-Turn Back">
+    <path>
+      <move select="Belle Wheel" />
+    </path>
+    <path>
+      <move select="Beau Wheel" />
+    </path>
+    <path>
+      <move reflect="-1" select="Beau Wheel" />
+    </path>
+    <path>
+      <move reflect="-1" select="Belle Wheel" />
+    </path>
+  </tam>
+
+  <tam formation="Two-Faced Lines RH" from="" group="As Couples" parts="" title="As Couples Walk and Dodge">
+    <path numbers="1 8">
+      <move hands="right" select="Forward 4" />
+    </path>
+    <path numbers="2 7">
+      <move hands="left" select="Forward 4" />
+    </path>
+    <path numbers="3 6">
+      <move beats="4" hands="gripleft" scaleX="2" scaleY="2" select="Dodge Right" />
+    </path>
+    <path numbers="4 5">
+      <move beats="4" hands="gripright" scaleX="2" scaleY="2" select="Dodge Right" />
+    </path>
+  </tam>
+
+  <tam formation="Two-Faced Lines RH" from="" group="As Couples" parts="" title="As Couples Zoom">
+    <path>
+      <move hands="right" select="Forward 4" />
+    </path>
+    <path>
+      <move hands="left" select="Forward 4" />
+    </path>
+    <path>
+      <move hands="left" scaleX="2" scaleY="2" select="Run Left" />
+      <move select="Forward 4" />
+      <move hands="left" scaleX="2" scaleY="2" select="Run Left" />
+    </path>
+    <path>
+      <move hands="right" scaleX=".5" scaleY=".5" select="Run Left" />
+      <move select="Forward 4" />
+      <move hands="right" scaleX=".5" scaleY=".5" select="Run Left" />
+    </path>
+  </tam>
+
+     <tam formation="Normal Lines" from="Lines" group="As Couples (A-1)" title="As Couples (A-1) Cross Trail Thru">
+    <path>
+      <move beats="2" hands="right" scaleX="2" scaleY=".5" select="Extend Left" />
+      <move beats="4" hands="gripright" scaleY="4.5" select="Extend Right" />
+      <move hands="right" select="Forward" />
+    </path>
+    <path>
+      <move beats="2" hands="left" scaleX="2" scaleY="1.5" select="Extend Left" />
+      <move beats="4" hands="gripleft" scaleY="5.5" select="Extend Right" />
+      <move hands="left" select="Forward" />
+    </path>
+    <path>
+      <move beats="2" hands="right" scaleX="2" scaleY=".5" select="Extend Left" />
+      <move beats="2" hands="gripright" scaleX="2" scaleY="3.5" select="Extend Left" />
+    </path>
+    <path>
+      <move beats="2" hands="left" scaleX="2" scaleY="1.5" select="Extend Left" />
+      <move beats="2" hands="gripleft" scaleX="2" scaleY="2.5" select="Extend Left" />
+    </path>
+  </tam>
+<tam formation="Lines Facing Out" from="Lines Facing Out" group="As Couples (A-1)" parts="" title="As Couples (A-1) Left Roll to a Wave">
+    <path>
+      <move hands="gripleft" offsetX="-2" offsetY=".5" select="Belle Wheel" />
+    </path>
+    <path>
+      <move hands="gripright" offsetX="-2" offsetY="1.5" select="Beau Wheel" />
+    </path>
+    <path>
+      <move hands="gripleft" offsetX="-2" offsetY=".5" select="Belle Wheel" />
+    </path>
+    <path>
+      <move hands="gripright" offsetX="-2" offsetY="1.5" select="Beau Wheel" />
+    </path>
+  </tam>
+
+  <tam formation="Two-Faced Lines RH" from="Two-Faced Lines" group="As Couples (A-1)" parts="" title="As Couples (A-1) Left Roll to a Wave">
+    <path>
+      <move beats="3" hands="right" scaleX="2" scaleY="1.5" select="Extend Right" />
+    </path>
+    <path>
+      <move beats="3" hands="left" scaleX="2" scaleY=".5" select="Extend Right" />
+    </path>
+    <path>
+      <move hands="gripleft" offsetX="-2" offsetY=".5" select="Belle Wheel" />
+    </path>
+    <path>
+      <move hands="gripright" offsetX="-2" offsetY="1.5" select="Beau Wheel" />
+    </path>
+  </tam>
+
+  <tam formation="Normal Lines" from="Lines" group="As Couples (A-1)" parts="" title="As Couples (A-1) Left Square Chain Thru">
+    <path>
+      <move beats="2" hands="right" scaleX="2" scaleY="1.5" select="Extend Right" />
+      <move beats="4" scaleX="3.5" scaleY="1.5" select="Lead Right" />
+      <move beats="4" scaleX="1.5" scaleY="1.5" select="Swing Right" />
+      <move beats="4" scaleX=".5" scaleY=".5" select="Swing Left" />
+      <move beats="4" scaleX="1.5" scaleY="1.5" select="Swing Right" />
+      <move beats="2" hands="right" scaleX="2" scaleY=".5" select="Extend Right" />
+    </path>
+    <path>
+      <move beats="2" hands="left" scaleX="2" scaleY=".5" select="Extend Right" />
+      <move beats="4" scaleX="2.5" scaleY=".5" select="Lead Right" />
+      <move beats="4" scaleX=".5" scaleY=".5" select="Swing Right" />
+      <move beats="4" scaleX="1.5" scaleY="1.5" select="Swing Left" />
+      <move beats="4" scaleX=".5" scaleY=".5" select="Swing Right" />
+      <move beats="2" hands="left" scaleX="2" scaleY="1.5" select="Extend Right" />
+    </path>
+    <path>
+      <move beats="2" hands="right" scaleX="2" scaleY="1.5" select="Extend Right" />
+      <move beats="4" scaleX=".5" scaleY="2.5" select="Lead Left" />
+      <move beats="4" scaleX="1.5" scaleY="1.5" select="Swing Right" />
+      <move beats="4" select="Stand" />
+      <move beats="4" scaleX="1.5" scaleY="1.5" select="Swing Right" />
+      <move beats="2" hands="right" scaleX="2" scaleY=".5" select="Extend Right" />
+    </path>
+    <path>
+      <move beats="2" hands="left" scaleX="2" scaleY=".5" select="Extend Right" />
+      <move beats="4" scaleX="1.5" scaleY="3.5" select="Lead Left" />
+      <move beats="4" scaleX=".5" scaleY=".5" select="Swing Right" />
+      <move beats="4" select="Stand" />
+      <move beats="4" scaleX=".5" scaleY=".5" select="Swing Right" />
+      <move beats="2" hands="left" scaleX="2" scaleY="1.5" select="Extend Right" />
+    </path>
+  </tam>
+<tam formation="Normal Lines" from="Lines" group="As Couples (A-1)" parts="" title="As Couples (A-1) Left Wheel Thru">
+    <path>
+      <move select="BackHinge Right" />
+    </path>
+    <path>
+      <move select="Hinge Left" />
+    </path>
+    <path>
+      <move beats="3" hands="right" scaleX="2.5" select="Lead Left" />
+      <move beats="2" hands="right" scaleX="2" scaleY=".5" select="Extend Right" />
+    </path>
+    <path>
+      <move beats="3" hands="left" scaleX="3.5" scaleY="3" select="Lead Left" />
+      <move beats="2" hands="left" scaleX="2" scaleY="1.5" select="Extend Right" />
+    </path>
+  </tam>
+
+  <tam formation="Two-Faced Tidal Line RH" from="Two-Faced Tidal Line" group="As Couples (A-1)" title="As Couples (A-1) Lockit">
+    <path>
+      <move beats="4" scaleX="3.5" scaleY="3.5" select="Hinge Right" />
+    </path>
+    <path>
+      <move beats="4" scaleX="2.5" scaleY="2.5" select="Hinge Right" />
+    </path>
+    <path>
+      <move beats="4" scaleX="1.5" scaleY="1.5" select="Hinge Left" />
+    </path>
+    <path>
+      <move beats="4" scaleX=".5" scaleY=".5" select="Hinge Left" />
+    </path>
+  </tam>
+
+  <tam formation="Two-Faced Tidal Line RH" from="Two-Faced Tidal Line" group="As Couples (A-1)" parts="3" title="As Couples (A-1) Mix">
+    <path>
+      <move select="Dodge Right" />
+      <move scaleX="1.5" scaleY="1.5" select="Swing Right" />
+    </path>
+    <path>
+      <move select="Dodge Right" />
+      <move scaleX=".5" scaleY=".5" select="Swing Right" />
+    </path>
+    <path>
+      <move beats="6" hands="gripleft" scaleX="3" scaleY="2.5" select="Run Left" />
+    </path>
+    <path>
+      <move beats="6" hands="gripright" scaleX="2" scaleY="1.5" select="Run Left" />
+    </path>
+  </tam>
+
+<tam formation="Normal Lines" from="Lines" group="As Couples (A-1)" parts="" title="As Couples (A-1) Pair Off">
+    <path>
+      <move select="BackHinge Right" />
+    </path>
+    <path>
+      <move select="Hinge Left" />
+    </path>
+    <path>
+      <move select="Hinge Right" />
+    </path>
+    <path>
+      <move select="BackHinge Left" />
+    </path>
+  </tam>
+
+  <tam formation="Normal Lines" from="Lines" group="As Couples (A-1)" parts="" title="As Couples (A-1) Pass In">
+    <path>
+      <move beats="2" hands="right" scaleX="2" scaleY=".5" select="Extend Left" />
+      <move beats="2" hands="right" scaleX="3" scaleY="1.5" select="Lead Right" />
+    </path>
+    <path>
+      <move beats="2" hands="left" scaleX="2" scaleY="1.5" select="Extend Left" />
+      <move beats="2" hands="left" scaleY=".5" select="Lead Right" />
+    </path>
+    <path>
+      <move beats="2" hands="right" scaleX="2" scaleY=".5" select="Extend Left" />
+      <move beats="2" hands="gripright" offsetX="1" offsetY="-1.5" select="Quarter Left" />
+    </path>
+    <path>
+      <move beats="2" hands="left" scaleX="2" scaleY="1.5" select="Extend Left" />
+      <move beats="2" hands="gripleft" offsetX="3" offsetY="-.5" select="Quarter Left" />
+    </path>
+  </tam>
+
+  <tam formation="Normal Lines" from="Lines" group="As Couples (A-1)" parts="" title="As Couples (A-1) Pass Out">
+    <path>
+      <move beats="2" hands="right" scaleX="2" scaleY=".5" select="Extend Left" />
+      <move beats="2" hands="gripright" offsetX="1" offsetY="-1.5" select="Quarter Left" />
+    </path>
+    <path>
+      <move beats="2" hands="left" scaleX="2" scaleY="1.5" select="Extend Left" />
+      <move beats="2" hands="gripleft" offsetX="3" offsetY="-.5" select="Quarter Left" />
+    </path>
+    <path>
+      <move beats="2" hands="right" scaleX="2" scaleY=".5" select="Extend Left" />
+      <move beats="2" hands="right" scaleX="3" scaleY="1.5" select="Lead Right" />
+    </path>
+    <path>
+      <move beats="2" hands="left" scaleX="2" scaleY="1.5" select="Extend Left" />
+      <move beats="2" hands="left" scaleY=".5" select="Lead Right" />
+    </path>
+  </tam>
+
+  <tam formation="Normal Lines" from="Lines" group="As Couples (A-1)" title="As Couples (A-1) Pass the Sea">
+    <path>
+      <move beats="2" hands="right" scaleX="2" scaleY=".5" select="Extend Left" />
+      <move beats="4" scaleX="1.5" scaleY="3.5" select="Lead Right" />
+    </path>
+    <path>
+      <move beats="2" hands="left" scaleX="2" scaleY="1.5" select="Extend Left" />
+      <move beats="4" scaleX=".5" scaleY="2.5" select="Lead Right" />
+    </path>
+    <path>
+      <move beats="2" hands="right" scaleX="2" scaleY=".5" select="Extend Left" />
+      <move beats="4" scaleX="2.5" scaleY=".5" select="Lead Left" />
+    </path>
+    <path>
+      <move beats="2" hands="left" scaleX="2" scaleY="1.5" select="Extend Left" />
+      <move beats="4" scaleX="3.5" scaleY="1.5" select="Lead Left" />
+    </path>
+  </tam>
+
+  <tam formation="Normal Lines" from="Lines" group="As Couples (A-1)" title="As Couples (A-1) Quarter In">
+    <path>
+      <move beats="3" select="Hinge Right" />
+    </path>
+    <path>
+      <move beats="3" select="BackHinge Left" />
+    </path>
+    <path>
+      <move beats="3" select="BackHinge Right" />
+    </path>
+    <path>
+      <move beats="3" select="Hinge Left" />
+    </path>
+  </tam>
+<tam formation="Normal Lines" from="Lines" group="As Couples (A-1)" title="As Couples (A-1) Quarter Out">
+    <path>
+      <move beats="2" select="BackHinge Right" />
+    </path>
+    <path>
+      <move beats="2" select="Hinge Left" />
+    </path>
+    <path>
+      <move beats="2" select="Hinge Right" />
+    </path>
+    <path>
+      <move beats="2" select="BackHinge Left" />
+    </path>
+  </tam>
+<tam formation="Two-Faced Lines RH" from="Two-Faced Lines" group="As Couples (A-1)" parts="3" title="As Couples (A-1) Quarter Thru">
+    <path>
+      <move beats="3" scaleX="1.5" scaleY="3" select="Hinge Right" />
+      <move beats="4" scaleX=".5" scaleY=".5" select="Swing Left" />
+    </path>
+    <path>
+      <move beats="3" hands="both" scaleX=".5" select="Hinge Right" />
+      <move beats="4" scaleX="1.5" scaleY="1.5" select="Swing Left" />
+    </path>
+    <path>
+      <move beats="3" hands="both" scaleX=".5" select="Hinge Right" />
+    </path>
+    <path>
+      <move beats="3" scaleX="1.5" scaleY="3" select="Hinge Right" />
+    </path>
+  </tam>
+
+  <tam formation="Normal Lines" from="Normal Lines" group="As Couples (A-1)" parts="2" title="As Couples (A-1) Reverse Swap Around">
+    <path>
+      <move hands="right" select="Forward 4" />
+    </path>
+    <path>
+      <move hands="left" select="Forward 4" />
+    </path>
+    <path>
+      <move beats="4" hands="gripright" select="Flip Left" />
+    </path>
+    <path>
+      <move beats="4" hands="gripleft" scaleY="3" select="Run Left" />
+    </path>
+  </tam>
+
+  <tam formation="Lines Facing Out" from="Lines Facing Out" group="As Couples (A-1)" parts="" title="As Couples (A-1) Right Roll to a Wave">
+    <path>
+      <move hands="gripleft" offsetX="-2" offsetY="-1.5" reflect="-1" select="Beau Wheel" />
+    </path>
+    <path>
+      <move hands="gripright" offsetX="-2" offsetY="-.5" reflect="-1" select="Belle Wheel" />
+    </path>
+    <path>
+      <move hands="gripleft" offsetX="-2" offsetY="-1.5" reflect="-1" select="Beau Wheel" />
+    </path>
+    <path>
+      <move hands="gripright" offsetX="-2" offsetY="-.5" reflect="-1" select="Belle Wheel" />
+    </path>
+  </tam>
+
+  <tam formation="Two-Faced Lines LH" from="Two-Faced Lines" group="As Couples (A-1)" parts="" title="As Couples (A-1) Right Roll to a Wave">
+    <path>
+      <move hands="gripleft" offsetX="-2" offsetY="-1.5" reflect="-1" select="Beau Wheel" />
+    </path>
+    <path>
+      <move hands="gripright" offsetX="-2" offsetY="-.5" reflect="-1" select="Belle Wheel" />
+    </path>
+    <path>
+      <move beats="3" hands="right" scaleX="2" scaleY=".5" select="Extend Left" />
+    </path>
+    <path>
+      <move beats="3" hands="left" scaleX="2" scaleY="1.5" select="Extend Left" />
+    </path>
+  </tam>
+
+  <tam formation="Two-Faced Lines RH" from="Right-Hand Two-Faced Lines" group="As Couples (A-1)" parts="" title="As Couples (A-1) Scoot and Dodge">
+    <path>
+      <move beats="2" hands="right" scaleX="2" scaleY="1.5" select="Extend Right" />
+      <move scaleX="1.5" scaleY="1.5" select="Swing Right" />
+      <move beats="2" hands="right" scaleX="2" scaleY="1.5" select="Extend Left" />
+    </path>
+    <path>
+      <move beats="2" hands="left" scaleX="2" scaleY=".5" select="Extend Right" />
+      <move scaleX=".5" scaleY=".5" select="Swing Right" />
+      <move beats="2" hands="left" scaleX="2" scaleY=".5" select="Extend Left" />
+    </path>
+    <path>
+      <move beats="5" hands="left" scaleY="2" select="Dodge Right" />
+    </path>
+    <path>
+      <move beats="5" hands="right" scaleY="2" select="Dodge Right" />
+    </path>
+  </tam>
+
+  <tam formation="Normal Lines" from="Lines" group="As Couples (A-1)" parts="6;4;4" title="As Couples (A-1) Square Chain Thru">
+    <path>
+      <move beats="2" hands="right" scaleX="2" scaleY=".5" select="Extend Left" />
+      <move beats="4" scaleX="1.5" scaleY="3.5" select="Lead Right" />
+      <move beats="4" scaleX=".5" scaleY=".5" select="Swing Left" />
+      <move beats="4" select="Stand" />
+      <move beats="4" scaleX=".5" scaleY=".5" select="Swing Left" />
+      <move beats="2" hands="right" scaleX="2" scaleY="1.5" select="Extend Left" />
+    </path>
+    <path>
+      <move beats="2" hands="left" scaleX="2" scaleY="1.5" select="Extend Left" />
+      <move beats="4" scaleX=".5" scaleY="2.5" select="Lead Right" />
+      <move beats="4" scaleX="1.5" scaleY="1.5" select="Swing Left" />
+      <move beats="4" select="Stand" />
+      <move beats="4" scaleX="1.5" scaleY="1.5" select="Swing Left" />
+      <move beats="2" hands="left" scaleX="2" scaleY=".5" select="Extend Left" />
+    </path>
+    <path>
+      <move beats="2" hands="right" scaleX="2" scaleY=".5" select="Extend Left" />
+      <move beats="4" scaleX="2.5" scaleY=".5" select="Lead Left" />
+      <move beats="4" scaleX=".5" scaleY=".5" select="Swing Left" />
+      <move beats="4" scaleX="1.5" scaleY="1.5" select="Swing Right" />
+      <move beats="4" scaleX=".5" scaleY=".5" select="Swing Left" />
+      <move beats="2" hands="right" scaleX="2" scaleY="1.5" select="Extend Left" />
+    </path>
+    <path>
+      <move beats="2" hands="left" scaleX="2" scaleY="1.5" select="Extend Left" />
+      <move beats="4" scaleX="3.5" scaleY="1.5" select="Lead Left" />
+      <move beats="4" scaleX="1.5" scaleY="1.5" select="Swing Left" />
+      <move beats="4" scaleX=".5" scaleY=".5" select="Swing Right" />
+      <move beats="4" scaleX="1.5" scaleY="1.5" select="Swing Left" />
+      <move beats="2" hands="left" scaleX="2" scaleY=".5" select="Extend Left" />
+    </path>
+  </tam>
+
+  <tam formation="Normal Lines" from="Normal Lines" group="As Couples (A-1)" parts="2" title="As Couples (A-1) Swap Around">
+    <path>
+      <move beats="4" hands="gripright" scaleY="3" select="Run Right" />
+    </path>
+    <path>
+      <move beats="4" hands="gripleft" select="Flip Right" />
+    </path>
+    <path>
+      <move hands="right" select="Forward 4" />
+    </path>
+    <path>
+      <move hands="left" select="Forward 4" />
+    </path>
+  </tam>
+
+  <tam formation="Two-Faced Lines RH" from="Two-Faced Lines" group="As Couples (A-1)" parts="9" title="As Couples (A-1) Three Quarter Thru">
+    <path>
+      <move beats="9" scaleX="1.5" scaleY="3" select="Cast Right" />
+    </path>
+    <path>
+      <move beats="9" hands="both" scaleX=".5" select="Cast Right" />
+    </path>
+    <path>
+      <move beats="9" hands="both" scaleX=".5" select="Cast Right" />
+      <move beats="4" scaleX="1.5" scaleY="1.5" select="Swing Left" />
+    </path>
+    <path>
+      <move beats="9" scaleX="1.5" scaleY="3" select="Cast Right" />
+      <move beats="4" scaleX=".5" scaleY=".5" select="Swing Left" />
+    </path>
+  </tam>
+
+  <tam formation="Tidal Line RH" from="Right-Hand Tidal Line" group="As Couples (A-1)" parts="" title="As Couples (A-1) Turn and Deal">
+    <path>
+      <move hands="gripright" offsetX="2" offsetY="-1.5" reflect="-1" scaleY=".5" select="Belle Wheel" />
+    </path>
+    <path>
+      <move beats="3" hands="gripleft" offsetX="2" offsetY=".5" select="U-Turn Right" />
+    </path>
+    <path>
+      <move hands="gripright" offsetX="2" offsetY="-3.5" reflect="-1" scaleY=".5" select="Belle Wheel" />
+    </path>
+    <path>
+      <move hands="gripleft" offsetX="2" offsetY="-2.5" reflect="-1" scaleX=".5" scaleY=".5" select="Beau Wheel" />
+    </path>
+  </tam>
+
+  <tam formation="Tidal Line LH" from="Left-Hand Tidal Line" group="As Couples (A-1)" parts="" title="As Couples (A-1) Turn and Deal">
+    <path>
+      <move beats="4" offsetX="-2" offsetY=".5" scaleX=".5" scaleY=".5" select="Beau Wheel" />
+    </path>
+    <path>
+      <move beats="4" offsetX="-2" offsetY="1.5" scaleX=".5" scaleY=".5" select="Belle Wheel" />
+    </path>
+    <path>
+      <move beats="4" offsetX="-2" offsetY="2.5" scaleX=".5" scaleY=".5" select="Beau Wheel" />
+    </path>
+    <path>
+      <move beats="4" offsetX="-2" offsetY="3.5" scaleX=".5" scaleY=".5" select="Belle Wheel" />
+    </path>
+  </tam>
+
+  <tam formation="Two-Faced Tidal Line RH" from="Right-Hand Two-Faced Tidal Line" group="As Couples (A-1)" parts="" title="As Couples (A-1) Turn and Deal">
+    <path>
+      <move offsetX="2" offsetY="-1.5" reflect="-1" scaleY=".5" select="Belle Wheel" />
+    </path>
+    <path>
+      <move offsetX="2" offsetY="-.5" reflect="-1" scaleX=".5" scaleY=".5" select="Beau Wheel" />
+    </path>
+    <path>
+      <move beats="4" offsetX="-2" offsetY="3.5" scaleX=".5" scaleY=".5" select="Belle Wheel" />
+    </path>
+    <path>
+      <move beats="4" offsetX="-2" offsetY="2.5" scaleX=".5" scaleY=".5" select="Beau Wheel" />
+    </path>
+  </tam>
+
+  <tam formation="Two-Faced Tidal Line LH" from="Left-Hand Two-Faced Tidal Line" group="As Couples (A-1)" parts="" title="As Couples (A-1) Turn and Deal">
+    <path>
+      <move beats="4" offsetX="-2" offsetY="1.5" scaleX=".5" scaleY=".5" select="Belle Wheel" />
+    </path>
+    <path>
+      <move beats="4" offsetX="-2" offsetY=".5" scaleX=".5" scaleY=".5" select="Beau Wheel" />
+    </path>
+    <path>
+      <move offsetX="2" offsetY="-3.5" reflect="-1" scaleY=".5" select="Belle Wheel" />
+    </path>
+    <path>
+      <move offsetX="2" offsetY="-2.5" reflect="-1" scaleX=".5" scaleY=".5" select="Beau Wheel" />
+    </path>
+  </tam>
+
+  <tam formation="Normal Lines" from="Lines" group="As Couples (A-1)" title="As Couples (A-1) Wheel Thru">
+    <path>
+      <move beats="3" hands="right" scaleX="3.5" scaleY="3" select="Lead Right" />
+      <move beats="2" hands="right" scaleX="2" scaleY="1.5" select="Extend Left" />
+    </path>
+    <path>
+      <move beats="3" hands="left" scaleX="2.5" select="Lead Right" />
+      <move beats="2" hands="left" scaleX="2" scaleY=".5" select="Extend Left" />
+    </path>
+    <path>
+      <move select="Hinge Right" />
+    </path>
+    <path>
+      <move select="BackHinge Left" />
+    </path>
+  </tam>
+
+  <tam formation="Two-Faced Lines RH" from="Two-Faced Lines" group="As Couples (A-2)" title="As Couples (A-2) Box Counter Rotate">
+    <path>
+      <move beats="5" hands="right" select="Counter Rotate Right 5 -1" />
+    </path>
+    <path>
+      <move beats="5" hands="both" select="Counter Rotate Right 3 1" />
+    </path>
+    <path>
+      <move beats="5" hands="both" select="Counter Rotate Right -1 -3" />
+    </path>
+    <path>
+      <move beats="5" hands="right" select="Counter Rotate Right 1 -5" />
+    </path>
+  </tam>
+
+<tam formation="Two-Faced Lines RH" from="Two-Faced Lines" group="As Couples (A-2)" title="As Couples (A-2) Box Transfer">
+    <path>
+      <move beats="2" hands="right" scaleX="2" scaleY="1.5" select="Extend Right" />
+      <move scaleX="1.5" scaleY="1.5" select="Cast Right" />
+      <move beats="2" hands="right" scaleX="2" scaleY="1.5" select="Extend Left" />
+    </path>
+    <path>
+      <move beats="2" hands="left" scaleX="2" scaleY=".5" select="Extend Right" />
+      <move scaleX=".5" scaleY=".5" select="Cast Right" />
+      <move beats="2" hands="left" scaleX="2" scaleY=".5" select="Extend Left" />
+    </path>
+    <path>
+      <move beats="2" hands="left" select="Lead Right" />
+      <move beats="4" scaleX="3" scaleY="3" select="Lead Right" />
+      <move beats="2" hands="left" select="Lead Right" />
+    </path>
+    <path>
+      <move beats="2" hands="right" scaleX="2" scaleY="3" select="Lead Right" />
+      <move beats="4" scaleX="4" scaleY="4" select="Lead Right" />
+      <move beats="2" hands="right" scaleX="3" scaleY="2" select="Lead Right" />
+    </path>
+  </tam>
+<tam formation="Eight Chain Thru" from="Eight Chain Thru" group="As Couples (A-2)" parts="" title="As Couples (A-2) Pass and Roll">
+    <path>
+      <move hands="right" scaleY=".5" select="Extend Left" />
+      <move select="Forward 2" />
+      <move scaleX="1.5" scaleY="1.5" select="Swing Right" />
+      <move select="Forward 2" />
+      <move hands="right" scaleX="2.25" scaleY="2.25" select="Run Right" />
+    </path>
+    <path>
+      <move hands="left" scaleY="1.5" select="Extend Left" />
+      <move select="Forward 2" />
+      <move scaleX=".5" scaleY=".5" select="Swing Right" />
+      <move select="Forward 2" />
+      <move hands="left" scaleX=".75" scaleY=".75" select="Run Right" />
+    </path>
+    <path>
+      <move hands="right" scaleY=".5" select="Extend Left" />
+      <move beats="5" scaleX="1.5" scaleY="1.5" select="Run Right" />
+      <move select="Forward 2" />
+      <move beats="3" hands="right" scaleX="2" scaleY="1.5" select="Extend Left" />
+    </path>
+    <path>
+      <move hands="left" scaleY="1.5" select="Extend Left" />
+      <move beats="5" scaleX=".5" scaleY=".5" select="Run Right" />
+      <move select="Forward 2" />
+      <move beats="3" hands="left" scaleX="2" scaleY=".5" select="Extend Left" />
+    </path>
+  </tam>
+<tam formation="Two-Faced Lines RH" from="Two-Faced Lines" group="As Couples (A-2)" parts="" title="As Couples (A-2) Peel and Trail">
+    <path>
+      <move beats="2" scaleX="2" scaleY="1.5" select="Extend Right" />
+      <move beats="3" scaleX="1.5" scaleY="1.5" select="Swing Right" />
+    </path>
+    <path>
+      <move beats="2" scaleX="2" scaleY=".5" select="Extend Right" />
+      <move beats="3" scaleX=".5" scaleY=".5" select="Swing Right" />
+    </path>
+    <path>
+      <move beats="5" hands="gripleft" offsetX="-2" offsetY=".5" select="Belle Wheel" />
+    </path>
+    <path>
+      <move beats="5" hands="gripright" offsetX="-2" offsetY="1.5" select="Beau Wheel" />
+    </path>
+  </tam>
+
+  <tam formation="Normal Lines" from="Lines" group="As Couples (A-2)" parts="" title="As Couples (A-2) Recycle">
+    <path>
+      <move beats="5" hands="right" offsetX="2" offsetY="-.5" select="Run Right" />
+    </path>
+    <path>
+      <move beats="5" hands="left" offsetX="2" offsetY=".5" select="U-Turn Right" />
+    </path>
+    <path>
+      <movement beats="5" cx1="-1" cx2="1" cx3="1" cx4="2" cy1="2" cy2="4.5" cy4="2" hands="gripright" x2="2" x4="3" y2="4.5" y4="2" />
+    </path>
+    <path>
+      <movement beats="5" cx1="-1" cx2="1" cx3="1" cx4="2" cy1="2" cy2="5.5" cy4="2" hands="gripleft" x2="2" x4="3" y2="5.5" y4="2" />
+    </path>
+  </tam>
+
+  <tam formation="Two-Faced Lines RH" from="Two-Faced Lines" group="As Couples (A-2)" parts="3;4" title="As Couples (A-2) Remake">
+    <path>
+      <move beats="3" hands="right" scaleX="1.5" scaleY="3" select="Lead Right" />
+      <move beats="4" scaleX=".5" scaleY=".5" select="Swing Left" />
+      <move beats="4" scaleX="1.5" scaleY="1.5" select="Swing Right" />
+      <move beats="3" hands="right" scaleX="3" scaleY="1.5" select="Lead Right" />
+    </path>
+    <path>
+      <move beats="3" hands="both" scaleX=".5" select="Lead Right" />
+      <move beats="4" scaleX="1.5" scaleY="1.5" select="Swing Left" />
+      <move beats="4" scaleX=".5" scaleY=".5" select="Swing Right" />
+      <move beats="3" hands="both" scaleY=".5" select="Lead Right" />
+    </path>
+    <path>
+      <move beats="3" hands="both" scaleX=".5" select="Lead Right" />
+      <move beats="4" select="Stand" />
+      <move beats="4" scaleX=".5" scaleY=".5" select="Swing Right" />
+      <move beats="3" hands="both" scaleY=".5" select="Lead Right" />
+    </path>
+    <path>
+      <move beats="3" hands="right" scaleX="1.5" scaleY="3" select="Lead Right" />
+      <move beats="4" select="Stand" />
+      <move beats="4" scaleX="1.5" scaleY="1.5" select="Swing Right" />
+      <move beats="3" hands="right" scaleX="3" scaleY="1.5" select="Lead Right" />
+    </path>
+  </tam>
+<tam formation="Two-Faced Lines RH" from="Two-Faced Lines" group="As Couples (A-2)" parts="6" title="As Couples (A-2) Scoot and Weave">
+    <path>
+      <move beats="2" hands="right" scaleX="2" scaleY="1.5" select="Extend Right" />
+      <move scaleX="1.5" scaleY="1.5" select="Swing Right" />
+      <move select="Forward 2" />
+      <move scaleX="1.5" scaleY="1.5" select="Hinge Right" />
+    </path>
+    <path>
+      <move beats="2" hands="left" scaleX="2" scaleY=".5" select="Extend Right" />
+      <move scaleX=".5" scaleY=".5" select="Swing Right" />
+      <move select="Forward 2" />
+      <move scaleX=".5" scaleY=".5" select="Hinge Right" />
+    </path>
+    <path>
+      <move beats="6" hands="left" scaleX=".75" scaleY=".75" select="Run Right" />
+      <move beats="2" scaleX="2" scaleY="2" select="Extend Right" />
+      <move scaleX="1.5" scaleY="1.5" select="Hinge Left" />
+    </path>
+    <path>
+      <move beats="6" hands="right" scaleX="2.25" scaleY="2.25" select="Run Right" />
+      <move beats="2" scaleX="2" scaleY="2" select="Extend Right" />
+      <move scaleX=".5" scaleY=".5" select="Hinge Left" />
+    </path>
+  </tam>
+
+  <tam formation="Two-Faced Tidal Line RH" from="Two-Faced Tidal Line" group="As Couples (A-2)" parts="2" title="As Couples (A-2) Slide">
+    <path>
+      <move beats="4" scaleX="2" select="BackSashay Right" />
+    </path>
+    <path>
+      <move beats="4" scaleX="2" select="BackSashay Right" />
+    </path>
+    <path>
+      <move beats="4" scaleX="2" select="BackSashay Right" />
+    </path>
+    <path>
+      <move beats="4" scaleX="2" select="BackSashay Right" />
+    </path>
+  </tam>
+
+  <tam formation="Two-Faced Tidal Line RH" from="Two-Faced Tidal Line" group="As Couples (A-2)" parts="2" title="As Couples (A-2) Slip">
+    <path>
+    </path>
+    <path>
+    </path>
+    <path>
+      <move beats="4" scaleX="1.5" scaleY="1.5" select="Swing Left" />
+    </path>
+    <path>
+      <move beats="4" scaleX=".5" scaleY=".5" select="Swing Left" />
+    </path>
+  </tam>
+
+  <tam formation="Two-Faced Tidal Line RH" from="Two-Faced Tidal Line" group="As Couples (A-2)" parts="2" title="As Couples (A-2) Slither">
+    <path>
+    </path>
+    <path>
+    </path>
+    <path>
+      <move beats="4" scaleX="2" select="BackSashay Left" />
+    </path>
+    <path>
+      <move beats="4" scaleX="2" select="BackSashay Left" />
+    </path>
+  </tam>
+
+  <tam formation="Two-Faced Tidal Line RH" from="Two-Faced Tidal Line" group="As Couples (A-2)" parts="2" title="As Couples (A-2) Swing">
+    <path>
+      <move beats="4" scaleX="1.5" scaleY="1.5" select="Swing Right" />
+    </path>
+    <path>
+      <move beats="4" scaleX=".5" scaleY=".5" select="Swing Right" />
+    </path>
+    <path>
+      <move beats="4" scaleX=".5" scaleY=".5" select="Swing Right" />
+    </path>
+    <path>
+      <move beats="4" scaleX="1.5" scaleY="1.5" select="Swing Right" />
+    </path>
+  </tam>
+
+  <tam formation="Normal Lines" group="As Couples (A-2)" parts="5;3" title="As Couples (A-2) Swing and Mix">
+    <path>
+      <move beats="2" scaleX="2" scaleY=".5" select="Extend Left" />
+      <move scaleX="1.5" scaleY="1.5" select="Swing Right" />
+      <move beats="6" hands="gripright" scaleX="2" scaleY="1.5" select="Run Left" />
+    </path>
+    <path>
+      <move beats="2" scaleX="2" scaleY="1.5" select="Extend Left" />
+      <move scaleX=".5" scaleY=".5" select="Swing Right" />
+      <move beats="6" hands="gripleft" scaleX="3" scaleY="2.5" select="Run Left" />
+    </path>
+    <path>
+      <move beats="2" scaleX="2" scaleY=".5" select="Extend Left" />
+      <move scaleX="1.5" scaleY="1.5" select="Swing Right" />
+      <move select="Dodge Right" />
+      <move scaleX="1.5" scaleY="1.5" select="Swing Right" />
+    </path>
+    <path>
+      <move beats="2" scaleX="2" scaleY="1.5" select="Extend Left" />
+      <move scaleX=".5" scaleY=".5" select="Swing Right" />
+      <move select="Dodge Right" />
+      <move scaleX=".5" scaleY=".5" select="Swing Right" />
+    </path>
+  </tam>
+
+<tam formation="Two-Faced Tidal Line RH" from="Tidal Two-Faced Line" group="As Couples (A-2)" parts="" title="As Couples (A-2) Switch the Wave">
+    <path>
+      <move beats="6" hands="right" scaleX="2.5" scaleY="2.5" select="Run Right" />
+    </path>
+    <path>
+      <move beats="6" hands="left" scaleX="1.5" scaleY="1.5" select="Run Right" />
+    </path>
+    <path>
+      <move beats="6" hands="left" scaleX=".5" scaleY=".5" select="Run Right" />
+    </path>
+    <path>
+      <move beats="6" hands="right" scaleX="1.5" scaleY="1.5" select="Run Right" />
+    </path>
+  </tam>
+
+  <tam formation="Two-Faced Lines RH" from="Two-Faced Lines" group="As Couples (A-2)" title="As Couples (A-2) Trail Off">
+    <path>
+      <move beats="2" hands="right" scaleX="2" scaleY="1.5" select="Extend Right" />
+      <move beats="4" scaleX="1.5" scaleY="1.5" select="Swing Right" />
+    </path>
+    <path>
+      <move beats="2" hands="left" scaleX="2" scaleY=".5" select="Extend Right" />
+      <move beats="4" scaleX=".5" scaleY=".5" select="Swing Right" />
+    </path>
+    <path>
+      <move beats="6" hands="left" offsetX="-2" offsetY="-1.5" select="Run Right" />
+    </path>
+    <path>
+      <move beats="6" hands="right" offsetX="-2" offsetY="-1.5" scaleX="2.5" scaleY="2.5" select="Run Right" />
+    </path>
+  </tam>
+
+  <tam formation="Two-Faced Tidal Line RH" from="Two-Faced Tidal Line" group="As Couples (C-1)" parts="" title="As Couples (C-1) Ah So">
+    <path>
+      <move beats="5" hands="gripright" offsetX="2" offsetY="-.5" scaleX="2" scaleY="3" select="Run Right" />
+    </path>
+    <path>
+      <move beats="5" hands="gripboth" offsetX="2" offsetY=".5" scaleY="2" select="Run Right" />
+    </path>
+    <path>
+      <move beats="5" hands="gripboth" offsetX="-2" offsetY=".5" select="U-Turn Right" />
+    </path>
+    <path>
+      <move beats="5" hands="gripright" offsetX="-2" offsetY="3.5" scaleY="3" select="Run Right" />
+    </path>
+  </tam>
+
+  <tam formation="Two-Faced Tidal Line RH" from="Two-Faced Tidal Line" group="As Couples (C-1)" parts="3;4.5;4" title="As Couples (C-1) Alter the Wave">
+    <path>
+      <move scaleX="1.5" scaleY="1.5" select="Swing Right" />
+      <move scaleX=".5" scaleY=".5" select="Swing Left" />
+      <move scaleX=".5" scaleY=".5" select="Hinge Left" />
+      <move beats="4" scaleX=".5" scaleY=".5" select="Swing Left" />
+      <move beats="3" scaleX="2.5" scaleY=".5" select="Lead Left" />
+    </path>
+    <path>
+      <move scaleX=".5" scaleY=".5" select="Swing Right" />
+      <move scaleX="1.5" scaleY="1.5" select="Swing Left" />
+      <move scaleX="1.5" scaleY="1.5" select="Hinge Left" />
+      <move beats="4" scaleX="1.5" scaleY="1.5" select="Swing Left" />
+      <move beats="3" scaleX="3.5" scaleY="1.5" select="Lead Left" />
+    </path>
+    <path>
+      <move scaleX=".5" scaleY=".5" select="Swing Right" />
+      <move beats="4.5" reflect="-1" scaleX=".5" scaleY=".5" select="Beau Wheel" />
+      <move beats="4" scaleX="3.5" scaleY="3.5" select="Run Left" />
+      <move scaleX="1.5" scaleY="1.5" select="Run Left" />
+    </path>
+    <path>
+      <move scaleX="1.5" scaleY="1.5" select="Swing Right" />
+      <move beats="4.5" reflect="-1" scaleX=".5" scaleY=".5" select="Belle Wheel" />
+      <move beats="4" scaleX="2.5" scaleY="2.5" select="Run Left" />
+      <move scaleX=".5" scaleY=".5" select="Run Left" />
+    </path>
+  </tam>
+
+  <tam formation="Two-Faced Lines RH" from="Two-Faced Lines" group="As Couples (C-1)" parts="" title="As Couples (C-1) And Weave">
+    <path>
+      <move beats="3" hands="right" scaleX="2" scaleY="3.5" select="Extend Right" />
+      <move beats="2" hands="both" scaleX=".5" scaleY=".5" select="Lead Left" />
+    </path>
+    <path>
+      <move beats="3" hands="left" scaleX="2" scaleY="2.5" select="Extend Right" />
+      <move beats="2" hands="left" scaleX="1.5" scaleY="1.5" select="Lead Left" />
+    </path>
+    <path>
+      <move beats="2" hands="left" scaleX=".5" select="Lead Right" />
+    </path>
+    <path>
+      <move beats="2" hands="right" scaleX="1.5" scaleY="3" select="Lead Right" />
+    </path>
+  </tam>
+
+  <tam formation="Two-Faced Lines RH" from="Two-Faced Lines" group="As Couples (C-1)" title="As Couples (C-1) Box Recycle">
+    <path>
+      <move beats="4" hands="gripright" offsetX="2" offsetY="-1.5" scaleY=".5" select="Run Right" />
+    </path>
+    <path>
+      <move beats="4" hands="gripboth" offsetX="2" offsetY="-.5" scaleY=".5" select="BackRun Left" />
+    </path>
+    <path>
+      <move beats="4" hands="gripboth" offsetX="-2" offsetY="-2.5" scaleX="2" scaleY=".5" select="Run Right" />
+    </path>
+    <path>
+      <move beats="4" hands="gripright" offsetX="-2" offsetY="-5.5" scaleX="3" scaleY=".5" select="Run Right" />
+    </path>
+  </tam>
+
+  <tam formation="Lines Facing Out" from="Lines Facing Out" group="As Couples (C-1)" title="As Couples (C-1) Chase Your Neighbor">
+    <path>
+      <move hands="left" offsetX="-1" select="BackRun Left" />
+      <move hands="left" select="Forward 3" />
+      <move beats="3" hands="left" scaleX=".5" select="Lead Right" />
+      <move scaleX=".5" scaleY=".5" select="BackRun Left" />
+    </path>
+    <path>
+      <move hands="right" offsetX="-1" select="Run Right" />
+      <move hands="right" select="Forward 3" />
+      <move beats="3" hands="right" scaleX="1.5" scaleY="3" select="Lead Right" />
+      <move scaleX=".5" scaleY=".5" select="Run Right" />
+    </path>
+    <path>
+      <move beats="6" hands="left" select="Run Right" />
+      <move beats="3" hands="left" scaleX="2" scaleY=".5" select="Extend Right" />
+      <move beats="4" scaleX=".5" scaleY=".5" select="Run Right" />
+      <move beats="2" scaleX=".5" scaleY=".5" select="Hinge Right" />
+    </path>
+    <path>
+      <move beats="6" hands="right" scaleX="3" scaleY="3" select="Run Right" />
+      <move beats="3" hands="right" scaleX="2" scaleY="1.5" select="Extend Right" />
+      <move beats="4" scaleX="1.5" scaleY="1.5" select="Run Right" />
+      <move beats="2" scaleX="1.5" scaleY="1.5" select="Hinge Right" />
+    </path>
+  </tam>
+
+  <tam formation="Normal Lines" from="Lines" group="As Couples (C-1)" title="As Couples (C-1) Cross and Turn">
+    <path>
+      <move beats="2" hands="right" scaleX="2" scaleY="1.5" select="Extend Right" />
+      <move beats="4" hands="right" scaleX="2" scaleY="2.5" select="Extend Right" />
+    </path>
+    <path>
+      <move beats="2" hands="left" scaleX="2" scaleY=".5" select="Extend Right" />
+      <move beats="4" hands="left" scaleX="2" scaleY="3.5" select="Extend Right" />
+    </path>
+    <path>
+      <move beats="6" select="Beau Wheel" />
+    </path>
+    <path>
+      <move beats="6" select="Belle Wheel" />
+    </path>
+  </tam>
+
+  <tam formation="Two-Faced Lines RH" from="" group="As Couples (C-1)" title="As Couples (C-1) Cross Extend">
+    <path>
+      <move beats="5" hands="right" offsetX="2" scaleY="2" select="Dodge Right" />
+    </path>
+    <path>
+      <move beats="5" hands="left" offsetX="2" scaleY="2" select="Dodge Right" />
+    </path>
+    <path>
+      <move hands="left" offsetX="1" select="Dodge Right" />
+    </path>
+    <path>
+      <move hands="right" offsetX="1" select="Dodge Right" />
+    </path>
+  </tam>
+
+  <tam formation="Tidal Line RH" from="" group="As Couples (C-1)" title="As Couples (C-1) Cross Roll">
+    <path>
+      <move beats="5" scaleX="1.5" scaleY="1.5" select="Run Right" />
+    </path>
+    <path>
+      <move beats="5" scaleX=".5" scaleY=".5" select="Run Right" />
+    </path>
+    <path>
+      <move beats="5" scaleX="2.5" scaleY="2.5" select="Run Right" />
+    </path>
+    <path>
+      <move beats="5" scaleX="1.5" scaleY="1.5" select="Run Right" />
+    </path>
+  </tam>
+
+  <tam formation="Two-Faced Lines RH" from="Two-Faced Lines" group="As Couples (C-1)" title="As Couples (C-1) Cross Your Neighbor">
+    <path>
+      <move beats="4" hands="gripright" scaleX="2" scaleY="3.5" select="Extend Right" />
+      <move beats="6" hands="both" scaleX=".5" scaleY=".5" select="Cast Left" />
+    </path>
+    <path>
+      <move beats="4" hands="gripleft" scaleX="2" scaleY="2.5" select="Extend Right" />
+      <move beats="6" scaleX="1.5" scaleY="1.5" select="Cast Left" />
+    </path>
+    <path>
+      <move beats="4" hands="left" scaleX="2" scaleY=".5" select="Extend Right" />
+      <move beats="6" hands="left" scaleX=".5" scaleY=".5" select="Cast Right" />
+    </path>
+    <path>
+      <move beats="4" hands="right" scaleX="2" scaleY="1.5" select="Extend Right" />
+      <move beats="6" scaleX="1.5" scaleY="1.5" select="Cast Right" />
+    </path>
+  </tam>
+
+  <tam formation="Two-Faced Lines RH" from="Two-Faced Lines" group="As Couples (C-1)" title="As Couples (C-1) Follow Thru">
+    <path>
+      <move beats="2" hands="right" scaleX="2" scaleY="1.5" select="Extend Right" />
+      <move scaleX="1.5" scaleY="1.5" select="Hinge Right" />
+    </path>
+    <path>
+      <move beats="2" hands="left" scaleX="2" scaleY=".5" select="Extend Right" />
+      <move hands="both" scaleX=".5" scaleY=".5" select="Hinge Right" />
+    </path>
+    <path>
+      <move beats="3" hands="left" scaleX=".5" select="Hinge Right" />
+    </path>
+    <path>
+      <move beats="3" scaleX="1.5" scaleY="3" select="Hinge Right" />
+    </path>
+  </tam>
+
+  <tam formation="Normal Lines" from="" group="As Couples (C-1)" title="As Couples (C-1) Reverse Cross and Turn">
+    <path>
+      <move select="Beau Reverse Wheel" />
+    </path>
+    <path>
+      <move select="Belle Reverse Wheel" />
+    </path>
+    <path>
+      <move beats="2" hands="right" scaleX="2" scaleY=".5" select="Extend Left" />
+      <move beats="4" hands="right" scaleX="2" scaleY="3.5" select="Extend Left" />
+    </path>
+    <path>
+      <move beats="2" hands="left" scaleX="2" scaleY="1.5" select="Extend Left" />
+      <move beats="4" hands="left" scaleX="2" scaleY="2.5" select="Extend Left" />
+    </path>
+  </tam>
+
+  <tam formation="Two-Faced Tidal Line RH" from="" group="As Couples (C-1)" title="As Couples (C-1) Reverse Explode">
+    <path>
+      <move beats="3" hands="right" offsetX="1" offsetY="-1.5" select="Quarter Left" />
+    </path>
+    <path>
+      <move beats="3" hands="left" offsetX="3" offsetY="-.5" select="Quarter Left" />
+    </path>
+    <path>
+      <move beats="3" hands="left" scaleY=".5" select="Lead Right" />
+    </path>
+    <path>
+      <move beats="3" hands="right" scaleX="3" scaleY="1.5" select="Lead Right" />
+    </path>
+  </tam>
+
+  <tam formation="Lines Facing Out" from="Lines Facing Out" group="As Couples (C-1)" title="As Couples (C-1) Shakedown">
+    <path>
+      <move offsetX="-2" offsetY="-1" reflect="-1" select="Beau Wheel" />
+      <move hands="left" offsetX="1" select="Quarter Right" />
+    </path>
+    <path>
+      <move offsetX="-2" offsetY="-1" reflect="-1" select="Belle Wheel" />
+      <move offsetX="1" scaleX="2" scaleY="2" select="Hinge Right" />
+    </path>
+    <path>
+      <move hands="left" offsetX="1" select="Run Right" />
+      <move hands="left" offsetY="1" select="Quarter Right" />
+    </path>
+    <path>
+      <move hands="right" offsetX="1" scaleX="3" scaleY="3" select="Run Right" />
+      <move offsetY="1" scaleX="2" scaleY="2" select="Hinge Right" />
+    </path>
+  </tam>
+
+  <tam formation="Lines Facing Out" from="Lines Facing Out" group="As Couples (C-1)" parts="" title="As Couples (C-1) Left Shakedown">
+    <path>
+      <move hands="left" offsetX="1" scaleX="3" scaleY="3" select="Run Left" />
+      <move offsetY="-1" scaleX="2" scaleY="2" select="Hinge Left" />
+    </path>
+    <path>
+      <move hands="right" offsetX="1" select="Run Left" />
+      <move hands="right" offsetY="-1" select="Quarter Left" />
+    </path>
+    <path>
+      <move offsetX="-2" offsetY="1" select="Belle Wheel" />
+      <move offsetX="1" scaleX="2" scaleY="2" select="Hinge Left" />
+    </path>
+    <path>
+      <move offsetX="-2" offsetY="1" select="Beau Wheel" />
+      <move hands="right" offsetX="1" select="Quarter Left" />
+    </path>
+  </tam>
+
+  <tam formation="Two-Faced Tidal Line RH" from="Tidal Two-Faced Line" group="As Couples (C-1)" title="As Couples (C-1) Step and Fold">
+    <path>
+      <move beats="4" hands="gripright" offsetX="2" offsetY="1.5" scaleY="2" select="Run Right" />
+    </path>
+    <path>
+      <move beats="4" hands="gripleft" offsetX="2" offsetY="2.5" select="Flip Right" />
+    </path>
+    <path>
+      <move beats="4" hands="left" scaleX="2" scaleY="1.5" select="Extend Right" />
+    </path>
+    <path>
+      <move beats="4" hands="right" scaleX="2" scaleY=".5" select="Extend Right" />
+    </path>
+  </tam>
+
+  <tam formation="Tidal Line RH" from="Tidal Line" group="As Couples (C-1)" parts="" title="As Couples (C-1) Switch the Line">
+    <path>
+      <move beats="4" scaleX="3.5" scaleY="2.5" select="Run Right" />
+    </path>
+    <path>
+      <move beats="4" scaleX="2.5" scaleY="1.5" select="Run Right" />
+    </path>
+    <path>
+      <move scaleX=".5" scaleY=".5" select="Run Left" />
+    </path>
+    <path>
+      <move scaleX="1.5" scaleY="1.5" select="Run Left" />
+    </path>
+  </tam>
+<tam formation="Normal Lines" from="Lines" group="As Couples (C-1)" parts="" title="As Couples (C-1) Wheel Fan Thru">
+    <path>
+      <move beats="2" hands="right" scaleX="2" scaleY="1.5" select="Extend Right" />
+      <move scaleX="1.5" scaleY="1.5" select="Cast Right" />
+      <move beats="2" hands="right" scaleX="2" scaleY="1.5" select="Extend Left" />
+    </path>
+    <path>
+      <move beats="2" hands="left" scaleX="2" scaleY=".5" select="Extend Right" />
+      <move scaleX=".5" scaleY=".5" select="Cast Right" />
+      <move beats="2" hands="left" scaleX="2" scaleY=".5" select="Extend Left" />
+    </path>
+    <path>
+      <move beats="3" select="Hinge Right" />
+      <move beats="5.5" hands="right" select="Stand" />
+    </path>
+    <path>
+      <move beats="3" select="BackHinge Left" />
+      <move beats="5.5" hands="left" select="Stand" />
+    </path>
+  </tam>
+
+  <tam formation="Normal Lines" from="" group="As Couples (C-1)" parts="" title="As Couples (C-1) Left Wheel Fan Thru">
+    <path>
+      <move select="BackHinge Right" />
+    </path>
+    <path>
+      <move select="Hinge Left" />
+    </path>
+    <path>
+      <move beats="2" hands="right" scaleX="2" scaleY=".5" select="Extend Left" />
+      <move scaleX=".5" scaleY=".5" select="Cast Left" />
+      <move beats="2" hands="right" scaleX="2" scaleY=".5" select="Extend Right" />
+    </path>
+    <path>
+      <move beats="2" hands="left" scaleX="2" scaleY="1.5" select="Extend Left" />
+      <move scaleX="1.5" scaleY="1.5" select="Cast Left" />
+      <move beats="2" hands="left" scaleX="2" scaleY="1.5" select="Extend Right" />
+    </path>
+  </tam>
+
+  <tam formation="Two-Faced Lines RH" from="" group="As Couples (C-1)" title="As Couples (C-1) Zing">
+    <path>
+      <move beats="4" hands="right" scaleX="2" select="Extend Right" />
+      <move beats="4" hands="gripright" offsetX="3" offsetY="1" select="Quarter Right" />
+    </path>
+    <path>
+      <move beats="4" hands="left" select="Forward 2" />
+      <move beats="4" hands="gripleft" offsetX="1" offsetY="2" select="Quarter Right" />
+    </path>
+    <path>
+      <move hands="left" scaleY="1.5" select="Run Left" />
+      <move hands="left" select="Forward 3" />
+      <move beats="2" hands="gripleft" scaleX="2" select="Lead Left" />
+    </path>
+    <path>
+      <move hands="Right" select="U-Turn Left" />
+      <move hands="right" select="Forward 3" />
+      <move beats="2" hands="gripright" select="Quarter Left" />
+    </path>
+  </tam>
+
+  <tam formation="Tidal Line RH" group="As Couples (C-2)" parts="3" title="As Couples (C-2) Bounce the Ends">
+    <path>
+      <move beats="3" hands="right" scaleX="2" scaleY=".5" select="Extend Right" />
+      <move select="Beau Reverse Wheel" />
+    </path>
+    <path>
+      <move beats="3" hands="both" scaleX="2" scaleY="1.5" select="Extend Right" />
+      <move select="Belle Reverse Wheel" />
+    </path>
+    <path>
+      <move beats="3" hands="both" scaleX="2" scaleY="2.5" select="Extend Right" />
+    </path>
+    <path>
+      <move beats="3" hands="left" scaleX="2" scaleY="3.5" select="Extend Right" />
+    </path>
+  </tam>
+
+  <tam formation="Two-Faced Lines RH" group="As Couples (C-2)" title="As Couples (C-2) Criss Cross Your Neighbor">
+    <path>
+      <move beats="3" hands="right" scaleX="2" scaleY="3.5" select="Extend Right" />
+      <move scaleX=".5" scaleY=".5" select="Swing Left" />
+      <move beats="3" scaleX="2.5" scaleY=".5" select="Lead Left" />
+    </path>
+    <path>
+      <move beats="3" hands="left" scaleX="2" scaleY="2.5" select="Extend Right" />
+      <move scaleX="1.5" scaleY="1.5" select="Swing Left" />
+      <move beats="3" scaleX="3.5" scaleY="1.5" select="Lead Left" />
+    </path>
+    <path>
+      <move beats="4" hands="gripleft" scaleY="1.5" select="Run Right" />
+      <move select="Forward 2" />
+      <move beats="3" scaleX=".5" scaleY="2" select="Lead Right" />
+    </path>
+    <path>
+      <move beats="4" hands="gripright" scaleX="2" scaleY="3" select="Run Right" />
+      <move select="Forward 2" />
+      <move beats="3" scaleX="1.5" scaleY="3" select="Lead Right" />
+    </path>
+  </tam>
+
+  <tam formation="Two-Faced Lines RH" group="As Couples (C-2)" title="As Couples (C-2) Cross Back">
+    <path>
+      <move beats="3" hands="right" scaleX="2" scaleY="4" select="Extend Right" />
+      <move hands="right" select="Forward 2" />
+    </path>
+    <path>
+      <move beats="3" hands="left" scaleX="2" scaleY="4" select="Extend Right" />
+      <move hands="left" select="Forward 2" />
+    </path>
+    <path>
+      <move select="Belle Reverse Wheel" />
+    </path>
+    <path>
+      <move select="Beau Reverse Wheel" />
+    </path>
+  </tam>
+
+  <tam formation="Two-Faced Lines RH" group="As Couples (C-2)" parts="" title="As Couples (C-2) Peel to a Diamond">
+    <path>
+      <move beats="2" scaleX="2" scaleY="1.5" select="Extend Right" />
+      <move scaleX="3" scaleY="1.5" select="Hinge Right" />
+    </path>
+    <path>
+      <move beats="2" scaleX="2" scaleY=".5" select="Extend Right" />
+      <move hands="both" scaleY=".5" select="Hinge Right" />
+    </path>
+    <path>
+      <move offsetX="-2" offsetY="1" select="Belle Wheel" />
+    </path>
+    <path>
+      <move offsetX="-2" offsetY="1" select="Beau Wheel" />
+    </path>
+  </tam>
+
+  <tam formation="Normal Lines" from="Normal Lines" group="As Couples (C-2)" parts="" title="As Couples (C-2) Reverse Split Swap Around">
+    <path>
+      <move beats="4" offsetX="4" select="BackHinge Right" />
+    </path>
+    <path>
+      <move beats="4" offsetX="4" select="Hinge Left" />
+    </path>
+    <path>
+      <move beats="4" offsetY="4" select="BackHinge Right" />
+    </path>
+    <path>
+      <move beats="4" offsetY="4" select="Hinge Left" />
+    </path>
+  </tam>
+<tam formation="Normal Lines" from="Normal Lines" group="As Couples (C-2)" parts="" title="As Couples (C-2) Split Swap Around">
+    <path>
+      <move beats="4" offsetY="-4" select="Hinge Right" />
+    </path>
+    <path>
+      <move beats="4" offsetY="-4" select="BackHinge Left" />
+    </path>
+    <path>
+      <move beats="4" offsetX="4" select="Hinge Right" />
+    </path>
+    <path>
+      <move beats="4" offsetX="4" select="BackHinge Left" />
+    </path>
+  </tam>
+<tam formation="Two-Faced Lines RH" group="As Couples (C-2)" title="As Couples (C-2) Trail to a Diamond">
+    <path>
+      <move hands="right" select="Forward 2" />
+      <move beats="4" hands="right" scaleX="3" scaleY="3" select="Lead Right" />
+    </path>
+    <path>
+      <move hands="left" select="Forward 2" />
+      <move beats="4" hands="both" select="Hinge Right" />
+    </path>
+    <path>
+      <move beats="2" hands="left" select="Lead Right" />
+      <move beats="4" hands="left" scaleX="2" scaleY="3" select="Lead Right" />
+    </path>
+    <path>
+      <move beats="2" hands="right" scaleX="3" scaleY="3" select="Lead Right" />
+      <move beats="4" hands="right" scaleX="4" scaleY="5" select="Lead Right" />
+    </path>
+  </tam>
+
+  <tam formation="Two-Faced Lines RH" group="As Couples (C-2)" title="As Couples (C-2) Turn to a Line">
+    <path>
+      <move beats="2" hands="right" select="Quarter Left" />
+      <move beats="2" hands="right" offsetX="-.5" offsetY="-2" select="Quarter Left" />
+    </path>
+    <path>
+      <move beats="2" hands="left" scaleX="2" scaleY="2" select="Lead Left" />
+      <move beats="2" hands="left" offsetX=".5" select="Quarter Left" />
+    </path>
+    <path>
+      <move beats="2" hands="left" offsetX="-1" offsetY="-1" select="Quarter Right" />
+      <move beats="2" hands="left" scaleX=".5" select="Lead Right" />
+    </path>
+    <path>
+      <move beats="2" hands="right" scaleY="3" select="Lead Right" />
+      <move beats="2" hands="right" scaleX="1.5" scaleY="3" select="Lead Right" />
+    </path>
+  </tam>
+
+  <tam formation="Lines Facing Out" from="Lines Facing Out" group="As Couples (C-2)" parts="5" title="As Couples (C-2) Wheel the Ocean">
+    <path>
+      <move beats="5" scaleX="3" scaleY="3" select="Belle Wheel" />
+      <move beats="4" hands="gripleft" scaleX="2" scaleY="4" select="Extend Left" />
+      <move hands="both" select="Forward 2" />
+    </path>
+    <path>
+      <move beats="5" hands="both" select="Belle Wheel" />
+      <move beats="4" hands="gripright" scaleX="2" scaleY="4" select="Extend Left" />
+      <move hands="right" select="Forward 2" />
+    </path>
+    <path>
+      <move beats="5" hands="both" scaleX=".5" select="Beau Wheel" />
+      <move beats="6" hands="left" select="Stand" />
+    </path>
+    <path>
+      <move beats="5" scaleX="1.5" scaleY="3" select="Beau Wheel" />
+      <move beats="6" hands="right" select="Stand" />
+    </path>
+  </tam>
+
+  <tam formation="Lines Facing Out" from="Lines Facing Out" group="As Couples (C-2)" parts="5" title="As Couples (C-2) Wheel the Sea">
+    <path>
+      <move beats="5" scaleX="3" scaleY="3" select="Belle Wheel" />
+      <move hands="left" select="Forward 4" />
+    </path>
+    <path>
+      <move beats="5" hands="both" select="Belle Wheel" />
+      <move hands="right" select="Forward 4" />
+    </path>
+    <path>
+      <move beats="5" hands="both" scaleX=".5" select="Beau Wheel" />
+      <move beats="4" hands="left" scaleY="2" select="Dodge Right" />
+    </path>
+    <path>
+      <move beats="5" scaleX="1.5" scaleY="3" select="Beau Wheel" />
+      <move beats="4" hands="right" scaleY="2" select="Dodge Right" />
+    </path>
+  </tam>
+
+  <tam formation="Two-Faced Lines RH" group="As Couples (C-3A)" title="As Couples (C-3A) 1/4 Mix">
+    <path>
+      <move beats="2" scaleX="1.5" scaleY="3" select="Hinge Right" />
+      <move beats="6" hands="gripright" scaleX="2" scaleY="1.5" select="Run Left" />
+    </path>
+    <path>
+      <move beats="2" hands="both" scaleX=".5" select="Hinge Right" />
+      <move beats="6" hands="gripleft" scaleX="3" scaleY="2.5" select="Run Left" />
+    </path>
+    <path>
+      <move beats="2" hands="both" scaleX=".5" select="Hinge Right" />
+      <move select="Dodge Right" />
+      <move scaleX=".5" scaleY=".5" select="Swing Right" />
+    </path>
+    <path>
+      <move beats="2" scaleX="1.5" scaleY="3" select="Hinge Right" />
+      <move select="Dodge Right" />
+      <move scaleX="1.5" scaleY="1.5" select="Swing Right" />
+    </path>
+  </tam>
+
+<tam formation="Two-Faced Lines RH" group="As Couples (C-3A)" parts="4" title="As Couples (C-3A) Couple Up">
+    <path>
+      <move hands="right" select="Forward 4" />
+      <move scaleX=".67" select="Beau Reverse Wheel" />
+    </path>
+    <path>
+      <move hands="left" select="Forward 4" />
+      <move scaleX=".67" select="Belle Reverse Wheel" />
+    </path>
+    <path>
+      <move beats="4" hands="left" select="Run Right" />
+    </path>
+    <path>
+      <move beats="4" hands="right" scaleX="3" scaleY="3" select="Run Right" />
+    </path>
+  </tam>
+
+  <tam formation="Two-Faced Tidal Line RH" from="Tidal Two-Faced Line" group="As Couples (C-3A)" parts="3" title="Finally As Couples (C-3A) Left Swing Thru">
+    <path>
+      <move beats="3" select="Stand" />
+      <move beats="5" hands="both" scaleX="1.5" scaleY="1.5" select="Swing Right" />
+    </path>
+    <path>
+      <move beats="3" select="Stand" />
+      <move beats="5" hands="both" scaleX=".5" scaleY=".5" select="Swing Right" />
+    </path>
+    <path>
+      <move beats="3" select="Stand" />
+      <move beats="5" hands="both" scaleX=".5" scaleY=".5" select="Swing Right" />
+    </path>
+    <path>
+      <move scaleX=".5" scaleY=".5" select="Swing Left" />
+      <move beats="5" hands="both" scaleX="1.5" scaleY="1.5" select="Swing Right" />
+    </path>
+  </tam>
+
+  <tam formation="Two-Faced Tidal Line RH" from="Tidal Two-Faced Line" group="As Couples (C-3A)" parts="3" title="Finally As Couples (C-3A) Mix">
+    <path>
+      <move scaleY=".5" select="Dodge Right" />
+    </path>
+    <path>
+      <move select="Run Right" />
+      <move beats="5" hands="both" scaleX=".5" scaleY=".5" select="Swing Left" />
+    </path>
+    <path>
+      <move select="Run Right" />
+    </path>
+    <path>
+      <move scaleY=".5" select="Dodge Right" />
+      <move beats="5" scaleX="1.5" scaleY="1.5" select="Swing Left" />
+    </path>
+  </tam>
+
+  <tam formation="Normal Lines" group="As Couples (C-3A)" parts=" " title="Finally As Couples (C-3A) Pass the Ocean">
+    <path>
+      <move beats="2" scaleX="2" scaleY=".5" select="Extend Left" />
+      <move scaleY=".5" select="Extend Right" />
+      <move select="Quarter Right" />
+      <move beats="3" hands="right" scaleY="2" select="Extend Left" />
+    </path>
+    <path>
+      <move beats="2" scaleX="2" scaleY=".5" select="Extend Left" />
+      <move scaleY=".5" select="Extend Right" />
+      <move select="Quarter Left" />
+      <move beats="3" hands="left" scaleY="2" select="Extend Left" />
+    </path>
+    <path>
+      <move beats="2" scaleX="2" scaleY=".5" select="Extend Left" />
+      <move scaleY=".5" select="Extend Right" />
+      <move select="Quarter Right" />
+      <move beats="3" hands="right" scaleY="2" select="Extend Left" />
+    </path>
+    <path>
+      <move beats="2" scaleX="2" scaleY=".5" select="Extend Left" />
+      <move scaleY=".5" select="Extend Right" />
+      <move select="Quarter Left" />
+      <move beats="3" hands="left" scaleY="2" select="Extend Left" />
+    </path>
+  </tam>
+
+  <tam formation="Lines Facing Out" group="As Couples (C-3A)" parts="3" title="Finally As Couples (C-3A) Wheel the Sea">
+    <path>
+      <move select="Belle Wheel" />
+      <move beats="4" hands="left" scaleY="2" select="Dodge Right" />
+    </path>
+    <path>
+      <move select="Beau Wheel" />
+      <move beats="4" hands="right" scaleY="2" select="Dodge Right" />
+    </path>
+    <path>
+      <move select="Belle Wheel" />
+      <move hands="left" select="Forward 4" />
+    </path>
+    <path>
+      <move select="Beau Wheel" />
+      <move hands="right" select="Forward 4" />
+    </path>
+  </tam>
+
+  <tam group="As Couples (C-3A)" parts="6" title="Finally Finally As Couples (C-3A) Scoot and Ramble">
+    <formation>
+      <dancer angle="0" gender="girl" x="-3" y="1" />
+      <dancer angle="0" gender="boy" x="-3" y="-1" />
+      <dancer angle="180" gender="girl" x="0" y="-3" />
+      <dancer angle="0" gender="boy" x="0" y="-1" />
+    </formation>
+    <path couples="4 2">
+      <move beats="1.5" scaleX="1.5" scaleY="1.5" select="Extend Left" />
+      <move scaleX=".75" scaleY=".75" select="Swing Right" />
+      <move beats="1.5" scaleX="1.5" select="Forward" />
+      <move offsetY="-1" select="Quarter Right" />
+      <move beats="2" scaleX="1" scaleY="2" select="Lead Right" />
+      <move hands="right" scaleY=".5" select="Extend Left" />
+      <move hands="right" offsetX="1" offsetY="-1.5" select="Quarter Left" />
+    </path>
+    <path couples="4 2">
+      <move beats="1.5" scaleX="1.5" select="Forward" />
+      <move scaleX=".75" scaleY=".75" select="Swing Right" />
+      <move beats="1.5" scaleX="1.5" scaleY="1.5" select="Extend Right" />
+      <move beats="3.5" offsetX="-2" offsetY="1.5" select="U-Turn Left" />
+      <move hands="left" select="Extend Left" />
+      <move beats="1.5" hands="left" offsetX="1" offsetY="-.5" select="Quarter Right" />
+    </path>
+    <path couples="3 1">
+      <move beats="1.5" scaleX="1.5" scaleY=".5" select="Extend Right" />
+      <move scaleX=".75" scaleY=".75" select="Swing Right" />
+      <move beats="1.5" scaleX="1.5" select="Forward" />
+      <move beats="3.5" offsetX="1" select="U-Turn Right" />
+      <move hands="left" scaleY="1.5" select="Extend Left" />
+      <move hands="left" offsetX="3" offsetY="-.5" select="Quarter Left" />
+    </path>
+    <path couples="3 1">
+      <move beats="1.5" scaleX="1.5" select="Forward" />
+      <move scaleX=".75" scaleY=".75" select="Swing Right" />
+      <move beats="1.5" scaleX="1.5" scaleY=".5" select="Extend Left" />
+      <move beats="3.5" offsetX="1" select="Flip Right" />
+      <move hands="right" scaleY=".5" select="Extend Left" />
+      <move hands="right" offsetX="3" offsetY="-1.5" select="Quarter Right" />
+    </path>
+    <taminator>
+    Finally Finally limits the concept to the last part of Ramble.
+    </taminator>
+  </tam>
+
+<tam formation="Two-Faced Lines RH" group="As Couples (C-3A)" title="As Couples (C-3A) Follow to a Diamond">
+    <path>
+      <move hands="right" select="Forward 2" />
+      <move beats="5" hands="right" scaleX="2" scaleY="3" select="Run Right" />
+      <move hands="right" select="Forward" />
+      <move beats="3" hands="right" scaleX="3" scaleY="3" select="Lead Right" />
+    </path>
+    <path>
+      <move hands="left" select="Forward 2" />
+      <move beats="5" hands="left" select="Run Right" />
+      <move hands="left" select="Forward" />
+      <move beats="3" hands="left" select="Lead Right" />
+    </path>
+    <path>
+      <move beats="8" hands="left" select="Run Right" />
+      <move beats="3" hands="left" select="Forward 2" />
+    </path>
+    <path>
+      <move beats="8" hands="right" scaleX="3" scaleY="3" select="Run Right" />
+      <move beats="3" hands="right" select="Forward 2" />
+    </path>
+  </tam>
+
+  <tam formation="Two-Faced Lines RH" group="As Couples (C-3A)" parts="3" title="As Couples (C-3A) Hinge the Lock">
+    <path>
+      <move beats="3" hands="right" scaleX="1.5" scaleY="3" select="Lead Right" />
+      <move beats="3" hands="both" scaleX=".5" scaleY=".5" select="Lead Left" />
+    </path>
+    <path>
+      <move beats="3" hands="both" scaleX=".5" select="Lead Right" />
+      <move beats="3" hands="left" scaleX="1.5" scaleY="1.5" select="Lead Left" />
+    </path>
+    <path>
+      <move beats="3" hands="both" scaleX=".5" select="Lead Right" />
+      <move beats="3" hands="left" scaleX="2.5" scaleY="2.5" select="Lead Right" />
+    </path>
+    <path>
+      <move beats="3" hands="right" scaleX="1.5" scaleY="3" select="Lead Right" />
+      <move beats="3" hands="right" scaleX="3.5" scaleY="3.5" select="Lead Right" />
+    </path>
+  </tam>
+
+  <tam formation="Tidal Line RH" group="As Couples (C-3A)" parts="2" title="Initially As Couples (C-3A) Hinge the Lock">
+    <path>
+      <move beats="2" scaleX="1.5" scaleY="1.5" select="Hinge Right" />
+      <move beats="2" scaleX="1.5" scaleY="1.5" select="Hinge Right" />
+    </path>
+    <path>
+      <move beats="2" hands="left" scaleX=".5" scaleY=".5" select="Hinge Right" />
+      <move beats="2" hands="both" scaleX=".5" scaleY=".5" select="Hinge Right" />
+    </path>
+    <path>
+      <move beats="2" offsetX="-1.5" offsetY=".5" select="Quarter Left" />
+      <move beats="2" scaleX="1.5" scaleY="1.5" select="Hinge Right" />
+    </path>
+    <path>
+      <move beats="2" offsetX="-.5" offsetY="1.5" select="Quarter Left" />
+      <move beats="2" hands="both" scaleX=".5" scaleY=".5" select="Hinge Right" />
+    </path>
+  </tam>
+
+  <tam formation="Two-Faced Tidal Line RH" group="As Couples (C-3A)" parts="2" title="Initially As Couples (C-3A) Lock the Hinge">
+   <path>
+      <move beats="3" scaleX="3.5" scaleY="3.5" select="Lead Right" />
+      <move beats="2" offsetX=".5" scaleX=".5" scaleY=".5" select="Lead Right" />
+    </path>
+    <path>
+      <move beats="3" scaleX="2.5" scaleY="2.5" select="Lead Right" />
+      <move beats="2" offsetX="-1" offsetY=".5" scaleX=".5" scaleY="1" select="Quarter Left" />
+    </path>
+    <path>
+      <move beats="3" scaleX="1.5" scaleY="1.5" select="Hinge Left" />
+      <move beats="2" offsetX="-1" offsetY=".5" scaleX=".5" scaleY="1" select="Quarter Left" />
+    </path>
+    <path>
+      <move beats="3" scaleX=".5" scaleY=".5" select="Hinge Left" />
+      <move beats="2" offsetX=".5" scaleX=".5" scaleY=".5" select="Lead Right" />
+    </path>
+  </tam>
+
+  <tam formation="Two-Faced Tidal Line RH" group="As Couples (C-3A)" parts="4" title="Initially As Couples (C-3A) Mix">
+    <path>
+      <move beats="4" hands="right" select="Dodge Right" />
+      <move scaleX=".5" scaleY=".5" select="Swing Left" />
+    </path>
+    <path>
+      <move beats="4" hands="left" select="Dodge Right" />
+    </path>
+    <path>
+      <move beats="4" hands="left" scaleX="2" scaleY="2.5" select="Run Left" />
+    </path>
+    <path>
+      <move beats="4" hands="right" scaleY="1.5" select="Run Left" />
+      <move scaleX=".5" scaleY=".5" select="Swing Left" />
+    </path>
+  </tam>
+
+  <tam formation="Two-Faced Tidal Line RH" group="As Couples (C-3A)" parts="4" title="Initially As Couples (C-3A) Spin the Top">
+    <path>
+      <move beats="4" scaleX="1.5" scaleY="1.5" select="Swing Right" />
+      <move beats="4.5" scaleX="3" scaleY="1.5" select="Lead Right" />
+    </path>
+    <path>
+      <move beats="4" hands="both" scaleX=".5" scaleY=".5" select="Swing Right" />
+      <move scaleX=".5" scaleY=".5" select="Swing Right" />
+      <move scaleY=".5" select="Hinge Right" />
+    </path>
+    <path>
+      <move beats="4" hands="both" scaleX=".5" scaleY=".5" select="Swing Right" />
+      <move scaleX=".5" scaleY=".5" select="Swing Right" />
+      <move scaleY=".5" select="Hinge Right" />
+    </path>
+    <path>
+      <move beats="4" scaleX="1.5" scaleY="1.5" select="Swing Right" />
+      <move beats="4.5" scaleX="3" scaleY="1.5" select="Lead Right" />
+    </path>
+  </tam>
+
+<tam formation="Two-Faced Tidal Line RH" group="As Couples (C-3A)" parts="4" title="As Couples (C-3A) Lock the Hinge">
+    <path>
+      <move beats="4" hands="right" scaleX="3.5" scaleY="3.5" select="Lead Right" />
+      <move beats="3" hands="right" scaleX="3" scaleY="1.5" select="Lead Right" />
+    </path>
+    <path>
+      <move beats="4" hands="left" scaleX="2.5" scaleY="2.5" select="Lead Right" />
+      <move beats="3" hands="both" scaleY=".5" select="Lead Right" />
+    </path>
+    <path>
+      <move beats="4" scaleX="1.5" scaleY="1.5" select="Lead Left" />
+      <move beats="3" hands="both" scaleY=".5" select="Lead Right" />
+    </path>
+    <path>
+      <move beats="4" scaleX=".5" scaleY=".5" select="Lead Left" />
+      <move beats="3" hands="right" scaleX="3" scaleY="1.5" select="Lead Right" />
+    </path>
+  </tam>
+
+  </tamination>
