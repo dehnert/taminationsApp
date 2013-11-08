@@ -39,10 +39,13 @@ import android.graphics.drawable.ColorDrawable;
 import android.os.Handler;
 import android.util.AttributeSet;
 import android.util.Pair;
+import android.view.MotionEvent;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
+import android.view.View;
+import android.view.View.OnTouchListener;
 
-public class AnimationView extends SurfaceView implements SurfaceHolder.Callback
+public class AnimationView extends SurfaceView implements SurfaceHolder.Callback, OnTouchListener
 {
 
   class AnimationThread extends Thread {
@@ -328,6 +331,37 @@ public class AnimationView extends SurfaceView implements SurfaceHolder.Callback
     }
 
     /**
+     *   Process a touch on the surface
+     *   Toggles path display if touched on a dancer
+     * @param x  Screen coord
+     * @param y  Screen coord
+     */
+    public synchronized void doTouch(double x, double y)
+    {
+      //  Convert x and y to dance floor coords
+      Rect r = mSurfaceHolder.getSurfaceFrame();
+      double range = Math.min(r.width(), r.height());
+      double s = range/13.0;
+      double dx = -(y-r.height()/2.0)/s;
+      double dy = -(x-r.width()/2.0)/s;
+      //  Compare with dancer locations
+      Dancer bestd = null;
+      double bestdist = 0.5;
+      for (Dancer d : dancers) {
+        Pair<Float,Float> loc = d.location();
+        double distsq = (loc.first-dx)*(loc.first-dx) + (loc.second-dy)*(loc.second-dy);
+        if (distsq < bestdist) {
+          bestd = d;
+          bestdist = distsq;
+        }
+      }
+      if (bestd != null) {
+        bestd.showPath = !bestd.showPath;
+        dirtify();
+      }
+    }
+
+    /**
      *   Called when a change is made that affects the display.
      *   Tell the display to redraw even if the animation is not running.
      */
@@ -406,13 +440,13 @@ public class AnimationView extends SurfaceView implements SurfaceHolder.Callback
         }
         if (tam == null)
           return;
+
         //  Draw paths if requested
-        if (showPaths) {
-          for (Dancer d: dancers) {
-            if (!d.hidden)
-              d.drawPath(c);
-          }
+        for (Dancer d: dancers) {
+          if (!d.hidden && (showPaths || d.showPath))
+            d.drawPath(c);
         }
+
         //  Draw handholds
         Paint hline = new Paint();
         hline.setColor(Color.ORANGE);
@@ -705,6 +739,8 @@ public class AnimationView extends SurfaceView implements SurfaceHolder.Callback
     // register our interest in hearing about changes to our surface
     SurfaceHolder holder = getHolder();
     holder.addCallback(this);
+    //  register listener for clicks on dancers to show path
+    setOnTouchListener(this);
   }
 
   /**
@@ -818,6 +854,14 @@ public class AnimationView extends SurfaceView implements SurfaceHolder.Callback
       }
     }
 
+  }
+
+  @Override
+  public boolean onTouch(View v, MotionEvent m)
+  {
+    if (m.getAction()==MotionEvent.ACTION_DOWN && m.getPointerCount() > 0)
+      thread.doTouch(m.getX(),m.getY());
+    return true;
   }
 
 

@@ -47,6 +47,7 @@ public class Dancer implements Comparable<Dancer> {
   public Dancer rightgrip;
   public Dancer leftgrip;
   public boolean hidden = false;
+  public boolean showPath = false;
   public Dancer rightdancer;
   public Dancer leftdancer;
   public boolean rightHandVisibility;
@@ -55,7 +56,7 @@ public class Dancer implements Comparable<Dancer> {
   public boolean leftHandNewVisibility;
 
   private int gender;
-  private String number;
+  public String number;
   private String number_couple;
   private Geometry geom;
   private Matrix starttx;

@@ -30,6 +30,7 @@ import android.widget.SeekBar;
 import android.widget.TextView;
 
 import com.bradchristie.taminationsapp.AnimationView.AnimationThread;
+import com.bradchristie.taminationsapp.LevelActivity.LevelData;
 
 public class AnimationActivity extends PortraitActivity
              implements AnimationListener,
@@ -87,12 +88,16 @@ public class AnimationActivity extends PortraitActivity
     super.onCreate(savedInstanceState);
     setContentView(R.layout.activity_animation);
     SharedPreferences prefs = getSharedPreferences("Taminations",MODE_PRIVATE);
-    setTitle(prefs.getString("name","no title"));
+    String title = prefs.getString("title","no title");
+    //  Remove extra stuff like (DBD) or (A-1) from title
+    setTitle(title.replaceAll("\\s*\\(.*\\)", ""));
     String xmlname = prefs.getString("link", getString(android.R.string.untitled))
         .replace("html", "xml");
     String level = xmlname.split("/")[0];
     Button levelButton = (Button)findViewById(R.id.button_level);
-    levelButton.setText(Tamination.levelDir2Name(level));
+    levelButton.setText(LevelData.find(level).name);
+    //boolean hasAudio = Tamination.assetExists(this, level, Tamination.audioAssetName(title));
+    //findViewById(R.id.speaker).setVisibility(hasAudio ? View.VISIBLE : View.GONE);
     mAnimationView = (AnimationView)findViewById(R.id.animation);
   }
 

@@ -94,6 +94,14 @@ public class RotationActivity extends FragmentActivity
     finish();
   }
 
+  public void onSpeakerClicked(View v)
+  {
+    SharedPreferences prefs = getSharedPreferences("Taminations",MODE_PRIVATE);
+    String level = prefs.getString("level", "");
+    level = LevelData.find(level).dir;
+    Tamination.playCallName(this, level, title);
+  }
+
   public boolean isPortrait()
   {
     return getResources().getConfiguration().orientation
@@ -103,7 +111,8 @@ public class RotationActivity extends FragmentActivity
 
   public void setTitle(String t)
   {
-    title = t;
+    //  Remove extra stuff like (DBD) or (A-1)
+    title = t.replaceAll("\\s*\\(.*\\)", "");
     TextView titleView = (TextView)findViewById(R.id.title);
     if (titleView != null) {
       if (isPortrait()) {
@@ -115,6 +124,14 @@ public class RotationActivity extends FragmentActivity
           titleView.setTextSize(36.0f);
       }
       titleView.setText(title);
+    }
+    //  Show speaker only if audio is availble
+    if (findViewById(R.id.speaker) != null) {
+      SharedPreferences prefs = getSharedPreferences("Taminations",MODE_PRIVATE);
+      String level = prefs.getString("level", "");
+      level = LevelData.find(level).dir;
+      boolean hasAudio = Tamination.assetExists(this, level, Tamination.audioAssetName(title));
+      findViewById(R.id.speaker).setVisibility(hasAudio ? View.VISIBLE : View.GONE);
     }
   }
 

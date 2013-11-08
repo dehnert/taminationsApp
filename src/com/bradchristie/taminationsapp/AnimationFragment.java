@@ -244,16 +244,25 @@ public class AnimationFragment extends RotationFragment
     }
   }
 
+  //  Called when the user starts dragging the slider
   @Override
   public void onStartTrackingTouch(SeekBar seekBar)
   {
-    //  nothing to do here
+    //  To avoid the jitters, stop running the animation
+    AnimationThread th = mAnimationView.getThread();
+    if (th != null)
+      th.doPause();
   }
 
+  //  Called when the user stops dragging the slider
   @Override
   public void onStopTrackingTouch(SeekBar seekBar)
   {
-    //  nothing to do here
+    //  If the animation was running, resume
+    View v = fragment.findViewById(R.id.button_play);
+    AnimationThread th = mAnimationView.getThread();
+    if (th != null && v.isSelected())
+      th.doStart();
   }
 
 

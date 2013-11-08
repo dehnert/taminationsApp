@@ -102,7 +102,7 @@ public abstract class Geometry
   static protected Paint gridPaint()
   {
     Paint p = new Paint(Paint.ANTI_ALIAS_FLAG);
-    p.setARGB(255,0,0,0);
+    p.setARGB(255,192,192,192);
     p.setStyle(Style.STROKE);
     p.setStrokeWidth(0f);
     return p;

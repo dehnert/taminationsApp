@@ -19,8 +19,10 @@
 */
 package com.bradchristie.taminationsapp;
 
+import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 
@@ -36,11 +38,17 @@ import org.w3c.dom.Element;
 import org.w3c.dom.NodeList;
 
 import android.content.Context;
+import android.content.res.AssetFileDescriptor;
+import android.content.res.AssetManager;
+import android.media.AudioManager;
+import android.media.MediaPlayer;
 
 public class Tamination {
 
   static private Document mdoc = null;
   static private Document fdoc = null;
+  static private MediaPlayer mediaPlayer = null;
+
 
   /**
    *   Convenience method to retrieve a XML document
@@ -81,6 +89,68 @@ public class Tamination {
     }
     return retval;
   }
+
+  static public String audioAssetName(String call)
+  {
+    return call.replace(" ", "_").toLowerCase()+".ogg";
+  }
+
+  /**
+   *   Test if an asset exists.  Assumes assets are all one directory deep.
+   * @param ctx
+   * @param dir
+   * @param name
+   * @return
+   */
+  static public boolean assetExists(Context ctx, String dir, String name)
+  {
+    boolean retval = false;
+    try {
+      AssetManager ass = ctx.getAssets();
+      String[] asses = ass.list(dir);
+      retval = Arrays.asList(asses).contains(name);
+    } catch (IOException e) {
+      //  Serious I/O problem
+      e.printStackTrace();
+    }
+    return retval;
+  }
+
+  /**
+   *    Convenience method to play the audio of a call name
+   *    if the audio file is available
+   * @param level  Level directory name
+   * @param name  Call name, such as "All 8 Circulate"
+   */
+  static public void playCallName(Context ctx, String level, String call)
+  {
+    //  See if there's an audio file, with Android's strange way
+    //  of finding the presence of an asset
+    try {
+      AssetManager ass = ctx.getAssets();
+      String assname = audioAssetName(call);
+      if (assetExists(ctx,level,assname)) {
+        //  File exists, open it and send to media player
+        AssetFileDescriptor assfile = ass.openFd(level+"/"+assname);
+        //  Shut down any previous media player
+        if (mediaPlayer == null) {
+          mediaPlayer = new MediaPlayer();
+          mediaPlayer.setAudioStreamType(AudioManager.STREAM_MUSIC);
+        }
+        mediaPlayer.reset();
+        mediaPlayer.setDataSource(assfile.getFileDescriptor(),
+                                  assfile.getStartOffset(),assfile.getLength());
+        assfile.close();
+        mediaPlayer.prepare();
+        mediaPlayer.setVolume(1f, 1f);
+        mediaPlayer.start();
+      }
+    } catch (IOException e) {
+      // Serious I/O error
+      e.printStackTrace();
+    }
+  }
+
 
   static public void loadMoves(Context ctx)
   {
@@ -270,7 +340,7 @@ public class Tamination {
     return retval;
   }
 
-  static String levelDir2Name(String dir)
+  static String levelDir2Namexxx(String dir)
   {
     @SuppressWarnings("serial")
     HashMap<String,String>levelnames =

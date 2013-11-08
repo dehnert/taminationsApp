@@ -25,6 +25,8 @@ import android.os.Bundle;
 import android.webkit.WebView;
 import android.widget.Button;
 
+import com.bradchristie.taminationsapp.LevelActivity.LevelData;
+
 public class DefinitionActivity extends PortraitActivity {
 
   @Override
@@ -37,7 +39,7 @@ public class DefinitionActivity extends PortraitActivity {
         .replace("html", "xml");
     String level = xmlname.split("/")[0];
     Button levelButton = (Button)findViewById(R.id.button_level);
-    levelButton.setText(Tamination.levelDir2Name(level));
+    levelButton.setText(LevelData.find(level).name);
     String titlestr = prefs.getString("call",getString(android.R.string.untitled));
     setTitle(titlestr);
     WebView defview = (WebView)findViewById(R.id.definitionView);

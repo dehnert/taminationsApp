@@ -39,6 +39,9 @@ import android.widget.Button;
 import android.widget.ListView;
 import android.widget.TextView;
 
+import com.bradchristie.taminationsapp.LevelActivity.LevelData;
+
+
 public class AnimListActivity extends RotationActivity
     implements  OnItemClickListener, AnimationSettingsListener {
 
@@ -115,6 +118,7 @@ public class AnimListActivity extends RotationActivity
   private DefinitionFragment deffrag;
   public TextView selectedView;
   public Drawable firstViewBackground;
+  private String level;
 
   @Override
   protected void onCreate(Bundle savedInstanceState) {
@@ -138,12 +142,16 @@ public class AnimListActivity extends RotationActivity
       deffrag = new DefinitionFragment();
       replaceFragment(deffrag, R.id.fragment_definition);
     }
-    setTitle(titlestr);
-    String level = xmlname.split("/")[0];
+    setTitle(titlestr);;
+    level = xmlname.split("/")[0];
     Button levelButton = (Button)findViewById(R.id.button_level);
-    levelButton.setText(Tamination.levelDir2Name(level));
+    levelButton.setText(LevelData.find(level).name);
     selectedView = null;
     firstViewBackground = null;
+    boolean hasAudio = Tamination.assetExists(this, level, Tamination.audioAssetName(titlestr));
+    View speaker = findViewById(R.id.speaker);
+    if (speaker != null)  // null if not landscape
+      speaker.setVisibility(hasAudio ? View.VISIBLE : View.INVISIBLE);
 
     // Fetch the list of animations and build the table
     String prevtitle = "";
@@ -210,7 +218,7 @@ public class AnimListActivity extends RotationActivity
       adapter.add(new AnimListItem("",title, "", R.layout.animlist_header, -1));
     } else if (multifragment) {
       AnimListItem item = adapter.getItem(firstanim);
-      titleView.setText(item.group + " " + item.name);
+      titleView.setText(item.title);
       prefs.edit().putString("title",item.title).commit();
     }
     // Build the list of animations
@@ -297,7 +305,7 @@ public class AnimListActivity extends RotationActivity
            .putString("xmlname", xmlname).commit();
       if (findViewById(R.id.animation) != null) {
         // Multi-fragment display - switch animation
-        titleView.setText(item.group + " " + item.name);
+        titleView.setText(item.title);
         replaceFragment2(new RotationActivity.FragmentFactory() {
           @Override
           public RotationFragment getFragment() {
@@ -305,6 +313,9 @@ public class AnimListActivity extends RotationActivity
             return animfrag;
           }
         }, R.id.fragment_animation);
+        boolean hasAudio = Tamination.assetExists(this, level, Tamination.audioAssetName(item.title));
+        findViewById(R.id.speaker).setVisibility(hasAudio ? View.VISIBLE : View.INVISIBLE);
+
       } else
         // Single fragment - start animation activity
         startActivity(new Intent(this, AnimationActivity.class));
