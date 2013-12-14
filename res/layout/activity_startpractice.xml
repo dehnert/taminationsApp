@@ -1,0 +1,140 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical" >
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        style="@style/ActivityTitle"
+        android:baselineAligned="false" >
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/ic_launcher"
+            android:onClick="onLogoClicked"
+            android:contentDescription="logo" />
+        <TextView
+            android:id="@+id/title"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            style="@style/ActivityTitleText"
+            android:text="Practice" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:orientation="horizontal" >
+
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:orientation="vertical" >
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:paddingTop="40dp"
+                android:textAppearance="?android:attr/textAppearanceLarge"
+                android:text="Choose a gender"/>
+
+            <RadioGroup
+                android:id="@+id/gendergroup"
+                style="@style/Settings2"
+                android:orientation="horizontal" >
+                <RadioButton
+                    android:id="@+id/genderBoy"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:textSize="24dp"
+                    android:text="Boy" />
+                <RadioButton
+                    android:id="@+id/genderGirl"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:textSize="24dp"
+                    android:text="Girl" />
+            </RadioGroup>
+
+            <!-- TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:paddingTop="40dp"
+                android:textAppearance="?android:attr/textAppearanceLarge"
+                android:text="Choose an input method"/>
+            <RadioGroup
+                android:id="@+id/inputgroup"
+                style="@style/Settings2"
+                android:orientation="horizontal" >
+                <RadioButton
+                    android:id="@+id/inputTouch"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:textSize="24dp"
+                    android:text="Touch Controls" />
+                <RadioButton
+                    android:id="@+id/inputWalk"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:textSize="24dp"
+                    android:text="Walk About" />
+            </RadioGroup   -->
+
+            <Button
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal"
+                android:layout_margin="20dp"
+                android:textSize="24dp"
+                android:text="Tutorial"
+                android:onClick="startTutorial"
+                />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="horizontal">
+                <Button
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:layout_gravity="bottom"
+                    android:textSize="24dp"
+                    android:text="Settings"
+                    android:onClick="showSettingsFragment"
+                    />
+                <Button
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:layout_gravity="bottom"
+                    android:textSize="24dp"
+                    android:text="Levels"
+                    android:onClick="showLevelsFragment"
+                    />
+            </LinearLayout>
+
+        </LinearLayout>
+
+        <FrameLayout
+            android:id="@+id/fragment_startpractice"
+              android:layout_width="0dp"
+              android:layout_height="match_parent"
+              android:layout_weight="1"
+            />
+
+
+    </LinearLayout>
+
+</LinearLayout>

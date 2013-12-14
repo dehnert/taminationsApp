@@ -20,14 +20,42 @@
 
 package com.bradchristie.taminationsapp;
 
-public interface AnimationListener
+public class Vector3D
 {
-  public static final int ANIMATION_READY = 1;
-  public static final int ANIMATION_PROGRESS = 2;
-  public static final int ANIMATION_DONE = 3;
-  public static final int ANIMATION_PART = 4;
-  public static final int ANIMATION_MOVE = 5;
+  public double x;
+  public double y;
+  public double z;
 
-  public void onAnimationChanged(int action, double loc, double beat, double z);
+  public Vector3D(double x_, double y_, double z_)
+  {
+    x = x_;
+    y = y_;
+    z = z_;
+  }
+
+  public Quaternion postMultiply(Quaternion m)
+  {
+    return new Quaternion(x*m.w+y*m.z-z*m.y,
+                         -x*m.z+y*m.w+z*m.x,
+                          x*m.y-y*m.x+z*m.w,
+                         -x*m.x-y*m.y-z*m.z);
+  }
+
+  public Vector3D rotate(Quaternion qrot)
+  {
+    Quaternion q = qrot.postMultiply(this).postMultiply(qrot.inverse());
+    return new Vector3D(q.x,q.y,q.z);
+  }
+
+  public double length()
+  {
+    return Math.sqrt(x*x+y*y+z*z);
+  }
+
+  public String toString()
+  {
+    return String.format("%4.1f %4.1f %4.1f",x,y,z);
+  }
+
 
 }

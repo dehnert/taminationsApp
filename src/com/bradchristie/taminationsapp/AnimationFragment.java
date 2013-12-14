@@ -63,7 +63,7 @@ public class AnimationFragment extends RotationFragment
         SliderTicView ticView = act==null ? null : (SliderTicView)getActivity().findViewById(R.id.slidertics);
         if (ticView != null) {
           mAnimationThread = mAnimationView.getThread();
-          ticView.setTics(mAnimationThread.getBeats(),mAnimationThread.getParts());
+          ticView.setTics(mAnimationThread.getTotalBeats(),mAnimationThread.getParts());
         }
         break;
       case ANIMATION_PROGRESS :
@@ -142,7 +142,7 @@ public class AnimationFragment extends RotationFragment
       //  Reset the slider display
       SliderTicView ticView = (SliderTicView)getActivity().findViewById(R.id.slidertics);
       if (ticView != null)
-        ticView.setTics(mAnimationThread.getBeats(),mAnimationThread.getParts());
+        ticView.setTics(mAnimationThread.getTotalBeats(),mAnimationThread.getParts());
     }
   }
 
@@ -225,7 +225,7 @@ public class AnimationFragment extends RotationFragment
   }
 
   @Override
-  public void onAnimationChanged(int action, double loc, double beat)
+  public void onAnimationChanged(int action, double loc, double beat, double z)
   {
     AnimationUpdater a = new AnimationUpdater(action, loc, beat);
     Activity act = getActivity();
@@ -239,7 +239,8 @@ public class AnimationFragment extends RotationFragment
   {
     if (fromUser) {
       mAnimationThread = mAnimationView.getThread();
-      double loc = progress * mAnimationThread.getBeats() / seekBar.getMax();
+      double b = mAnimationThread.getTotalBeats();
+      double loc = progress * b / seekBar.getMax();
       mAnimationThread.setLocation(loc);
     }
   }

@@ -23,7 +23,6 @@ package com.bradchristie.taminationsapp;
 import java.util.Vector;
 
 import android.graphics.Canvas;
-import android.graphics.Matrix;
 import android.graphics.Paint;
 import android.graphics.Paint.Style;
 import android.graphics.Path;
@@ -127,15 +126,15 @@ class BigonGeometry extends Geometry
     double y = matvals[Matrix.MTRANS_Y];
     double r = Math.sqrt(x*x+y*y);
     double startangle =
-        Math.toDegrees(Math.atan2(matvals[Matrix.MSKEW_Y],matvals[Matrix.MSCALE_Y]));
+        Math.atan2(matvals[Matrix.MSKEW_Y],matvals[Matrix.MSCALE_Y]);
     double angle = Math.atan2(y,x)+Math.PI;
     double bigangle = angle*2.0f-Math.PI;
     x = r*Math.cos(bigangle);
     y = r*Math.sin(bigangle);
-    startangle += Math.toDegrees(angle);
+    startangle += angle;
     Matrix retval = new Matrix();
-    retval.postRotate((float)startangle);
-    retval.postTranslate((float)x,(float)y);
+    retval.postRotate(startangle);
+    retval.postTranslate(x,y);
     return retval;
   }
 
@@ -154,11 +153,11 @@ class BigonGeometry extends Geometry
     double a1 = Math.atan2(y,x);
     if (beat <= 0.0)
       prevangle = a1;
-    double wrap = Math.round((a1-prevangle)/(Math.PI*2.0f));
+    double wrap = Math.round((a1-prevangle)/(Math.PI*2));
     a1 -= wrap*Math.PI*2;
     double a2 = a1 - a0;
     Matrix m = new Matrix();
-    m.postRotate((float)Math.toDegrees(a2));
+    m.postRotate(a2);
     prevangle = a1;
     return m;
   }
@@ -178,7 +177,7 @@ class BigonGeometry extends Geometry
       }
       c.drawPath(points,pline);
       Matrix m = new Matrix();
-      m.postScale(-1.0f,1.0f);
+      m.postScale(-1.0,1.0);
       points.transform(m);
       c.drawPath(points,pline);
     }
@@ -199,7 +198,7 @@ class SquareGeometry extends Geometry
   public Matrix startMatrix(Matrix mat)
   {
     Matrix retval = new Matrix(mat);
-    retval.postRotate(180f*rotnum);
+    retval.postRotate(Math.PI*rotnum);
     return retval;
   }
 
@@ -232,23 +231,22 @@ class HexagonGeometry extends Geometry
   @Override
   public Matrix startMatrix(Matrix mat)
   {
-    //  TODO use radians instead of degrees?
-    float a = 120f*rotnum;
+    double a = (Math.PI*2/3)*rotnum;
     float[] matvals = new float[9];
     mat.getValues(matvals);
     double x = matvals[Matrix.MTRANS_X];
     double y = matvals[Matrix.MTRANS_Y];
     double r = Math.sqrt(x*x+y*y);
     double startangle =
-        Math.toDegrees(Math.atan2(matvals[Matrix.MSKEW_Y],matvals[Matrix.MSCALE_Y]));
-    double angle = Math.toDegrees(Math.atan2(y,x));
-    double dangle = angle < 0.0f ? -(180f+angle)/3f : (180f-angle)/3f;
-    x = r * Math.cos(Math.toRadians(angle+dangle+a));
-    y = r * Math.sin(Math.toRadians(angle+dangle+a));
+        Math.atan2(matvals[Matrix.MSKEW_Y],matvals[Matrix.MSCALE_Y]);
+    double angle = Math.atan2(y,x);
+    double dangle = angle < 0.0 ? -(Math.PI+angle)/3 : (Math.PI-angle)/3;
+    x = r * Math.cos(angle+dangle+a);
+    y = r * Math.sin(angle+dangle+a);
     startangle += a + dangle;
     Matrix retval = new Matrix();
-    retval.postRotate((float)startangle);
-    retval.postTranslate((float)x,(float)y);
+    retval.postRotate(startangle);
+    retval.postTranslate(x,y);
     return retval;
   }
 
@@ -266,13 +264,13 @@ class HexagonGeometry extends Geometry
     y = matvals[Matrix.MTRANS_Y];
     double a1 = Math.atan2(y,x);
     //  Correct for wrapping around +/- pi
-    if (beat <= 0.0f)
+    if (beat <= 0.0)
       prevangle = a1;
-    double wrap = Math.round((a1-prevangle)/(Math.PI*2.0f));
-    a1 -= wrap*Math.PI*2.0f;
-    double a2 = -(a1-a0)/3.0f;
+    double wrap = Math.round((a1-prevangle)/(Math.PI*2));
+    a1 -= wrap*Math.PI*2;
+    double a2 = -(a1-a0)/3;
     Matrix m = new Matrix();
-    m.postRotate((float)Math.toDegrees(a2));
+    m.postRotate(a2);
     prevangle = a1;
     return m;
   }
@@ -281,12 +279,12 @@ class HexagonGeometry extends Geometry
   {
     //  Hex grid
     Paint pline = gridPaint();
-    for (double x0=0.5f; x0<=8.5f; x0+=1.0f) {
+    for (double x0=0.5; x0<=8.5; x0+=1) {
       Path points = new Path();
       // moveto 0, x0
       points.moveTo(0.0f,(float)x0);
-      for (float y0=0.5f; y0<=8.5f; y0+=0.5f) {
-        double a = Math.atan2(y0,x0)*2f/3f;
+      for (double y0=0.5; y0<=8.5; y0+=0.5) {
+        double a = Math.atan2(y0,x0)*2/3;
         double r = Math.sqrt(x0*x0+y0*y0);
         double x = r*Math.sin(a);
         double y = r*Math.cos(a);
@@ -295,12 +293,12 @@ class HexagonGeometry extends Geometry
       }
       //  rotate and reflect the result
       Path p = new Path();
-      for (float a=0.0f; a<6.0f; a+=1.0f) {
+      for (double a=0.0; a<6.0; a+=1.0) {
         Matrix m = new Matrix();
-        m.postRotate(30.0f+a*60.0f);
+        m.postRotate(Math.PI/6+a*Math.PI/3);
         points.transform(m,p);
         c.drawPath(p,pline);
-        m.postScale(1.0f,-1.0f);
+        m.postScale(1.0,-1.0);
         points.transform(m,p);
         c.drawPath(p,pline);
       }

@@ -55,7 +55,7 @@ public class AnimationActivity extends PortraitActivity
         //  Tell the tic view where to put the tic marks
         SliderTicView ticView = (SliderTicView)findViewById(R.id.slidertics);
         mAnimationThread = mAnimationView.getThread();
-        ticView.setTics(mAnimationThread.getBeats(),mAnimationThread.getParts());
+        ticView.setTics(mAnimationThread.getTotalBeats(),mAnimationThread.getParts());
         break;
       case ANIMATION_PROGRESS :
         //  Position slider to current location
@@ -130,7 +130,7 @@ public class AnimationActivity extends PortraitActivity
   }
 
   @Override
-  public void onAnimationChanged(int action, double loc, double beat)
+  public void onAnimationChanged(int action, double loc, double beat, double z)
   {
     AnimationUpdater a = new AnimationUpdater(action, loc, beat);
     runOnUiThread(a);
@@ -148,7 +148,8 @@ public class AnimationActivity extends PortraitActivity
   {
     if (fromUser) {
       mAnimationThread = mAnimationView.getThread();
-      double loc = progress * mAnimationThread.getBeats() / seekBar.getMax();
+      double b = mAnimationThread.getTotalBeats();
+      double loc = progress * b / seekBar.getMax();
       mAnimationThread.setLocation(loc);
     }
   }

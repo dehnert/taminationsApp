@@ -31,13 +31,15 @@ import org.w3c.dom.NodeList;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.graphics.Canvas;
-import android.graphics.Matrix;
 import android.graphics.Paint;
 import android.graphics.Paint.Style;
 import android.graphics.Rect;
 import android.graphics.drawable.ColorDrawable;
+//import android.hardware.Sensor;
+import android.hardware.SensorManager;
 import android.os.Handler;
 import android.util.AttributeSet;
+import android.util.Log;
 import android.util.Pair;
 import android.view.MotionEvent;
 import android.view.SurfaceHolder;
@@ -45,7 +47,9 @@ import android.view.SurfaceView;
 import android.view.View;
 import android.view.View.OnTouchListener;
 
-public class AnimationView extends SurfaceView implements SurfaceHolder.Callback, OnTouchListener
+public class AnimationView extends SurfaceView
+                           implements SurfaceHolder.Callback,
+                                      OnTouchListener
 {
 
   class AnimationThread extends Thread {
@@ -80,6 +84,8 @@ public class AnimationView extends SurfaceView implements SurfaceHolder.Callback
     private String parts;
     private double[] partbeats;
     private int currentpart;
+    private InteractiveDancer idancer = null;
+    private double iscore;
 
     /** Handle to the surface manager object we interact with */
     private SurfaceHolder mSurfaceHolder;
@@ -87,9 +93,13 @@ public class AnimationView extends SurfaceView implements SurfaceHolder.Callback
     /** Used to figure out elapsed time between frames */
     private long mLastTime;
     /** Current location in the animation */
-    private double beat = -2.0f;
+    private double beat = -2.0;
     /** Previous location  */
-    private double prevbeat = -2.0f;
+    private double prevbeat = -2.0;
+    /** Beats to wait before starting animation  */
+    private double leadin = 2.0;
+    /** Beats to add to end of animation  */
+    private double leadout = 2.0;
 
     public AnimationThread(SurfaceHolder surfaceHolder, Context context,
         Handler handler) {
@@ -104,9 +114,10 @@ public class AnimationView extends SurfaceView implements SurfaceHolder.Callback
     {
       mLastTime = System.currentTimeMillis();
       if (beat > beats)
-        beat = -2.0;
+        beat = -leadin;
       isAlive = true;
       isRunning = true;
+      iscore = 0;
       dirtify();
     }
 
@@ -123,7 +134,7 @@ public class AnimationView extends SurfaceView implements SurfaceHolder.Callback
      */
     public synchronized void doRewind()
     {
-      beat = -2.0;
+      beat = -leadin;
       dirtify();
     }
 
@@ -132,7 +143,7 @@ public class AnimationView extends SurfaceView implements SurfaceHolder.Callback
      */
     public synchronized void doBackup()
     {
-      beat = Math.max(beat-0.1, -2.0);
+      beat = Math.max(beat-0.1, -leadin);
       dirtify();
     }
 
@@ -268,6 +279,9 @@ public class AnimationView extends SurfaceView implements SurfaceHolder.Callback
      */
     public synchronized void setNumbers(int numberem)
     {
+      //  For now at least, no numbers for practice
+      if (idancer != null)
+        numberem = Dancer.NUMBERS_OFF;
       if (dancers != null) {
         for (Dancer d : dancers)
           d.showNumber = numberem;
@@ -305,12 +319,25 @@ public class AnimationView extends SurfaceView implements SurfaceHolder.Callback
     }
 
 
-    /**
-     *   Return animation beats, including 2 beat intro
-     */
+    public synchronized double getTotalBeats()
+    {
+      return leadin+beats;
+    }
     public synchronized double getBeats()
     {
-      return beats+2.0;
+      return beats-leadout;
+    }
+    public synchronized double getLeadin()
+    {
+      return leadin;
+    }
+    public synchronized double getLeadout()
+    {
+      return leadout;
+    }
+    public synchronized double getScore()
+    {
+      return iscore;
     }
 
     /**
@@ -373,6 +400,8 @@ public class AnimationView extends SurfaceView implements SurfaceHolder.Callback
 
     @Override
     public void run() {
+      if (listener != null)
+        listener.onAnimationChanged(AnimationListener.ANIMATION_READY,0,0,0);
       while (isAlive) {
         synchronized (this) {
           if (dirty || isRunning) {
@@ -381,7 +410,7 @@ public class AnimationView extends SurfaceView implements SurfaceHolder.Callback
           }
           if (listener != null)
             listener.onAnimationChanged(AnimationListener.ANIMATION_PROGRESS,
-                                        (beat+2.0)/(beats+2.0),beat);
+                                        (beat+2.0)/(beats+2.0),beat,0);
           if (!isRunning)
             //  animation is not running, so don't chew up the CPU
             try {
@@ -420,12 +449,38 @@ public class AnimationView extends SurfaceView implements SurfaceHolder.Callback
         if (loop)
           infostr += "Loop";
         c.drawText(infostr, 10.0f, candim.height()-20.0f, p);
+        if (idancer != null) {
+          if (idancer.debugstr1 != null)
+            c.drawText(idancer.debugstr1, candim.width()/2.0f+range/2.0f, range*2/10.0f, p);
+          if (idancer.debugstr2 != null)
+            c.drawText(idancer.debugstr2, candim.width()/2.0f+range/2.0f, range*3/10.0f, p);
+          if (idancer.debugstr3 != null)
+            c.drawText(idancer.debugstr3, candim.width()/2.0f+range/2.0f, range*4/10.0f, p);
+          if (idancer.debugstr4 != null)
+            c.drawText(idancer.debugstr4, candim.width()/2.0f+range/2.0f, range*5/10.0f, p);
+        }
+        //  For interactive leadin, show countdown
+        if (idancer != null && beat < 0.0) {
+          String tminus = ""+(int)Math.floor(beat);
+          p.setTextAlign(Paint.Align.CENTER);
+          p.setTextSize(range/2.0f);
+          p.setColor(Color.GRAY);
+          c.drawText(tminus, range/2.0f, range, p);
+        }
         //  Scale coordinate system to dancer's size
         c.translate(candim.width()/2,candim.height()/2);
         float s = range/13.0f;
         //  Flip and rotate
         c.scale(s,-s);
         c.rotate(90f);
+        //  Transform to interactive dancer's viewpoint
+        //  Canvas has a concat but not a preconcat method, so..
+        if (idancer != null) {
+          Matrix m = new Matrix();
+          idancer.tx.invert(m);
+          c.concat(m);
+          c.rotate((float)(-idancer.userAngle*180.0/Math.PI));
+        }
         //  Draw grid if on
         if (showGrid)
           Geometry.drawGrid(geometry,c);
@@ -531,7 +586,7 @@ public class AnimationView extends SurfaceView implements SurfaceHolder.Callback
       if (thispart != currentpart) {
         currentpart = thispart;
         if (listener != null)
-          listener.onAnimationChanged(AnimationListener.ANIMATION_PART,currentpart,beats);
+          listener.onAnimationChanged(AnimationListener.ANIMATION_PART,currentpart,beats,0);
       }
 
       //  Compute handholds
@@ -624,23 +679,30 @@ public class AnimationView extends SurfaceView implements SurfaceHolder.Callback
           d.leftHandVisibility = false;
       }
 
+      //  Update interactive dancer score
+      if (idancer != null && idancer.onTrack && beat > 0.0 && beat < beats-leadout)
+        iscore += (beat - Math.max(prevbeat, 0.0)) * 10.0;
+
       //  At end of animation?
       prevbeat = beat;
       if (beat >= beats) {
         if (loop && isRunning)
-          prevbeat = beat = -2f;
+          prevbeat = beat = -leadin;
         else {
           doPause();
           if (listener != null)
-            listener.onAnimationChanged(AnimationListener.ANIMATION_DONE,1.0,beats);
+            listener.onAnimationChanged(AnimationListener.ANIMATION_DONE,1.0,beats,0);
         }
       }
     }
 
-    public synchronized void setAnimation(Element tam)
+    public synchronized void setAnimation(Element tam, int intdan)
     {
       if (tam == null)  // sanity check
         return;
+      leadin = intdan < 0 ? 2 : 3;
+      leadout = intdan < 0 ? 2 : 1;
+      beats = 0;
       Element formation = null;
       Tamination.loadMoves(ctx);
       NodeList tlist = tam.getElementsByTagName("formation");
@@ -685,11 +747,20 @@ public class AnimationView extends SurfaceView implements SurfaceHolder.Callback
         couples = bigoncouples;
       }
       int dnum = 0;
+      int icount = -1;
+      Vector<Geometry> geoms = Geometry.getGeometry(geometry);
+      if (intdan > 0) {
+        NodeList glist = Tamination.evalXPath("dancer[@gender='boy']",formation);
+        //  presumably we have the same number of girls and boys..
+        //  This selects a random one of them for the interactive dancer
+        icount = (int)(Math.random()*geoms.size()*glist.getLength());
+      }
+      //  Create dancers for each one listed in the formation
       for (int i=0; i<flist.getLength(); i++) {
         Element fd = (Element)flist.item(i);
         float x = Float.valueOf(fd.getAttribute("x"));
         float y = Float.valueOf(fd.getAttribute("y"));
-        float angle = Float.valueOf(fd.getAttribute("angle"));
+        double angle = Double.valueOf(fd.getAttribute("angle"));
         String gender = fd.getAttribute("gender");
         int g = 0;
         if (gender.equals("boy"))
@@ -700,29 +771,41 @@ public class AnimationView extends SurfaceView implements SurfaceHolder.Callback
           g = Dancer.PHANTOM;
         Element pathelem = (Element)tam.getElementsByTagName("path").item(i);
         List<Movement> movelist = Tamination.translatePath(pathelem);
-        Vector<Geometry> geoms = Geometry.getGeometry(geometry);
+        //  Each dancer listed in the formation corresponds to
+        //  one, two, or three real dancers depending on the geometry
         for (Geometry geom : geoms) {
           Matrix m = new Matrix();
-          m.postRotate(angle);
+          //  compute the transform for the start position
+          m.postRotate(Math.toRadians(angle));
           m.postTranslate(x, y);
-          dancers[dnum] = new Dancer(numbers[dnum],couples[dnum],g,
-                                     dancerColor[Integer.valueOf(couples[dnum])-1],
-                                     m,geom,movelist);
+          //  add one dancer
+          if (g == intdan && icount-- == 0) {
+            //  add the interactive dancer controlled by the user
+            idancer = new InteractiveDancer(numbers[dnum],couples[dnum],g,
+                dancerColor[Integer.valueOf(couples[dnum])-1],
+                m,geom,movelist);
+            dancers[dnum] = idancer;
+          }
+          else
+            dancers[dnum] = new Dancer(numbers[dnum],couples[dnum],g,
+                                       dancerColor[Integer.valueOf(couples[dnum])-1],
+                                       m,geom,movelist);
           if (g == Dancer.PHANTOM && !showPhantoms)
             dancers[dnum].hidden = true;
-          beats = Math.max(beats,dancers[dnum].beats()+2f);
+          beats = Math.max(beats,dancers[dnum].beats()+leadout);
           dnum++;
         }
       }
       partbeats = getPartsValues();
       currentpart = 0;
       isRunning = false;
-      beat = -2.0;
+      beat = -leadin;
       dirtify();
     }
 
     public synchronized void setListener(AnimationListener l)
     {
+      Log.i("Thread","listener set");
       listener = l;
     }
 
@@ -732,6 +815,7 @@ public class AnimationView extends SurfaceView implements SurfaceHolder.Callback
   private AnimationThread thread;
   private Element tam;
   private AnimationListener listener = null;
+  private int interactiveDancer = -1;
 
   public AnimationView(Context context, AttributeSet attrs)
   {
@@ -739,8 +823,6 @@ public class AnimationView extends SurfaceView implements SurfaceHolder.Callback
     // register our interest in hearing about changes to our surface
     SurfaceHolder holder = getHolder();
     holder.addCallback(this);
-    //  register listener for clicks on dancers to show path
-    setOnTouchListener(this);
   }
 
   /**
@@ -754,9 +836,17 @@ public class AnimationView extends SurfaceView implements SurfaceHolder.Callback
 
   public void setAnimation(Element tam)
   {
+    setAnimation(tam,-1);
+  }
+
+  public void setAnimation(Element tam, int intdan)
+  {
     this.tam = tam;
+    this.interactiveDancer = intdan;
     if (thread != null && tam != null) {
-      thread.setAnimation(tam);
+      unregisterSensorListeners();
+      thread.setAnimation(tam,interactiveDancer);
+      registerSensorListeners();
       //  Need to re-apply dancer numbers here because they get zapped
       //  when dancers are re-created
       if (numberpref.contains("1-8"))
@@ -770,7 +860,10 @@ public class AnimationView extends SurfaceView implements SurfaceHolder.Callback
 
   public void setAnimationListener(AnimationListener l)
   {
+    Log.i("View","listener set");
     listener = l;
+    if (thread != null)
+      thread.setListener(listener);
   }
 
   /**
@@ -779,7 +872,7 @@ public class AnimationView extends SurfaceView implements SurfaceHolder.Callback
    */
   @Override
   public void onWindowFocusChanged(boolean hasWindowFocus) {
-      if (!hasWindowFocus)
+      if (!hasWindowFocus && thread != null)
         thread.doPause();
   }
 
@@ -792,11 +885,15 @@ public class AnimationView extends SurfaceView implements SurfaceHolder.Callback
   @Override
   public void surfaceCreated(SurfaceHolder holder) {
     thread = new AnimationThread(holder, getContext(), h);
+    Log.i("View","thread created");
     readSettings();
-    thread.setListener(listener);
-    if (listener != null && tam != null)
-      listener.onAnimationChanged(AnimationListener.ANIMATION_READY,0.0,0.0);
     // start the thread here, it will wait until Play is pressed
+    if (listener != null) {
+      thread.setListener(listener);
+      //if (tam != null)
+      //  listener.onAnimationChanged(AnimationListener.ANIMATION_READY,0,0,0);
+    }
+    registerSensorListeners();
     thread.start();
   }
 
@@ -818,9 +915,9 @@ public class AnimationView extends SurfaceView implements SurfaceHolder.Callback
     thread.setSpeed(prefs.getString("speed", "Normal"));
     thread.setPhantomVisibility(prefs.getBoolean("phantoms",false));
     if (tam != null)
-      setAnimation(tam);
-    if (listener != null && tam != null)
-      listener.onAnimationChanged(AnimationListener.ANIMATION_DONE,0.0,0.0);
+      setAnimation(tam,interactiveDancer);
+    if (listener != null && tam != null && interactiveDancer < 0)
+      listener.onAnimationChanged(AnimationListener.ANIMATION_DONE,0,0,0);
   }
 
   @Override
@@ -853,13 +950,49 @@ public class AnimationView extends SurfaceView implements SurfaceHolder.Callback
         // retry again
       }
     }
+    unregisterSensorListeners();
+  }
 
+  private SensorManager sensorManager;
+  //private Sensor rotationVectorSensor;
+  //private Sensor accelerationSensor;
+  private void registerSensorListeners()
+  {
+    if (thread.idancer != null) {
+      //Context ctx = getContext();
+      //SharedPreferences prefs = ctx.getSharedPreferences("Taminations",Context.MODE_PRIVATE);
+      /*
+      if (prefs.getString("inputmethod", "touch").equals("walk")) {
+        sensorManager = (SensorManager)ctx.getSystemService(Context.SENSOR_SERVICE);
+        rotationVectorSensor = sensorManager.getDefaultSensor(Sensor.TYPE_ROTATION_VECTOR);
+        accelerationSensor = sensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER);
+        List<Sensor> slist =
+            sensorManager.getSensorList(Sensor.TYPE_LINEAR_ACCELERATION);
+        for (Sensor s: slist) {
+          Log.i("sensor vendor",s.getVendor());
+          if (s.getVendor().startsWith("Google"))
+            accelerationSensor = s;
+        }
+        sensorManager.registerListener(thread.idancer, rotationVectorSensor,SensorManager.SENSOR_DELAY_GAME);
+        sensorManager.registerListener(thread.idancer, accelerationSensor,SensorManager.SENSOR_DELAY_GAME);
+      }  */
+    }
+    //  register listener for clicks on dancers to show path
+    setOnTouchListener(this);
+  }
+
+  private void unregisterSensorListeners()
+  {
+    if (thread.idancer != null && sensorManager != null)
+      sensorManager.unregisterListener(thread.idancer);
   }
 
   @Override
   public boolean onTouch(View v, MotionEvent m)
   {
-    if (m.getAction()==MotionEvent.ACTION_DOWN && m.getPointerCount() > 0)
+    if (thread.idancer != null && sensorManager==null)
+      thread.idancer.doTouch(v,m);
+    else if (m.getAction()==MotionEvent.ACTION_DOWN && m.getPointerCount() > 0)
       thread.doTouch(m.getX(),m.getY());
     return true;
   }

@@ -24,7 +24,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import android.graphics.Canvas;
-import android.graphics.Matrix;
 import android.graphics.Paint;
 import android.graphics.Paint.Style;
 import android.graphics.Path;
@@ -59,12 +58,12 @@ public class Dancer implements Comparable<Dancer> {
   public String number;
   private String number_couple;
   private Geometry geom;
-  private Matrix starttx;
+  protected Matrix starttx;
   private List<Movement> movelist;
   private List<Matrix> transformlist;
   private Path pathpath;
-  private int fillColor;
-  private int drawColor;
+  protected int fillColor;
+  protected int drawColor;
 
   /**
    *     Constructor for a new dancer
@@ -99,16 +98,16 @@ public class Dancer implements Comparable<Dancer> {
     }
     // Compute points of path for drawing path
     pathpath = new Path();
-    animate(0.0f);
+    animate(0.0);
     Pair<Float, Float> loc = location();
     pathpath.moveTo(loc.first, loc.second);
-    for (float beat = 0.1f; beat < beats(); beat += 0.1f) {
+    for (double beat = 0.1; beat < beats(); beat += 0.1) {
       animate(beat);
       loc = location();
       pathpath.lineTo(loc.first, loc.second);
     }
     //  Restore dancer to start position
-    animate(-2.0f);
+    animate(-2.0);
   }
 
   public boolean isPhantom() {
@@ -239,8 +238,8 @@ public class Dancer implements Comparable<Dancer> {
       tx.getValues(m);
       double angle = Math.atan2(m[Matrix.MSKEW_X], m[Matrix.MSCALE_Y]);
       Matrix txtext = new Matrix();
-      txtext.postRotate((float)(-angle * 180.0 / Math.PI + 90.0));
-      txtext.postScale(1f, -1f);
+      txtext.postRotate(-angle+Math.PI/2);
+      txtext.postScale(1, -1);
       c.concat(txtext);
       p.setColor(Color.BLACK);
       p.setStyle(Style.FILL);

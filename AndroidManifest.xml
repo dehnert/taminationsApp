@@ -57,6 +57,24 @@
             android:name="com.bradchristie.taminationsapp.AboutActivity"
             android:label="@string/title_activity_about" >
         </activity>
+        <activity
+            android:name="com.bradchristie.taminationsapp.StartPracticeActivity"
+            android:screenOrientation="landscape"
+            android:theme="@android:style/Theme.Light.NoTitleBar"
+            android:label="Start Practice" >
+        </activity>
+        <activity
+            android:name="com.bradchristie.taminationsapp.PracticeActivity"
+            android:screenOrientation="landscape"
+            android:theme="@android:style/Theme.Light.NoTitleBar"
+            android:label="Practice" >
+        </activity>
+        <activity
+            android:name="com.bradchristie.taminationsapp.TutorialActivity"
+            android:screenOrientation="landscape"
+            android:theme="@android:style/Theme.Light.NoTitleBar"
+            android:label="Practice" >
+        </activity>
     </application>
 
 </manifest>

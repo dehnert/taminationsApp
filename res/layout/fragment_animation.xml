@@ -17,15 +17,6 @@
             android:layout_width="fill_parent"
             android:layout_height="fill_parent" />
 
-        <View
-            android:id="@+id/animation_cover"
-            android:background="#fffff0e0"
-            android:visibility="invisible"
-            android:layout_alignParentLeft="true"
-            android:layout_alignParentTop="true"
-            android:layout_width="fill_parent"
-            android:layout_height="fill_parent" />
-
         <TextView
             android:id="@+id/text_tamsays"
             android:layout_width="wrap_content"

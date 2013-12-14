@@ -39,17 +39,26 @@ public class Color extends android.graphics.Color {
     return argb(alpha(c),255-red(c),255-green(c),255-blue(c));
   }
 
-  static public int darker(int c) {
+  static public int darker(int c, float f) {
     return argb(
         alpha(c),
-        Math.round(red(c)*FACTOR),
-        Math.round(green(c)*FACTOR),
-        Math.round(blue(c)*FACTOR));
+        Math.round(red(c)*f),
+        Math.round(green(c)*f),
+        Math.round(blue(c)*f));
+  }
+
+  static public int darker(int c)
+  {
+    return darker(c,FACTOR);
   }
 
   static public int brighter(int c)
   {
     return invert(darker(invert(c)));
+  }
+  static public int brighter(int c, float f)
+  {
+    return invert(darker(invert(c),f));
   }
 
   static public int veryBright(int c)

@@ -20,8 +20,6 @@
 
 package com.bradchristie.taminationsapp;
 
-import android.graphics.Matrix;
-
 public class Bezier {
 
   private double x1;
@@ -70,7 +68,7 @@ public class Bezier {
     double x = x1 + t*(cx + t*(bx + t*ax));
     double y = y1 + t*(cy + t*(by + t*ay));
     Matrix retval = new Matrix();
-    retval.postTranslate((float)x,(float)y);
+    retval.postTranslate(x,y);
     return retval;
   }
 
@@ -82,7 +80,7 @@ public class Bezier {
     double y = cy + t*(2.0*by + t*3.0*ay);
     double theta = Math.atan2(y,x);
     Matrix retval = new Matrix();
-    retval.postRotate((float)(theta*180.0/Math.PI));
+    retval.postRotate(theta);
     return retval;
   };
 

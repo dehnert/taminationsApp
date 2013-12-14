@@ -160,6 +160,11 @@ public class LevelActivity extends RotationActivity
     startActivity(new Intent(this,AnimListActivity.class));
   }
 
+  public void onPracticeClick(View v)
+  {
+    startActivity(new Intent(this,StartPracticeActivity.class));
+  }
+
   public void onAboutClick(View v)
   {
     highlightClick(v);
@@ -170,7 +175,6 @@ public class LevelActivity extends RotationActivity
     } else
       //  Single-fragment display - start calllist activity
       startActivity(new Intent(this,AboutActivity.class));
-
   }
 
 }

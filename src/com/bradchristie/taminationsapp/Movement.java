@@ -21,8 +21,6 @@ package com.bradchristie.taminationsapp;
 
 import org.w3c.dom.Element;
 
-import android.graphics.Matrix;
-
 public class Movement {
 
   static public final int NOHANDS = 0;

@@ -49,10 +49,15 @@ public class RotationActivity extends FragmentActivity
   private View fragmentview;
   private int fid;
 
+  protected boolean isLandscapeActivity()
+  {
+    return false;
+  }
+
   @Override
   protected void onCreate(Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
-    if (getResources().getBoolean(R.bool.portrait_only))
+    if (!isLandscapeActivity() && getResources().getBoolean(R.bool.portrait_only))
       setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
   }
 

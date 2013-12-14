@@ -43,6 +43,7 @@
   </LinearLayout>
 
   <LinearLayout
+      android:id="@+id/loopPanel"
       style="@style/Settings1"
       android:orientation="vertical" >
       <LinearLayout
@@ -60,6 +61,7 @@
     </LinearLayout>
 
   <LinearLayout
+      android:id="@+id/gridPanel"
       style="@style/Settings1"
       android:orientation="vertical" >
       <LinearLayout
@@ -77,6 +79,7 @@
   </LinearLayout>
 
   <LinearLayout
+      android:id="@+id/pathsPanel"
       style="@style/Settings1"
       android:orientation="vertical" >
       <LinearLayout

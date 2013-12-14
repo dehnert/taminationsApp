@@ -28,11 +28,31 @@ import android.view.ViewGroup;
 
 public class LevelFragment extends RotationFragment
 {
+  static public final boolean SHOWLEVELSONLY = true;
+  private boolean noLevels = false;
+
+  public LevelFragment()
+  {
+    super();
+    noLevels = false;
+  }
+
+  public LevelFragment(boolean showLevelsOnly)
+  {
+    super();
+    noLevels = true;
+  }
 
   public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState)
   {
     // Inflate the layout for this fragment
-    return inflater.inflate(R.layout.fragment_level, container, false);
+    View fragment = inflater.inflate(R.layout.fragment_level, container, false);
+    if (noLevels) {
+      fragment.findViewById(R.id.button_search).setVisibility(View.GONE);
+      fragment.findViewById(R.id.button_about).setVisibility(View.GONE);
+      fragment.findViewById(R.id.button_index).setVisibility(View.GONE);
+    }
+    return fragment;
   }
 
 }

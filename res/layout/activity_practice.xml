@@ -1,0 +1,122 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical" >
+
+    <TextView
+        android:id="@+id/title"
+        style="@style/ActivityTitle"
+        android:text="Practice" />
+
+    <RelativeLayout
+        android:layout_height="fill_parent"
+        android:layout_width="fill_parent"
+        android:orientation="horizontal" >
+
+        <com.bradchristie.taminationsapp.AnimationView
+            android:id="@+id/animationview"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentTop="true"
+            android:layout_width="fill_parent"
+            android:layout_height="fill_parent" />
+
+        <TextView
+            android:id="@+id/text_instructions"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentTop="true"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            style="@style/PracticeInstructions"
+            android:text=" "
+            />
+
+        <TextView
+            android:id="@+id/text_score"
+            android:layout_alignParentRight="true"
+            android:layout_alignParentTop="true"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginRight="40dp"
+            android:textSize="36sp"
+            android:text=" "
+            />
+
+        <LinearLayout
+            android:id="@+id/practice_complete_panel"
+            android:layout_width="wrap_content"
+            android:layout_height="fill_parent"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentTop="true"
+            android:orientation="vertical"
+            android:visibility="gone" >
+
+            <TextView
+                android:text="Animation Complete"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal"
+                style="@style/PracticeResults"
+                 />
+
+            <TextView
+                android:text="Your Score"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal"
+                style="@style/PracticeResults"
+                 />
+            <TextView
+                android:id="@+id/finalscore"
+                android:text="24 / 36"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center_horizontal"
+                style="@style/PracticeResults"
+                 />
+
+            <TextView
+                android:id="@+id/contgrats"
+                android:text="Excellent!"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal"
+                style="@style/PracticeResults"
+                  />
+
+            <View
+                android:layout_width="fill_parent"
+                android:layout_height="20dp" />
+
+            <Button
+                android:id="@+id/button_practice_repeat"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal"
+                android:onClick="clickRepeat"
+                android:text="Repeat"
+                style="@style/BWButton"
+                />
+            <Button
+                android:id="@+id/button_practice_continue"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal"
+                android:onClick="clickContinue"
+                style="@style/BWButton"
+                android:text="Continue"
+                />
+            <Button
+                android:id="@+id/button_practice_return"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal"
+                android:onClick="clickReturn"
+                style="@style/BWButton"
+                android:text="Go Back"
+                />
+        </LinearLayout>
+
+    </RelativeLayout>
+
+</LinearLayout>
