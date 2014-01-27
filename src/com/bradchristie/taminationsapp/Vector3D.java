@@ -52,10 +52,4 @@ public class Vector3D
     return Math.sqrt(x*x+y*y+z*z);
   }
 
-  public String toString()
-  {
-    return String.format("%4.1f %4.1f %4.1f",x,y,z);
-  }
-
-
 }

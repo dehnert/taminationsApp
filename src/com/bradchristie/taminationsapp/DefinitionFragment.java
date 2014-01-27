@@ -37,18 +37,50 @@ public class DefinitionFragment extends RotationFragment
 {
 
   private WebView defview;
+  private RadioButton abbrevRadioButton;
+  private RadioButton fullRadioButton;
+  private View fragment;
+  private SharedPreferences prefs;
 
   public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState)
   {
-    // Inflate the layout for this fragment
-    View fragment = inflater.inflate(R.layout.fragment_definition, container, false);
-    final SharedPreferences prefs = getActivity().getSharedPreferences("Taminations",Context.MODE_PRIVATE);
-    String name = prefs.getString("link",getString(android.R.string.untitled));
+    fragment = inflater.inflate(R.layout.fragment_definition, container, false);
+    prefs = getActivity().getSharedPreferences("Taminations",Context.MODE_PRIVATE);
     defview = (WebView)fragment.findViewById(R.id.definitionView);
     //  Turn on pinch-to-zoom, which is off(!) by default
     defview.getSettings().setBuiltInZoomControls(true);
     defview.getSettings().setJavaScriptEnabled(true);
-    defview.loadUrl("file:///android_asset/" + name);
+
+    abbrevRadioButton = (RadioButton)fragment.findViewById(R.id.definitionAbbrevRadioButton);
+    abbrevRadioButton.setOnCheckedChangeListener(
+        new CompoundButton.OnCheckedChangeListener() {
+          @Override
+          public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+            if (isChecked) {
+              defview.loadUrl("javascript:setAbbrev(true)");
+              prefs.edit().putBoolean("isabbrev",true).commit();
+            }
+          }
+        });
+
+    fullRadioButton = (RadioButton)fragment.findViewById(R.id.definitionFullRadioButton);
+    fullRadioButton.setOnCheckedChangeListener(
+        new CompoundButton.OnCheckedChangeListener() {
+          @Override
+          public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+            if (isChecked) {
+              defview.loadUrl("javascript:setAbbrev(false)");
+              prefs.edit().putBoolean("isabbrev",false).commit();
+            }
+          }
+        });
+    setDefinition(prefs.getString("link",getString(android.R.string.untitled)));
+    return fragment;
+  }
+
+  public void setDefinition(String link)
+  {
+    defview.loadUrl("file:///android_asset/" + link);
     String jsfunction =
     "    function setPart(part)    { "+
     "      var nodes = document.getElementsByTagName('span'); "+
@@ -66,9 +98,11 @@ public class DefinitionFragment extends RotationFragment
 
     //  Show abbrev/full buttons only for Basic and Mainstream
     View dgv =  fragment.findViewById(R.id.definitionGroup);
-    if (name.matches("(b1|b2|ms).*")) {
+    if (link.matches("(b1|b2|ms).*")) {
       dgv.setVisibility(View.VISIBLE);
       boolean isAbbrev = prefs.getBoolean("isabbrev",true);
+      abbrevRadioButton.setChecked(isAbbrev);
+      fullRadioButton.setChecked(!isAbbrev);
       //  Function to show either full or abbrev
       //  We need to wait until the page loading is finished
       //  before injecting this
@@ -92,39 +126,10 @@ public class DefinitionFragment extends RotationFragment
         }
       });
 
-      //  Add listeners for the abbrev/full radio buttons
-      RadioButton abbrevRadioButton =
-          (RadioButton)fragment.findViewById(R.id.definitionAbbrevRadioButton);
-      abbrevRadioButton.setChecked(isAbbrev);
-      abbrevRadioButton.setOnCheckedChangeListener(
-          new CompoundButton.OnCheckedChangeListener() {
-            @Override
-            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-              if (isChecked) {
-                defview.loadUrl("javascript:setAbbrev(true)");
-                prefs.edit().putBoolean("isabbrev",true).commit();
-              }
-            }
-          });
-
-      RadioButton fullRadioButton =
-          (RadioButton)fragment.findViewById(R.id.definitionFullRadioButton);
-      fullRadioButton.setChecked(!isAbbrev);
-      fullRadioButton.setOnCheckedChangeListener(
-          new CompoundButton.OnCheckedChangeListener() {
-            @Override
-            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-              if (isChecked) {
-                defview.loadUrl("javascript:setAbbrev(false)");
-                prefs.edit().putBoolean("isabbrev",false).commit();
-              }
-            }
-          });
 
     }
     else  //  Not a BMS def, so don't show radio buttons
       dgv.setVisibility(View.GONE);
-    return fragment;
   }
 
   //  This is called as the animation progresses through

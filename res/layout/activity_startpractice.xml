@@ -5,6 +5,7 @@
     android:layout_height="match_parent"
     android:orientation="vertical" >
 
+    <!-- This is the header -->
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -26,12 +27,15 @@
             android:text="Practice" />
     </LinearLayout>
 
+    <!--  Top-level layout for left and right panels  -->
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_weight="1"
-        android:orientation="horizontal" >
+        android:orientation="horizontal"
+        android:baselineAligned="false">
 
+        <!-- Second level for components of left panel  -->
         <LinearLayout
             android:layout_width="0dp"
             android:layout_height="match_parent"
@@ -54,78 +58,61 @@
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
-                    android:textSize="24dp"
+                    android:textSize="24sp"
+                    android:onClick="clickGender"
                     android:text="Boy" />
                 <RadioButton
                     android:id="@+id/genderGirl"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
-                    android:textSize="24dp"
+                    android:textSize="24sp"
+                    android:onClick="clickGender"
                     android:text="Girl" />
             </RadioGroup>
 
-            <!-- TextView
+
+            <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:paddingTop="40dp"
                 android:textAppearance="?android:attr/textAppearanceLarge"
-                android:text="Choose an input method"/>
+                android:text="Speed for Practice"/>
+
             <RadioGroup
-                android:id="@+id/inputgroup"
+                android:id="@+id/speedgroup"
                 style="@style/Settings2"
                 android:orientation="horizontal" >
                 <RadioButton
-                    android:id="@+id/inputTouch"
+                    android:id="@+id/speedSlow"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
-                    android:textSize="24dp"
-                    android:text="Touch Controls" />
+                    android:textSize="24sp"
+                    android:onClick="clickSpeed"
+                    android:text="Slow" />
                 <RadioButton
-                    android:id="@+id/inputWalk"
+                    android:id="@+id/speedModerate"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
-                    android:textSize="24dp"
-                    android:text="Walk About" />
-            </RadioGroup   -->
+                    android:textSize="24sp"
+                    android:onClick="clickSpeed"
+                    android:text="Moderate" />
+                <RadioButton
+                    android:id="@+id/speedNormal"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:textSize="24sp"
+                    android:onClick="clickSpeed"
+                    android:text="Normal" />
+                </RadioGroup>
 
-            <Button
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center_horizontal"
-                android:layout_margin="20dp"
-                android:textSize="24dp"
-                android:text="Tutorial"
-                android:onClick="startTutorial"
-                />
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:orientation="horizontal">
-                <Button
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:layout_gravity="bottom"
-                    android:textSize="24dp"
-                    android:text="Settings"
-                    android:onClick="showSettingsFragment"
-                    />
-                <Button
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:layout_gravity="bottom"
-                    android:textSize="24dp"
-                    android:text="Levels"
-                    android:onClick="showLevelsFragment"
-                    />
-            </LinearLayout>
 
         </LinearLayout>
+
+
 
         <FrameLayout
             android:id="@+id/fragment_startpractice"

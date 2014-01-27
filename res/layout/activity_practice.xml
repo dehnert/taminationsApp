@@ -42,6 +42,7 @@
             android:text=" "
             />
 
+
         <LinearLayout
             android:id="@+id/practice_complete_panel"
             android:layout_width="wrap_content"
@@ -117,6 +118,27 @@
                 />
         </LinearLayout>
 
-    </RelativeLayout>
+        <fragment android:name="com.bradchristie.taminationsapp.DefinitionFragment"
+              android:id="@+id/fragment_definition"
+              android:layout_width="fill_parent"
+              android:layout_height="fill_parent"
+              android:layout_marginRight="100dp"
+              android:layout_marginLeft="100dp"
+               />
+
+        <Button
+            android:id="@+id/button_practice_definition"
+            android:layout_alignParentRight="true"
+            android:layout_alignParentBottom="true"
+            android:layout_marginRight="20dp"
+            android:layout_marginBottom="20dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:onClick="clickDefinition"
+            android:text="Definition"
+            style="@style/BWButton"
+            />
+
+        </RelativeLayout>
 
 </LinearLayout>

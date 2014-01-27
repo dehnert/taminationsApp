@@ -131,7 +131,7 @@ public class AnimListActivity extends RotationActivity
     Document doc = Tamination.getXMLAsset(this, xmlname);
     NodeList tams = doc.getElementsByTagName("tam");
     multifragment = findViewById(R.id.fragment_animation) != null;
-    titleView = (TextView)findViewById(R.id.title2);
+    titleView = (TextView)findViewById(R.id.title);
     String titlestr = prefs.getString("call",
         getString(android.R.string.untitled));
     if (multifragment) {

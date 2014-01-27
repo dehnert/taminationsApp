@@ -56,6 +56,7 @@ public class LevelActivity extends RotationActivity
       new LevelData("C-1","c1","sublevel='C-1'",R.id.button_c1),
       new LevelData("C-2","c2","sublevel='C-2'",R.id.button_c2),
       new LevelData("C-3A","c3a","sublevel='C-3A'",R.id.button_c3a),
+      new LevelData("C-3B","c3b","sublevel='C-3B'",R.id.button_c3b),
       new LevelData("All Calls","","level!='Info' and @sublevel!='Styling'",R.id.button_index),
       new LevelData("Index of All Calls","","level!='Info' and @sublevel!='Styling'",R.id.button_index),
       new LevelData("Search Calls","","",R.id.button_search)

@@ -84,7 +84,7 @@ public class Dancer implements Comparable<Dancer> {
     fillColor = c;
     drawColor = Color.darker(c);
     starttx = geometry.startMatrix(mat);
-    geom = geometry;
+    geom = geometry.clone();
     movelist = moves;
     // Calculate list of transforms to speed up animations
     transformlist = new ArrayList<Matrix>();

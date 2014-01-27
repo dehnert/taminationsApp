@@ -58,6 +58,10 @@
       <item name="android:paddingLeft">10sp</item>
   </style>
 
+  <style name="PracticeLevelButtonBase" parent="LevelButtonBase">
+      <item name="android:gravity">center</item>
+  </style>
+
   <style name="IndentedLevelButton" parent="LevelButton">
       <item name="android:paddingLeft">30sp</item>
   </style>
@@ -111,5 +115,11 @@
   <style name="PracticeInstructions">
       <item name="android:textSize">24sp</item>
   </style>
+
+  <style name="PracticeLevelButton" parent="LevelButtonBase">
+      <item name="android:gravity">center_horizontal|center_vertical</item>
+      <item name="android:textSize">24sp</item>
+  </style>
+
 
 </resources>

@@ -52,17 +52,18 @@ public class TutorialActivity extends PracticeActivity
                      "Left-Hand Box",
                      "Move Forward with Left Thumb\nwhile Turning with Right Thumb")
   };
+  private int tutnum = 0;
+  private SharedPreferences prefs;
 
   @Override
   protected void nextAnimation()
   {
-    SharedPreferences prefs = getSharedPreferences("Taminations",Context.MODE_PRIVATE);
-    int tutnum = prefs.getInt("tutorial",0);
     if (tutnum >= tutdata.length)
       tutnum = 0;
     TutorialData td = tutdata[tutnum];
     setTitle(td.title);
     Document tamdoc = Tamination.getXMLAsset(this,td.xmlfile);
+    prefs = getSharedPreferences("Taminations",Context.MODE_PRIVATE);
     int gender = prefs.getString("gender", "boy").equals("boy") ? Dancer.BOY : Dancer.GIRL;
     String from = gender == Dancer.BOY ? td.animforBoy : td.animforGirl;
     String selector = "[@title='"+td.title+"' and @from='"+from+"']";
@@ -77,8 +78,6 @@ public class TutorialActivity extends PracticeActivity
   @Override
   protected void success()
   {
-    SharedPreferences prefs = getSharedPreferences("Taminations",Context.MODE_PRIVATE);
-    int tutnum = prefs.getInt("tutorial",0)+1;
     if (tutnum >= tutdata.length) {
       TextView congrats = (TextView)findViewById(R.id.contgrats);
       congrats.setText("Tutorial Complete");

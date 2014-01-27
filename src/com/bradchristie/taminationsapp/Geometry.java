@@ -27,7 +27,7 @@ import android.graphics.Paint;
 import android.graphics.Paint.Style;
 import android.graphics.Path;
 
-public abstract class Geometry
+public abstract class Geometry implements Cloneable
 {
   static final public int BIGON = 1;
   static final public int SQUARE = 2;
@@ -45,6 +45,18 @@ public abstract class Geometry
   {
     rotnum = r;
   }
+  public Geometry clone()
+  {
+    Geometry retval = null;
+    try {
+      retval = (Geometry)super.clone();
+    } catch (CloneNotSupportedException e) {
+      // can never happen because this class implements Cloneable
+      e.printStackTrace();
+    }
+    return retval;
+  }
+
   /**
    * Generate a transform to apply to a dancer's start position
    * @param sym

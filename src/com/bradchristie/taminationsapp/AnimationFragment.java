@@ -36,12 +36,9 @@ import android.widget.ImageButton;
 import android.widget.SeekBar;
 import android.widget.TextView;
 
-import com.bradchristie.taminationsapp.AnimationView.AnimationThread;
-
 public class AnimationFragment extends RotationFragment
                                implements AnimationListener,
                                           SeekBar.OnSeekBarChangeListener
-
 {
 
   private class AnimationUpdater implements Runnable
@@ -62,8 +59,7 @@ public class AnimationFragment extends RotationFragment
         Activity act = getActivity();
         SliderTicView ticView = act==null ? null : (SliderTicView)getActivity().findViewById(R.id.slidertics);
         if (ticView != null) {
-          mAnimationThread = mAnimationView.getThread();
-          ticView.setTics(mAnimationThread.getTotalBeats(),mAnimationThread.getParts());
+          ticView.setTics(mAnimationView.getTotalBeats(),mAnimationView.getParts());
         }
         break;
       case ANIMATION_PROGRESS :
@@ -98,9 +94,6 @@ public class AnimationFragment extends RotationFragment
       }
     }
   };
-
-  /** A handle to the thread that's actually running the animation. */
-  private AnimationThread mAnimationThread;
 
   /** A handle to the View in which the animation is running. */
   public AnimationView mAnimationView;
@@ -142,7 +135,7 @@ public class AnimationFragment extends RotationFragment
       //  Reset the slider display
       SliderTicView ticView = (SliderTicView)getActivity().findViewById(R.id.slidertics);
       if (ticView != null)
-        ticView.setTics(mAnimationThread.getTotalBeats(),mAnimationThread.getParts());
+        ticView.setTics(mAnimationView.getTotalBeats(),mAnimationView.getParts());
     }
   }
 
@@ -160,36 +153,35 @@ public class AnimationFragment extends RotationFragment
     View rewindButton = fragment.findViewById(R.id.button_rewind);
     rewindButton.setOnClickListener(new OnClickListener() {
       public void onClick(View v) {
-        mAnimationView.getThread().doPrevPart();
+        mAnimationView.doPrevPart();
       }
     });
     ImageButton prevButton = (ImageButton)fragment.findViewById(R.id.button_prev);
     prevButton.setOnClickListener(new OnClickListener() {
       public void onClick(View v) {
-        mAnimationView.getThread().doBackup();
+        mAnimationView.doBackup();
       }
     });
     ImageButton forwardButton = (ImageButton)fragment.findViewById(R.id.button_next);
     forwardButton.setOnClickListener(new OnClickListener() {
       public void onClick(View v) {
-        mAnimationView.getThread().doForward();
+        mAnimationView.doForward();
       }
     });
     View endButton = fragment.findViewById(R.id.button_end);
     endButton.setOnClickListener(new OnClickListener() {
       public void onClick(View v) {
-        mAnimationView.getThread().doNextPart();
+        mAnimationView.doNextPart();
       }
     });
     fragment.findViewById(R.id.button_play).setOnClickListener(new OnClickListener() {
       public void onClick(View v) {
-        mAnimationThread = mAnimationView.getThread();
-        if (mAnimationThread.running()) {
-          mAnimationThread.doPause();
+        if (mAnimationView.running()) {
+          mAnimationView.doPause();
           v.setSelected(false);
         }
         else {
-          mAnimationThread.doStart();
+          mAnimationView.doStart();
           v.setSelected(true);
         }
       }
@@ -197,7 +189,7 @@ public class AnimationFragment extends RotationFragment
     //  Add hook for long-press on forward button
     endButton.setOnLongClickListener(new View.OnLongClickListener() {
         public boolean onLongClick(View v) {
-          mAnimationView.getThread().doEnd();
+          mAnimationView.doEnd();
           return true;
         }
       }
@@ -205,7 +197,7 @@ public class AnimationFragment extends RotationFragment
     //  Add hook for long-press on prev button
     rewindButton.setOnLongClickListener(new View.OnLongClickListener() {
         public boolean onLongClick(View v) {
-          mAnimationView.getThread().doRewind();
+          mAnimationView.doRewind();
           return true;
         }
       }
@@ -219,9 +211,7 @@ public class AnimationFragment extends RotationFragment
   @Override
   public void onPause() {
     super.onPause();
-    AnimationThread th = mAnimationView.getThread();
-    if (th != null)  // sanity check
-      th.doPause(); // pause animation when Activity pauses
+      mAnimationView.doPause(); // pause animation when Activity pauses
   }
 
   @Override
@@ -238,10 +228,9 @@ public class AnimationFragment extends RotationFragment
   public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser)
   {
     if (fromUser) {
-      mAnimationThread = mAnimationView.getThread();
-      double b = mAnimationThread.getTotalBeats();
+      double b = mAnimationView.getTotalBeats();
       double loc = progress * b / seekBar.getMax();
-      mAnimationThread.setLocation(loc);
+      mAnimationView.setLocation(loc);
     }
   }
 
@@ -250,9 +239,7 @@ public class AnimationFragment extends RotationFragment
   public void onStartTrackingTouch(SeekBar seekBar)
   {
     //  To avoid the jitters, stop running the animation
-    AnimationThread th = mAnimationView.getThread();
-    if (th != null)
-      th.doPause();
+    mAnimationView.doPause();
   }
 
   //  Called when the user stops dragging the slider
@@ -261,9 +248,8 @@ public class AnimationFragment extends RotationFragment
   {
     //  If the animation was running, resume
     View v = fragment.findViewById(R.id.button_play);
-    AnimationThread th = mAnimationView.getThread();
-    if (th != null && v.isSelected())
-      th.doStart();
+    if (v.isSelected())
+      mAnimationView.doStart();
   }
 
 

@@ -48,6 +48,12 @@ public class Movement {
   public Bezier btranslate;
   public Bezier brotate;
 
+  /**
+   *   Translates a string describing hand use to one of the
+   *   int constants above
+   * @param h  String from XML hands parameter
+   * @return   int constant used in this class
+   */
   static public int getHands(String h)
   {
     final String[] handnames = {
@@ -60,6 +66,19 @@ public class Movement {
     return retval;
   }
 
+  /**
+   * Constructor for a movement where the dancer always faces
+   * the direction of travel, so only one Bezier curve is needed
+   * @param beats  Timing
+   * @param hands  One of the const ints above
+   *               X and Y values for start of curve are always 0, 0
+   * @param cx1    X value for 1st control point
+   * @param cy1    Y value for 1st control point
+   * @param cx2    X value for 2nd control point
+   * @param cy2    Y value for 2nd control point
+   * @param x2     X value for end of curve
+   * @param y2     Y value for end of curve
+   */
   public Movement(double beats, int hands, double cx1, double cy1,
                   double cx2, double cy2, double x2, double y2)
   {
@@ -74,6 +93,29 @@ public class Movement {
     recalculate();
   }
 
+  /**  Constructor for a movement where the dancer does not face the direction
+   *   of travel.  Two Bezier curves are used, one for travel and one for
+   *   facing direction.
+   *
+   * @param beats  Timing
+   * @param hands  One of the const ints above
+   *     Next set of parameters are for direction of travel
+   *     X and Y values for start of curve are always 0,0
+   * @param cx1    X value for 1st control point
+   * @param cy1    Y value for 1st control point
+   * @param cx2    X value for 2nd control point
+   * @param cy2    Y value for 2nd control point
+   * @param x2     X value for end of curve
+   * @param y2     Y value for end of curve
+   *     Next set of parameters are for facing direction
+   *     X and Y values for start of curve, as well as Y value for 1st control
+   *     point, are all 0
+   * @param cx3    X value for 1st control point
+   * @param cx4    X value for 2nd control point
+   * @param cy4    Y value for 2nd control point
+   * @param x4     X value for end of curve
+   * @param y4     Y value for end of curve
+   */
   public Movement(double beats, int hands, double cx1, double cy1,
                   double cx2, double cy2, double x2, double y2,
                   double cx3, double cx4, double cy4, double x4, double y4)
@@ -94,6 +136,10 @@ public class Movement {
     recalculate();
   }
 
+  /**
+   * Construct a Movement from the attributes of an XML movement
+   * @param elem
+   */
   public Movement(Element elem)
   {
     beats = Double.valueOf(elem.getAttribute("beats"));
@@ -142,6 +188,10 @@ public class Movement {
     return brotate.rotate(tt/beats);
   };
 
+  /**
+   *   Recalculate the Bezier curves from the points
+   *   Must be called whenever the points are changed
+   */
   public void recalculate()
   {
     this.btranslate = new Bezier(0.0,0.0,cx1,cy1,cx2,cy2,x2,y2);

@@ -25,6 +25,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Locale;
 
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
@@ -92,7 +93,7 @@ public class Tamination {
 
   static public String audioAssetName(String call)
   {
-    return call.replace(" ", "_").toLowerCase()+".ogg";
+    return call.replace(" ", "_").toLowerCase(Locale.US)+".ogg";
   }
 
   /**

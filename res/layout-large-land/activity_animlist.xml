@@ -21,7 +21,7 @@
             android:contentDescription="logo" />
 
         <TextView
-            android:id="@+id/title2"
+            android:id="@+id/title"
             style="@style/ActivityTitleText"
             android:layout_width="0dp"
             android:layout_height="wrap_content"

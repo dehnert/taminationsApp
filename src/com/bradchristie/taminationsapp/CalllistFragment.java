@@ -20,6 +20,8 @@
 
 package com.bradchristie.taminationsapp;
 
+import java.util.Locale;
+
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.NodeList;
@@ -72,7 +74,7 @@ public class CalllistFragment extends RotationFragment implements OnItemClickLis
     cla = new CallListAdapter(getActivity(),R.layout.calllist_item);
     for (int j=0; j<list1.getLength(); j++) {
       Element e1 = (Element)list1.item(j);
-      if (query != null && !e1.getAttribute("text").toLowerCase().contains(query))
+      if (query != null && !e1.getAttribute("text").toLowerCase(Locale.US).contains(query))
         continue;
       CallListItem item = new CallListItem(e1.getAttribute("text"),
                                            e1.getAttribute("level"),

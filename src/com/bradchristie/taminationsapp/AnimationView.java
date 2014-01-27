@@ -35,11 +35,8 @@ import android.graphics.Paint;
 import android.graphics.Paint.Style;
 import android.graphics.Rect;
 import android.graphics.drawable.ColorDrawable;
-//import android.hardware.Sensor;
-import android.hardware.SensorManager;
 import android.os.Handler;
 import android.util.AttributeSet;
-import android.util.Log;
 import android.util.Pair;
 import android.view.MotionEvent;
 import android.view.SurfaceHolder;
@@ -49,821 +46,790 @@ import android.view.View.OnTouchListener;
 
 public class AnimationView extends SurfaceView
                            implements SurfaceHolder.Callback,
-                                      OnTouchListener
+                                      OnTouchListener,
+                                      Runnable
 {
+  private static final double SLOWSPEED =     1500.0;
+  private static final double MODERATESPEED = 1000.0;
+  private static final double NORMALSPEED =    500.0;
+  private static final double FASTSPEED =      200.0;
+  /** Indicate if the animation is running */
+  private boolean isRunning = false;
+  /** Indicate if the grid should be drawn */
+  private boolean showGrid = false;
+  /** Indicate if dancer paths should be drawn */
+  private boolean showPaths = false;
+  /** Indicate if the animation should repeat when the end is reached */
+  private boolean loop = false;
+  /** Special geometries */
+  private int geometry = Geometry.SQUARE;
+  /** Indicate if phantoms should be drawn */
+  private boolean showPhantoms = false;
+  /** Array of dancers in the current animation */
+  private Dancer[] dancers;
+  /** Total length of the animation */
+  private double beats = 0f;
+  private double speed = 500f;
+  private AnimationListener listener = null;
+  private boolean dirty = false;
+  /** Parts string from formation, for passing to tic labeler  */
+  private String parts;
+  private double[] partbeats;
+  private int currentpart;
+  private InteractiveDancer idancer = null;
+  private double iscore;
+  private Thread thread;
 
-  class AnimationThread extends Thread {
+  /** Handle to the surface manager object we interact with */
+  private SurfaceHolder surface = null;
 
-    private static final double SLOWSPEED = 1500.0;
-    private static final double NORMALSPEED = 500.0;
-    private static final double FASTSPEED = 200.0;
-    /** Indicate whether the surface has been created & is ready to draw */
-    private boolean isAlive = true;
-    /** Indicate if the animation is running */
-    private boolean isRunning = false;
-    /** Indicate if the grid should be drawn */
-    private boolean showGrid = false;
-    /** Indicate if dancer paths should be drawn */
-    private boolean showPaths = false;
-    /** Indicate if the animation should repeat when the end is reached */
-    private boolean loop = false;
-    /** Special geometries */
-    private int geometry = Geometry.SQUARE;
-    /** Indicate if phantoms should be drawn */
-    private boolean showPhantoms = false;
-    /** Array of dancers in the current animation */
-    private Dancer[] dancers;
-    /** Context from application */
-    private Context ctx;
-    /** Total length of the animation */
-    private double beats = 0f;
-    private double speed = 500f;
-    private AnimationListener listener = null;
-    private boolean dirty = false;
-    /** Parts string from formation, for passing to tic labeler  */
-    private String parts;
-    private double[] partbeats;
-    private int currentpart;
-    private InteractiveDancer idancer = null;
-    private double iscore;
+  /** Used to figure out elapsed time between frames */
+  private long mLastTime;
+  /** Current location in the animation */
+  private double beat = -2.0;
+  /** Previous location  */
+  private double prevbeat = -2.0;
+  /** Beats to wait before starting animation  */
+  private double leadin = 2.0;
+  /** Beats to add to end of animation  */
+  private double leadout = 2.0;
+  private Element tam;
+  private int interactiveDancer = -1;
 
-    /** Handle to the surface manager object we interact with */
-    private SurfaceHolder mSurfaceHolder;
-
-    /** Used to figure out elapsed time between frames */
-    private long mLastTime;
-    /** Current location in the animation */
-    private double beat = -2.0;
-    /** Previous location  */
-    private double prevbeat = -2.0;
-    /** Beats to wait before starting animation  */
-    private double leadin = 2.0;
-    /** Beats to add to end of animation  */
-    private double leadout = 2.0;
-
-    public AnimationThread(SurfaceHolder surfaceHolder, Context context,
-        Handler handler) {
-      mSurfaceHolder = surfaceHolder;
-      ctx = context;
-    }
-
-    /**
-     *   Starts the animation
-     */
-    public synchronized void doStart()
-    {
-      mLastTime = System.currentTimeMillis();
-      if (beat > beats)
-        beat = -leadin;
-      isAlive = true;
-      isRunning = true;
-      iscore = 0;
-      dirtify();
-    }
-
-    /**
-     * Pauses the dancers update & animation.
-     */
-    public synchronized void doPause()
-    {
-      isRunning = false;
-    }
-
-    /**
-     *  Rewinds to the start of the animation, even if it is running
-     */
-    public synchronized void doRewind()
-    {
+  /**
+   *   Starts the animation
+   */
+  public synchronized void doStart()
+  {
+    mLastTime = System.currentTimeMillis();
+    if (beat > beats)
       beat = -leadin;
-      dirtify();
-    }
+    isRunning = true;
+    iscore = 0;
+    dirtify();
+  }
 
-    /**
-     *   Moves the animation back a little
-     */
-    public synchronized void doBackup()
-    {
-      beat = Math.max(beat-0.1, -leadin);
-      dirtify();
-    }
+  /**
+   * Pauses the dancers update & animation.
+   */
+  public synchronized void doPause()
+  {
+    isRunning = false;
+  }
 
-    /**
-     *   Moves the animation forward a little
-     */
-    public synchronized void doForward()
-    {
-      beat = Math.min(beat+0.1, beats);
-      dirtify();
-    }
+  /**
+   *  Rewinds to the start of the animation, even if it is running
+   */
+  public synchronized void doRewind()
+  {
+    beat = -leadin;
+    dirtify();
+  }
 
-    /**
-     *   Build an array of floats out of the parts of the animation
-     */
-    private double[] getPartsValues()
-    {
-      double[] retval = { -2.0f, 0.0f, beats-2.0f, beats };
-      if (parts.length() > 0) {
-        String[] t = parts.split(";");
-        retval = new double[t.length+4];
-        retval[0] = -2.0;
-        retval[1] = 0.0;
-        double b = 0.0;
-        for (int i=0; i<t.length; i++) {
-          b += Double.valueOf(t[i]);
-          retval[i+2] = b;
-        }
-        retval[t.length+2] = beats - 2.0;
-        retval[t.length+3] = beats;
+  /**
+   *   Moves the animation back a little
+   */
+  public synchronized void doBackup()
+  {
+    beat = Math.max(beat-0.1, -leadin);
+    dirtify();
+  }
+
+  /**
+   *   Moves the animation forward a little
+   */
+  public synchronized void doForward()
+  {
+    beat = Math.min(beat+0.1, beats);
+    dirtify();
+  }
+
+  /**
+   *   Build an array of floats out of the parts of the animation
+   */
+  private double[] getPartsValues()
+  {
+    double[] retval = { -2.0f, 0.0f, beats-2.0f, beats };
+    if (parts.length() > 0) {
+      String[] t = parts.split(";");
+      retval = new double[t.length+4];
+      retval[0] = -2.0;
+      retval[1] = 0.0;
+      double b = 0.0;
+      for (int i=0; i<t.length; i++) {
+        b += Double.valueOf(t[i]);
+        retval[i+2] = b;
       }
-      return retval;
+      retval[t.length+2] = beats - 2.0;
+      retval[t.length+3] = beats;
     }
+    return retval;
+  }
 
-    /**
-     *   Moves the animation to the next part
-     */
-    public synchronized void doNextPart()
-    {
-      double[] p = getPartsValues();
-      for (double x:p) {
-        if (x > beat) {
-          beat = x;
-          break;
-        }
-      }
-      dirtify();
-    }
-
-    /**
-     *   Moves the animation to the previous part
-     */
-    public synchronized void doPrevPart()
-    {
-      double[] p = getPartsValues();
-      for (int i=p.length-1; i>=0; i--) {
-        if (p[i] < beat) {
-          beat = p[i];
-          break;
-        }
-      }
-      dirtify();
-    }
-
-    /**
-     *   Moves to the end of the animation, minus leadout
-     */
-    public synchronized void doEnd()
-    {
-      beat = beats;
-      dirtify();
-    }
-
-    /**  Tells caller if the animation is running
-     *
-     */
-    public synchronized boolean running()
-    {
-      return isRunning;
-    }
-
-    /**
-     * Shut down the animation and stop the thread.
-     */
-    public synchronized void doQuit()
-    {
-      isRunning = false;
-      isAlive = false;
-      dirtify();
-    }
-
-    /**
-     *   Set the visibility of the grid
-     */
-    public synchronized void setGridVisibility(boolean show)
-    {
-      showGrid = show;
-      dirtify();
-    }
-
-    /**
-     *   Set the visibility of phantom dancers
-     */
-    public synchronized void setPhantomVisibility(boolean show)
-    {
-      showPhantoms = show;
-      if (dancers != null) {
-        for (Dancer d : dancers) {
-          d.hidden = d.isPhantom() && !show;
-        }
+  /**
+   *   Moves the animation to the next part
+   */
+  public synchronized void doNextPart()
+  {
+    double[] p = getPartsValues();
+    for (double x:p) {
+      if (x > beat) {
+        beat = x;
+        break;
       }
     }
+    dirtify();
+  }
 
-    /**
-     *  Turn on drawing of dancer paths
-     */
-    public synchronized void setPathVisibility(boolean show)
-    {
-      showPaths = show;
-      dirtify();
-    }
-
-    /**
-     *   Set animation looping
-     */
-    public synchronized void setLoop(boolean loopit)
-    {
-      loop = loopit;
-    }
-
-    /**
-     *   Set display of dancer numbers
-     */
-    public synchronized void setNumbers(int numberem)
-    {
-      //  For now at least, no numbers for practice
-      if (idancer != null)
-        numberem = Dancer.NUMBERS_OFF;
-      if (dancers != null) {
-        for (Dancer d : dancers)
-          d.showNumber = numberem;
-        dirtify();
+  /**
+   *   Moves the animation to the previous part
+   */
+  public synchronized void doPrevPart()
+  {
+    double[] p = getPartsValues();
+    for (int i=p.length-1; i>=0; i--) {
+      if (p[i] < beat) {
+        beat = p[i];
+        break;
       }
     }
+    dirtify();
+  }
 
-    /**
-     *   Set speed of animation
-     */
-    public synchronized void setSpeed(String myspeed)
-    {
-      if (myspeed.equals("Slow"))
-        speed = SLOWSPEED;
-      else if (myspeed.equals("Fast"))
-        speed = FASTSPEED;
-      else
-        speed = NORMALSPEED;  // default normal speed
-    }
+  /**
+   *   Moves to the end of the animation, minus leadout
+   */
+  public synchronized void doEnd()
+  {
+    beat = beats;
+    dirtify();
+  }
 
-    /**  Set hexagon geometry  */
-    public synchronized void setHexagon()
-    {
-      geometry = Geometry.HEXAGON;
-    }
+  /**  Tells caller if the animation is running
+   *
+   */
+  public synchronized boolean running()
+  {
+    return isRunning;
+  }
 
-    /**  Set bigon geometry  */
-    public synchronized void setBigon()
-    {
-      geometry = Geometry.BIGON;
-    }
-    public synchronized void setSquare()
-    {
-      geometry = Geometry.SQUARE;
-    }
+  /**
+   *   Set the visibility of the grid
+   */
+  public synchronized void setGridVisibility(boolean show)
+  {
+    showGrid = show;
+    dirtify();
+  }
 
-
-    public synchronized double getTotalBeats()
-    {
-      return leadin+beats;
-    }
-    public synchronized double getBeats()
-    {
-      return beats-leadout;
-    }
-    public synchronized double getLeadin()
-    {
-      return leadin;
-    }
-    public synchronized double getLeadout()
-    {
-      return leadout;
-    }
-    public synchronized double getScore()
-    {
-      return iscore;
-    }
-
-    /**
-     *  Return animation parts, defined in formation xml
-     */
-    public synchronized String getParts()
-    {
-      return parts;
-    }
-
-    /**
-     *   Set location of animation
-     */
-    public synchronized void setLocation(double loc)
-    {
-      beat = loc - 2.0;
-      dirtify();
-    }
-
-    /**
-     *   Process a touch on the surface
-     *   Toggles path display if touched on a dancer
-     * @param x  Screen coord
-     * @param y  Screen coord
-     */
-    public synchronized void doTouch(double x, double y)
-    {
-      //  Convert x and y to dance floor coords
-      Rect r = mSurfaceHolder.getSurfaceFrame();
-      double range = Math.min(r.width(), r.height());
-      double s = range/13.0;
-      double dx = -(y-r.height()/2.0)/s;
-      double dy = -(x-r.width()/2.0)/s;
-      //  Compare with dancer locations
-      Dancer bestd = null;
-      double bestdist = 0.5;
+  /**
+   *   Set the visibility of phantom dancers
+   */
+  public synchronized void setPhantomVisibility(boolean show)
+  {
+    showPhantoms = show;
+    if (dancers != null) {
       for (Dancer d : dancers) {
-        Pair<Float,Float> loc = d.location();
-        double distsq = (loc.first-dx)*(loc.first-dx) + (loc.second-dy)*(loc.second-dy);
-        if (distsq < bestdist) {
-          bestd = d;
-          bestdist = distsq;
-        }
-      }
-      if (bestd != null) {
-        bestd.showPath = !bestd.showPath;
-        dirtify();
+        d.hidden = d.isPhantom() && !show;
       }
     }
+  }
 
-    /**
-     *   Called when a change is made that affects the display.
-     *   Tell the display to redraw even if the animation is not running.
-     */
-    public synchronized void dirtify()
-    {
-      dirty = true;
-      notify();
+  /**
+   *  Turn on drawing of dancer paths
+   */
+  public synchronized void setPathVisibility(boolean show)
+  {
+    showPaths = show;
+    dirtify();
+  }
+
+  /**
+   *   Set animation looping
+   */
+  public synchronized void setLoop(boolean loopit)
+  {
+    loop = loopit;
+  }
+
+  /**
+   *   Set display of dancer numbers
+   */
+  public synchronized void setNumbers(int numberem)
+  {
+    //  For now at least, no numbers for practice
+    if (idancer != null)
+      numberem = Dancer.NUMBERS_OFF;
+    if (dancers != null) {
+      for (Dancer d : dancers)
+        d.showNumber = numberem;
+      dirtify();
     }
+  }
 
-    @Override
-    public void run() {
-      if (listener != null)
-        listener.onAnimationChanged(AnimationListener.ANIMATION_READY,0,0,0);
-      while (isAlive) {
-        synchronized (this) {
-          if (dirty || isRunning) {
-            updateDancers();
-            doDraw();
-          }
-          if (listener != null)
-            listener.onAnimationChanged(AnimationListener.ANIMATION_PROGRESS,
-                                        (beat+2.0)/(beats+2.0),beat,0);
-          if (!isRunning)
-            //  animation is not running, so don't chew up the CPU
-            try {
-              wait();
-            } catch (InterruptedException e) {
-              // ignore spurious wakeups, only causes a redraw
-            }
-        }
+  /**
+   *   Set speed of animation
+   */
+  public synchronized void setSpeed(String myspeed)
+  {
+    if (myspeed.equals("Slow"))
+      speed = SLOWSPEED;
+    else if (myspeed.equals("Moderate"))
+      speed = MODERATESPEED;
+    else if (myspeed.equals("Fast"))
+      speed = FASTSPEED;
+    else
+      speed = NORMALSPEED;  // default normal speed
+  }
+
+  /**  Set hexagon geometry  */
+  public synchronized void setHexagon()
+  {
+    geometry = Geometry.HEXAGON;
+  }
+
+  /**  Set bigon geometry  */
+  public synchronized void setBigon()
+  {
+    geometry = Geometry.BIGON;
+  }
+  public synchronized void setSquare()
+  {
+    geometry = Geometry.SQUARE;
+  }
+
+
+  public synchronized double getTotalBeats()
+  {
+    return leadin+beats;
+  }
+  public synchronized double getBeats()
+  {
+    return beats-leadout;
+  }
+  public synchronized double getLeadin()
+  {
+    return leadin;
+  }
+  public synchronized double getLeadout()
+  {
+    return leadout;
+  }
+  public synchronized double getScore()
+  {
+    return iscore;
+  }
+
+  /**
+   *  Return animation parts, defined in formation xml
+   */
+  public synchronized String getParts()
+  {
+    return parts;
+  }
+
+  /**
+   *   Set location of animation
+   */
+  public synchronized void setLocation(double loc)
+  {
+    beat = loc - 2.0;
+    dirtify();
+  }
+
+  /**
+   *   Process a touch on the surface
+   *   Toggles path display if touched on a dancer
+   * @param x  Screen coord
+   * @param y  Screen coord
+   */
+  public synchronized void doTouch(double x, double y)
+  {
+    //  Convert x and y to dance floor coords
+    Rect r = surface.getSurfaceFrame();
+    double range = Math.min(r.width(), r.height());
+    double s = range/13.0;
+    double dx = -(y-r.height()/2.0)/s;
+    double dy = -(x-r.width()/2.0)/s;
+    //  Compare with dancer locations
+    Dancer bestd = null;
+    double bestdist = 0.5;
+    for (Dancer d : dancers) {
+      Pair<Float,Float> loc = d.location();
+      double distsq = (loc.first-dx)*(loc.first-dx) + (loc.second-dy)*(loc.second-dy);
+      if (distsq < bestdist) {
+        bestd = d;
+        bestdist = distsq;
       }
     }
+    if (bestd != null) {
+      bestd.showPath = !bestd.showPath;
+      dirtify();
+    }
+  }
 
-    /**
-     * Draws the dancers and background
-     */
-    private void doDraw() {
-      Canvas c = null;
-      try {
-        c = mSurfaceHolder.lockCanvas();
-        if (c == null)
-          return;  // sanity check
-        //  Draw background
-        ColorDrawable cd = new ColorDrawable(0xfffff0e0);
-        Rect candim = c.getClipBounds();
-        cd.setBounds(candim);
-        cd.draw(c);
-        float range = Math.min(candim.width(),candim.height());
-        //  Note Loop and dancer speed
-        Paint p = new Paint();
-        p.setColor(Color.BLACK);
-        p.setTextSize(range/15.0f);
-        String infostr = "";
-        if (speed == SLOWSPEED)
-          infostr = "Slow ";
-        else if (speed == FASTSPEED)
-          infostr = "Fast ";
-        if (loop)
-          infostr += "Loop";
-        c.drawText(infostr, 10.0f, candim.height()-20.0f, p);
-        if (idancer != null) {
-          if (idancer.debugstr1 != null)
-            c.drawText(idancer.debugstr1, candim.width()/2.0f+range/2.0f, range*2/10.0f, p);
-          if (idancer.debugstr2 != null)
-            c.drawText(idancer.debugstr2, candim.width()/2.0f+range/2.0f, range*3/10.0f, p);
-          if (idancer.debugstr3 != null)
-            c.drawText(idancer.debugstr3, candim.width()/2.0f+range/2.0f, range*4/10.0f, p);
-          if (idancer.debugstr4 != null)
-            c.drawText(idancer.debugstr4, candim.width()/2.0f+range/2.0f, range*5/10.0f, p);
-        }
-        //  For interactive leadin, show countdown
-        if (idancer != null && beat < 0.0) {
-          String tminus = ""+(int)Math.floor(beat);
-          p.setTextAlign(Paint.Align.CENTER);
-          p.setTextSize(range/2.0f);
-          p.setColor(Color.GRAY);
-          c.drawText(tminus, range/2.0f, range, p);
-        }
-        //  Scale coordinate system to dancer's size
-        c.translate(candim.width()/2,candim.height()/2);
-        float s = range/13.0f;
-        //  Flip and rotate
-        c.scale(s,-s);
-        c.rotate(90f);
-        //  Transform to interactive dancer's viewpoint
-        //  Canvas has a concat but not a preconcat method, so..
-        if (idancer != null) {
-          Matrix m = new Matrix();
-          idancer.tx.invert(m);
-          c.concat(m);
-          c.rotate((float)(-idancer.userAngle*180.0/Math.PI));
-        }
-        //  Draw grid if on
-        if (showGrid)
-          Geometry.drawGrid(geometry,c);
-        //  Always show bigon center mark
-        if (geometry == Geometry.BIGON) {
-          Paint pline = new Paint();
-          pline.setARGB(255,0,0,0);
-          pline.setStyle(Style.STROKE);
-          pline.setStrokeWidth(0f);
-          c.drawLine(0.0f,-0.5f,0.0f,0.5f,pline);
-          c.drawLine(-0.5f,0.0f,0.5f,0.0f,pline);
-        }
-        if (tam == null)
-          return;
+  /**
+   *   Called when a change is made that affects the display.
+   *   Tell the display to redraw even if the animation is not running.
+   */
+  public synchronized void dirtify()
+  {
+    dirty = true;
+    notify();
+  }
 
-        //  Draw paths if requested
-        for (Dancer d: dancers) {
-          if (!d.hidden && (showPaths || d.showPath))
-            d.drawPath(c);
+  /**
+   *   Method to run in a separate thread.
+   *   If an animation is running, it updates the dancer positions
+   *   and draws them.
+   */
+  @Override
+  public void run() {
+    if (listener != null)
+      listener.onAnimationChanged(AnimationListener.ANIMATION_READY,0,0,0);
+    while (surface != null) {
+      synchronized (this) {
+        if (dirty || isRunning) {
+          updateDancers();
+          doDraw();
         }
-
-        //  Draw handholds
-        Paint hline = new Paint();
-        hline.setColor(Color.ORANGE);
-        hline.setStrokeWidth(0.05f);
-        hline.setStyle(Style.FILL);
-        for (Dancer d: dancers) {
-          Pair<Float,Float> loc = d.location();
-          if (d.rightHandVisibility) {
-            if (d.rightdancer == null) {  // hexagon center
-              c.drawLine(loc.first,loc.second,0.0f,0.0f,hline);
-              c.drawCircle(0.0f,0.0f,0.125f,hline);
-            }
-            else if (d.rightdancer.compareTo(d) < 0) {
-              Pair<Float,Float> loc2 = d.rightdancer.location();
-              c.drawLine(loc.first, loc.second, loc2.first, loc2.second, hline);
-              c.drawCircle((loc.first+loc2.first)/2f,
-                           (loc.second+loc2.second)/2f,.125f,hline);
-            }
+        if (listener != null)
+          listener.onAnimationChanged(AnimationListener.ANIMATION_PROGRESS,
+              (beat+2.0)/(beats+2.0),beat,0);
+        if (!isRunning)
+          //  animation is not running, so don't chew up the CPU
+          try {
+            wait();
+          } catch (InterruptedException e) {
+            // ignore spurious wakeups, only causes a redraw
           }
-          if (d.leftHandVisibility) {
-            if (d.leftdancer == null) {  // hexagon center
-              c.drawLine(loc.first,loc.second,0.0f,0.0f,hline);
-              c.drawCircle(0.0f,0.0f,0.125f,hline);
-            }
-            else if (d.leftdancer.compareTo(d) < 0) {
-              Pair<Float,Float> loc2 = d.leftdancer.location();
-              c.drawLine(loc.first, loc.second, loc2.first, loc2.second, hline);
-              c.drawCircle((loc.first+loc2.first)/2f,
-                           (loc.second+loc2.second)/2f,.125f,hline);
-            }
-          }
-        }
-        //  Draw dancers
-        for (Dancer d : dancers) {
-          if (!d.hidden) {
-            c.save();
-            c.concat(d.tx);
-            d.draw(c);
-            c.restore();
-          }
-        }
-        dirty = false;
-      } finally {
-        // do this in a finally so that if an exception is thrown
-        // during the above, we don't leave the Surface in an
-        // inconsistent state
-        if (c != null)
-          mSurfaceHolder.unlockCanvasAndPost(c);
       }
     }
+  }
 
-    /**
-     * Updates dancers positions based on the passage of realtime.
-     * Called at the start of draw().
-     */
-    private void updateDancers() {
+  /**
+   * Draws the dancers and background
+   */
+  private void doDraw() {
+    Canvas c = null;
+    try {
+      c = surface.lockCanvas();
+      if (c == null)
+        return;  // sanity check
+      //  Draw background
+      ColorDrawable cd = new ColorDrawable(0xfffff0e0);
+      Rect candim = c.getClipBounds();
+      cd.setBounds(candim);
+      cd.draw(c);
+      float range = Math.min(candim.width(),candim.height());
+      //  Note Loop and dancer speed
+      Paint p = new Paint();
+      p.setColor(Color.BLACK);
+      p.setTextSize(range/15.0f);
+      String infostr = "";
+      if (speed == SLOWSPEED)
+        infostr = "Slow ";
+      else if (speed == FASTSPEED)
+        infostr = "Fast ";
+      if (loop)
+        infostr += "Loop";
+      c.drawText(infostr, 10.0f, candim.height()-20.0f, p);
+      if (idancer != null) {
+        if (idancer.debugstr1 != null)
+          c.drawText(idancer.debugstr1, candim.width()/2.0f+range/2.0f, range*2/10.0f, p);
+        if (idancer.debugstr2 != null)
+          c.drawText(idancer.debugstr2, candim.width()/2.0f+range/2.0f, range*3/10.0f, p);
+        if (idancer.debugstr3 != null)
+          c.drawText(idancer.debugstr3, candim.width()/2.0f+range/2.0f, range*4/10.0f, p);
+        if (idancer.debugstr4 != null)
+          c.drawText(idancer.debugstr4, candim.width()/2.0f+range/2.0f, range*5/10.0f, p);
+      }
+      //  For interactive leadin, show countdown
+      if (idancer != null && beat < 0.0) {
+        String tminus = ""+(int)Math.floor(beat);
+        p.setTextAlign(Paint.Align.CENTER);
+        p.setTextSize(range/2.0f);
+        p.setColor(Color.GRAY);
+        c.drawText(tminus, range/2.0f, range, p);
+      }
+      //  Scale coordinate system to dancer's size
+      c.translate(candim.width()/2,candim.height()/2);
+      float s = range/13.0f;
+      //  Flip and rotate
+      c.scale(s,-s);
+      c.rotate(90f);
+      //  Transform to interactive dancer's viewpoint
+      //  Canvas has a concat but not a preconcat method, so..
+      if (idancer != null) {
+        Matrix m = new Matrix();
+        idancer.tx.invert(m);
+        c.concat(m);
+        c.rotate((float)(-idancer.userAngle*180.0/Math.PI));
+      }
+      //  Draw grid if on
+      if (showGrid)
+        Geometry.drawGrid(geometry,c);
+      //  Always show bigon center mark
+      if (geometry == Geometry.BIGON) {
+        Paint pline = new Paint();
+        pline.setARGB(255,0,0,0);
+        pline.setStyle(Style.STROKE);
+        pline.setStrokeWidth(0f);
+        c.drawLine(0.0f,-0.5f,0.0f,0.5f,pline);
+        c.drawLine(-0.5f,0.0f,0.5f,0.0f,pline);
+      }
       if (tam == null)
         return;
-      //  Update the animation time
-      long now = System.currentTimeMillis();
-      long diff = now - mLastTime;
-      if (isRunning)
-        beat += (float)diff/speed;
-      mLastTime = now;
-      //  Move dancers
-      //  For big jumps, move incrementally -
-      //  this helps hexagon and bigon compute the right location
-      double delta = beat - prevbeat;
-      int incs = (int)Math.ceil(Math.abs(delta));
-      for (int j=1; j<=incs; j++) {
-        for (int i=0; i<dancers.length; i++)
-          dancers[i].animate(prevbeat + j*delta/incs);
-      }
-      //  Find the current part, and send a message if it's changed
-      int thispart = 0;
-      for (int i=0; i<partbeats.length; i++) {
-        if (partbeats[i] < beat)
-          thispart = i;
-      }
-      if (beat < 0 || beat > beats)
-        thispart = 0;
-      if (thispart != currentpart) {
-        currentpart = thispart;
-        if (listener != null)
-          listener.onAnimationChanged(AnimationListener.ANIMATION_PART,currentpart,beats,0);
+
+      //  Draw paths if requested
+      for (Dancer d: dancers) {
+        if (!d.hidden && (showPaths || d.showPath))
+          d.drawPath(c);
       }
 
-      //  Compute handholds
-      ArrayList<Handhold> hhlist = new ArrayList<Handhold>();
-      for (Dancer d0 : dancers) {
-        d0.rightdancer = d0.leftdancer = null;
-        d0.rightHandNewVisibility = false;
-        d0.leftHandNewVisibility = false;
-      }
-      for (int i1=0; i1<dancers.length-1; i1++) {
-        Dancer d1 = dancers[i1];
-        if (d1.isPhantom() && !showPhantoms)
-          continue;
-        for (int i2=i1+1; i2<dancers.length; i2++) {
-          Dancer d2 = this.dancers[i2];
-          if (d2.isPhantom() && !showPhantoms)
-            continue;
-          Handhold hh = Handhold.getHandhold(d1,d2,geometry);
-          if (hh != null)
-            hhlist.add(hh);
+      //  Draw handholds
+      Paint hline = new Paint();
+      hline.setColor(Color.ORANGE);
+      hline.setStrokeWidth(0.05f);
+      hline.setStyle(Style.FILL);
+      for (Dancer d: dancers) {
+        Pair<Float,Float> loc = d.location();
+        if (d.rightHandVisibility) {
+          if (d.rightdancer == null) {  // hexagon center
+            c.drawLine(loc.first,loc.second,0.0f,0.0f,hline);
+            c.drawCircle(0.0f,0.0f,0.125f,hline);
+          }
+          else if (d.rightdancer.compareTo(d) < 0) {
+            Pair<Float,Float> loc2 = d.rightdancer.location();
+            c.drawLine(loc.first, loc.second, loc2.first, loc2.second, hline);
+            c.drawCircle((loc.first+loc2.first)/2f,
+                (loc.second+loc2.second)/2f,.125f,hline);
+          }
         }
-      }
-
-      //  Sort the array to put best scores first
-      Handhold[] hharr = new Handhold[hhlist.size()];
-      hhlist.toArray(hharr);
-      Arrays.sort(hharr);
-
-      //  Apply the handholds in order from best to worst
-      //  so that if a dancer has a choice it gets the best handhold
-      for (Handhold hh : hharr) {
-        //  Check that the hands aren't already used
-        boolean incenter = geometry == Geometry.HEXAGON && hh.inCenter();
-        if (incenter ||
-            (hh.hold1 == Movement.RIGHTHAND && hh.dancer1.rightdancer == null ||
-                hh.hold1 == Movement.LEFTHAND && hh.dancer1.leftdancer == null) &&
-            (hh.hold2 == Movement.RIGHTHAND && hh.dancer2.rightdancer == null ||
-                hh.hold2 == Movement.LEFTHAND && hh.dancer2.leftdancer == null)) {
-          //      	Make the handhold visible
-          //  Scale should be 1 if distance is 2
-          //  float scale = hh.distance/2f;
-          if (hh.hold1 == Movement.RIGHTHAND || hh.hold1 == Movement.GRIPRIGHT) {
-            if (!hh.dancer1.rightHandVisibility)
-              hh.dancer1.rightHandVisibility = true;
-            hh.dancer1.rightHandNewVisibility = true;
+        if (d.leftHandVisibility) {
+          if (d.leftdancer == null) {  // hexagon center
+            c.drawLine(loc.first,loc.second,0.0f,0.0f,hline);
+            c.drawCircle(0.0f,0.0f,0.125f,hline);
           }
-          if (hh.hold1 == Movement.LEFTHAND || hh.hold1 == Movement.GRIPLEFT) {
-            if (!hh.dancer1.leftHandVisibility)
-              hh.dancer1.leftHandVisibility = true;
-            hh.dancer1.leftHandNewVisibility = true;
-          }
-          if (hh.hold2 == Movement.RIGHTHAND || hh.hold2 == Movement.GRIPRIGHT) {
-            if (!hh.dancer2.rightHandVisibility)
-              hh.dancer2.rightHandVisibility = true;
-            hh.dancer2.rightHandNewVisibility = true;
-          }
-          if (hh.hold2 == Movement.LEFTHAND || hh.hold2 == Movement.GRIPLEFT) {
-            if (!hh.dancer2.leftHandVisibility)
-              hh.dancer2.leftHandVisibility = true;
-            hh.dancer2.leftHandNewVisibility = true;
-          }
-
-          if (incenter)
-            continue;
-          if (hh.hold1 == Movement.RIGHTHAND) {
-            hh.dancer1.rightdancer = hh.dancer2;
-            if ((hh.dancer1.hands & Movement.GRIPRIGHT) == Movement.GRIPRIGHT)
-              hh.dancer1.rightgrip = hh.dancer2;
-          } else {
-            hh.dancer1.leftdancer = hh.dancer2;
-            if ((hh.dancer1.hands & Movement.GRIPLEFT) == Movement.GRIPLEFT)
-              hh.dancer1.leftgrip = hh.dancer2;
-          }
-          if (hh.hold2 == Movement.RIGHTHAND) {
-            hh.dancer2.rightdancer = hh.dancer1;
-            if ((hh.dancer2.hands & Movement.GRIPRIGHT) == Movement.GRIPRIGHT)
-              hh.dancer2.rightgrip = hh.dancer1;
-          } else {
-            hh.dancer2.leftdancer = hh.dancer1;
-            if ((hh.dancer2.hands & Movement.GRIPLEFT) == Movement.GRIPLEFT)
-              hh.dancer2.leftgrip = hh.dancer1;
+          else if (d.leftdancer.compareTo(d) < 0) {
+            Pair<Float,Float> loc2 = d.leftdancer.location();
+            c.drawLine(loc.first, loc.second, loc2.first, loc2.second, hline);
+            c.drawCircle((loc.first+loc2.first)/2f,
+                (loc.second+loc2.second)/2f,.125f,hline);
           }
         }
       }
-      //  Clear handholds no longer visible
+      //  Draw dancers
       for (Dancer d : dancers) {
-        if (d.rightHandVisibility && !d.rightHandNewVisibility)
-          d.rightHandVisibility = false;
-        if (d.leftHandVisibility && !d.leftHandNewVisibility)
-          d.leftHandVisibility = false;
+        if (!d.hidden) {
+          c.save();
+          c.concat(d.tx);
+          d.draw(c);
+          c.restore();
+        }
       }
+      dirty = false;
+    } finally {
+      // do this in a finally so that if an exception is thrown
+      // during the above, we don't leave the Surface in an
+      // inconsistent state
+      if (c != null)
+        surface.unlockCanvasAndPost(c);
+    }
+  }
 
-      //  Update interactive dancer score
-      if (idancer != null && idancer.onTrack && beat > 0.0 && beat < beats-leadout)
-        iscore += (beat - Math.max(prevbeat, 0.0)) * 10.0;
+  /**
+   * Updates dancers positions based on the passage of realtime.
+   * Called at the start of draw().
+   */
+  private void updateDancers() {
+    if (tam == null)
+      return;
+    //  Update the animation time
+    long now = System.currentTimeMillis();
+    long diff = now - mLastTime;
+    if (isRunning)
+      beat += (float)diff/speed;
+    mLastTime = now;
+    //  Move dancers
+    //  For big jumps, move incrementally -
+    //  this helps hexagon and bigon compute the right location
+    double delta = beat - prevbeat;
+    int incs = (int)Math.ceil(Math.abs(delta));
+    for (int j=1; j<=incs; j++) {
+      for (int i=0; i<dancers.length; i++)
+        dancers[i].animate(prevbeat + j*delta/incs);
+    }
+    //  Find the current part, and send a message if it's changed
+    int thispart = 0;
+    for (int i=0; i<partbeats.length; i++) {
+      if (partbeats[i] < beat)
+        thispart = i;
+    }
+    if (beat < 0 || beat > beats)
+      thispart = 0;
+    if (thispart != currentpart) {
+      currentpart = thispart;
+      if (listener != null)
+        listener.onAnimationChanged(AnimationListener.ANIMATION_PART,currentpart,beats,0);
+    }
 
-      //  At end of animation?
-      prevbeat = beat;
-      if (beat >= beats) {
-        if (loop && isRunning)
-          prevbeat = beat = -leadin;
-        else {
-          doPause();
-          if (listener != null)
-            listener.onAnimationChanged(AnimationListener.ANIMATION_DONE,1.0,beats,0);
+    //  Compute handholds
+    ArrayList<Handhold> hhlist = new ArrayList<Handhold>();
+    for (Dancer d0 : dancers) {
+      d0.rightdancer = d0.leftdancer = null;
+      d0.rightHandNewVisibility = false;
+      d0.leftHandNewVisibility = false;
+    }
+    for (int i1=0; i1<dancers.length-1; i1++) {
+      Dancer d1 = dancers[i1];
+      if (d1.isPhantom() && !showPhantoms)
+        continue;
+      for (int i2=i1+1; i2<dancers.length; i2++) {
+        Dancer d2 = this.dancers[i2];
+        if (d2.isPhantom() && !showPhantoms)
+          continue;
+        Handhold hh = Handhold.getHandhold(d1,d2,geometry);
+        if (hh != null)
+          hhlist.add(hh);
+      }
+    }
+
+    //  Sort the array to put best scores first
+    Handhold[] hharr = new Handhold[hhlist.size()];
+    hhlist.toArray(hharr);
+    Arrays.sort(hharr);
+
+    //  Apply the handholds in order from best to worst
+    //  so that if a dancer has a choice it gets the best handhold
+    for (Handhold hh : hharr) {
+      //  Check that the hands aren't already used
+      boolean incenter = geometry == Geometry.HEXAGON && hh.inCenter();
+      if (incenter ||
+          (hh.hold1 == Movement.RIGHTHAND && hh.dancer1.rightdancer == null ||
+          hh.hold1 == Movement.LEFTHAND && hh.dancer1.leftdancer == null) &&
+          (hh.hold2 == Movement.RIGHTHAND && hh.dancer2.rightdancer == null ||
+          hh.hold2 == Movement.LEFTHAND && hh.dancer2.leftdancer == null)) {
+        //      	Make the handhold visible
+        //  Scale should be 1 if distance is 2
+        //  float scale = hh.distance/2f;
+        if (hh.hold1 == Movement.RIGHTHAND || hh.hold1 == Movement.GRIPRIGHT) {
+          if (!hh.dancer1.rightHandVisibility)
+            hh.dancer1.rightHandVisibility = true;
+          hh.dancer1.rightHandNewVisibility = true;
+        }
+        if (hh.hold1 == Movement.LEFTHAND || hh.hold1 == Movement.GRIPLEFT) {
+          if (!hh.dancer1.leftHandVisibility)
+            hh.dancer1.leftHandVisibility = true;
+          hh.dancer1.leftHandNewVisibility = true;
+        }
+        if (hh.hold2 == Movement.RIGHTHAND || hh.hold2 == Movement.GRIPRIGHT) {
+          if (!hh.dancer2.rightHandVisibility)
+            hh.dancer2.rightHandVisibility = true;
+          hh.dancer2.rightHandNewVisibility = true;
+        }
+        if (hh.hold2 == Movement.LEFTHAND || hh.hold2 == Movement.GRIPLEFT) {
+          if (!hh.dancer2.leftHandVisibility)
+            hh.dancer2.leftHandVisibility = true;
+          hh.dancer2.leftHandNewVisibility = true;
+        }
+
+        if (incenter)
+          continue;
+        if (hh.hold1 == Movement.RIGHTHAND) {
+          hh.dancer1.rightdancer = hh.dancer2;
+          if ((hh.dancer1.hands & Movement.GRIPRIGHT) == Movement.GRIPRIGHT)
+            hh.dancer1.rightgrip = hh.dancer2;
+        } else {
+          hh.dancer1.leftdancer = hh.dancer2;
+          if ((hh.dancer1.hands & Movement.GRIPLEFT) == Movement.GRIPLEFT)
+            hh.dancer1.leftgrip = hh.dancer2;
+        }
+        if (hh.hold2 == Movement.RIGHTHAND) {
+          hh.dancer2.rightdancer = hh.dancer1;
+          if ((hh.dancer2.hands & Movement.GRIPRIGHT) == Movement.GRIPRIGHT)
+            hh.dancer2.rightgrip = hh.dancer1;
+        } else {
+          hh.dancer2.leftdancer = hh.dancer1;
+          if ((hh.dancer2.hands & Movement.GRIPLEFT) == Movement.GRIPLEFT)
+            hh.dancer2.leftgrip = hh.dancer1;
         }
       }
     }
+    //  Clear handholds no longer visible
+    for (Dancer d : dancers) {
+      if (d.rightHandVisibility && !d.rightHandNewVisibility)
+        d.rightHandVisibility = false;
+      if (d.leftHandVisibility && !d.leftHandNewVisibility)
+        d.leftHandVisibility = false;
+    }
 
-    public synchronized void setAnimation(Element tam, int intdan)
-    {
-      if (tam == null)  // sanity check
-        return;
-      leadin = intdan < 0 ? 2 : 3;
-      leadout = intdan < 0 ? 2 : 1;
-      beats = 0;
-      Element formation = null;
-      Tamination.loadMoves(ctx);
-      NodeList tlist = tam.getElementsByTagName("formation");
-      if (tlist.getLength() > 0)
-        formation = (Element)tlist.item(0);
-      else
-        formation = Tamination.getFormation(ctx,tam.getAttribute("formation"));
-      parts = tam.getAttribute("parts");
-      NodeList flist = formation.getElementsByTagName("dancer");
-      dancers = new Dancer[flist.getLength()*geometry];
-      //  Except for the phantoms, these are the standard colors
-      //  used for teaching callers
-      int[] dancerColor = { Color.RED, Color.GREEN,
-                            Color.BLUE, Color.YELLOW,
-                            Color.LTGRAY, Color.LTGRAY };
-      //  Get numbers for dancers and couples
-      //  This fetches any custom numbers that might be defined in
-      //  the animation to match a Callerlab or Ceder Chest illustration
-      String[] numbers = Tamination.getNumbers(tam);
-      String[] couples = Tamination.getCouples(tam);
-      if (geometry == Geometry.HEXAGON) {
-        String[] hexnumbers = { "A","E","I",
-                                "B","F","J",
-                                "C","G","K",
-                                "D","H","L",
-                                "u","v","w","x","y","z" };
-        numbers = hexnumbers;
-        String[] hexcouples = { "1", "3", "5", "1", "3", "5",
-                                "2", "4", "6", "2", "4", "6",
-                                "7", "8", "7", "8", "7", "8" };
-        couples = hexcouples;
-        int[] hexcolor = { Color.RED, Color.GREEN,
-                           Color.MAGENTA, Color.BLUE,
-                           Color.YELLOW, Color.CYAN,
-                           Color.LTGRAY, Color.LTGRAY };
-        dancerColor = hexcolor;
+    //  Update interactive dancer score
+    if (idancer != null && idancer.onTrack && beat > 0.0 && beat < beats-leadout)
+      iscore += (beat - Math.max(prevbeat, 0.0)) * 10.0;
+
+    //  At end of animation?
+    prevbeat = beat;
+    if (beat >= beats) {
+      if (loop && isRunning)
+        prevbeat = beat = -leadin;
+      else {
+        doPause();
+        if (listener != null)
+          listener.onAnimationChanged(AnimationListener.ANIMATION_DONE,1.0,beats,0);
       }
-      else if (geometry == Geometry.BIGON) {
-        String[] bigonnumbers = { "1", "2", "3", "4", "5", "6" };
-        numbers = bigonnumbers;
-        String[] bigoncouples = { "1", "2", "3", "4", "5", "6" };
-        couples = bigoncouples;
-      }
-      int dnum = 0;
-      int icount = -1;
-      Vector<Geometry> geoms = Geometry.getGeometry(geometry);
-      if (intdan > 0) {
-        NodeList glist = Tamination.evalXPath("dancer[@gender='boy']",formation);
-        //  presumably we have the same number of girls and boys..
-        //  This selects a random one of them for the interactive dancer
-        icount = (int)(Math.random()*geoms.size()*glist.getLength());
-      }
-      //  Create dancers for each one listed in the formation
-      for (int i=0; i<flist.getLength(); i++) {
-        Element fd = (Element)flist.item(i);
-        float x = Float.valueOf(fd.getAttribute("x"));
-        float y = Float.valueOf(fd.getAttribute("y"));
-        double angle = Double.valueOf(fd.getAttribute("angle"));
-        String gender = fd.getAttribute("gender");
-        int g = 0;
-        if (gender.equals("boy"))
-          g = Dancer.BOY;
-        else if (gender.equals("girl"))
-          g = Dancer.GIRL;
-        else if (gender.equals("phantom"))
-          g = Dancer.PHANTOM;
-        Element pathelem = (Element)tam.getElementsByTagName("path").item(i);
-        List<Movement> movelist = Tamination.translatePath(pathelem);
-        //  Each dancer listed in the formation corresponds to
-        //  one, two, or three real dancers depending on the geometry
-        for (Geometry geom : geoms) {
-          Matrix m = new Matrix();
-          //  compute the transform for the start position
-          m.postRotate(Math.toRadians(angle));
-          m.postTranslate(x, y);
-          //  add one dancer
-          if (g == intdan && icount-- == 0) {
-            //  add the interactive dancer controlled by the user
-            idancer = new InteractiveDancer(numbers[dnum],couples[dnum],g,
-                dancerColor[Integer.valueOf(couples[dnum])-1],
-                m,geom,movelist);
-            dancers[dnum] = idancer;
-          }
-          else
-            dancers[dnum] = new Dancer(numbers[dnum],couples[dnum],g,
-                                       dancerColor[Integer.valueOf(couples[dnum])-1],
-                                       m,geom,movelist);
-          if (g == Dancer.PHANTOM && !showPhantoms)
-            dancers[dnum].hidden = true;
-          beats = Math.max(beats,dancers[dnum].beats()+leadout);
-          dnum++;
+    }
+  }
+
+  /**
+   *   This is called to generate or re-generate the dancers and their
+   *   animations based on the call, geometry, and other settings.
+   * @param tam     XML element containing the call
+   * @param intdan  Dancer controlled by the user, or -1 if not used
+   */
+  public synchronized void setAnimation(Element tam, int intdan)
+  {
+    if (tam == null)  // sanity check
+      return;
+    this.tam = tam;
+    interactiveDancer = intdan;
+    leadin = intdan < 0 ? 2 : 3;
+    leadout = intdan < 0 ? 2 : 1;
+    beats = 0;
+    Element formation = null;
+    Tamination.loadMoves(getContext());
+    NodeList tlist = tam.getElementsByTagName("formation");
+    if (tlist.getLength() > 0)
+      formation = (Element)tlist.item(0);
+    else
+      formation = Tamination.getFormation(getContext(),tam.getAttribute("formation"));
+    parts = tam.getAttribute("parts");
+    NodeList flist = formation.getElementsByTagName("dancer");
+    dancers = new Dancer[flist.getLength()*geometry];
+    //  Except for the phantoms, these are the standard colors
+    //  used for teaching callers
+    int[] dancerColor = { Color.RED, Color.GREEN,
+        Color.BLUE, Color.YELLOW,
+        Color.LTGRAY, Color.LTGRAY };
+    //  Get numbers for dancers and couples
+    //  This fetches any custom numbers that might be defined in
+    //  the animation to match a Callerlab or Ceder Chest illustration
+    String[] numbers = Tamination.getNumbers(tam);
+    String[] couples = Tamination.getCouples(tam);
+    if (geometry == Geometry.HEXAGON) {
+      String[] hexnumbers = { "A","E","I",
+          "B","F","J",
+          "C","G","K",
+          "D","H","L",
+          "u","v","w","x","y","z" };
+      numbers = hexnumbers;
+      String[] hexcouples = { "1", "3", "5", "1", "3", "5",
+          "2", "4", "6", "2", "4", "6",
+          "7", "8", "7", "8", "7", "8" };
+      couples = hexcouples;
+      int[] hexcolor = { Color.RED, Color.GREEN,
+          Color.MAGENTA, Color.BLUE,
+          Color.YELLOW, Color.CYAN,
+          Color.LTGRAY, Color.LTGRAY };
+      dancerColor = hexcolor;
+    }
+    else if (geometry == Geometry.BIGON) {
+      String[] bigonnumbers = { "1", "2", "3", "4", "5", "6" };
+      numbers = bigonnumbers;
+      String[] bigoncouples = { "1", "2", "3", "4", "5", "6" };
+      couples = bigoncouples;
+    }
+    int dnum = 0;
+    int icount = -1;
+    Vector<Geometry> geoms = Geometry.getGeometry(geometry);
+    if (intdan > 0) {
+      NodeList glist = Tamination.evalXPath("dancer[@gender='boy']",formation);
+      //  presumably we have the same number of girls and boys..
+      //  This selects a random one of them for the interactive dancer
+      icount = (int)(Math.random()*geoms.size()*glist.getLength());
+    }
+    //  Create dancers for each one listed in the formation
+    for (int i=0; i<flist.getLength(); i++) {
+      Element fd = (Element)flist.item(i);
+      float x = Float.valueOf(fd.getAttribute("x"));
+      float y = Float.valueOf(fd.getAttribute("y"));
+      double angle = Double.valueOf(fd.getAttribute("angle"));
+      String gender = fd.getAttribute("gender");
+      int g = 0;
+      if (gender.equals("boy"))
+        g = Dancer.BOY;
+      else if (gender.equals("girl"))
+        g = Dancer.GIRL;
+      else if (gender.equals("phantom"))
+        g = Dancer.PHANTOM;
+      Element pathelem = (Element)tam.getElementsByTagName("path").item(i);
+      List<Movement> movelist = Tamination.translatePath(pathelem);
+      //  Each dancer listed in the formation corresponds to
+      //  one, two, or three real dancers depending on the geometry
+      for (Geometry geom : geoms) {
+        Matrix m = new Matrix();
+        //  compute the transform for the start position
+        m.postRotate(Math.toRadians(angle));
+        m.postTranslate(x, y);
+        //  add one dancer
+        if (g == intdan && icount-- == 0) {
+          //  add the interactive dancer controlled by the user
+          idancer = new InteractiveDancer(numbers[dnum],couples[dnum],g,
+              dancerColor[Integer.valueOf(couples[dnum])-1],
+              m,geom,movelist);
+          dancers[dnum] = idancer;
         }
+        else
+          dancers[dnum] = new Dancer(numbers[dnum],couples[dnum],g,
+              dancerColor[Integer.valueOf(couples[dnum])-1],
+              m,geom,movelist);
+        if (g == Dancer.PHANTOM && !showPhantoms)
+          dancers[dnum].hidden = true;
+        beats = Math.max(beats,dancers[dnum].beats()+leadout);
+        dnum++;
       }
-      partbeats = getPartsValues();
-      currentpart = 0;
-      isRunning = false;
-      beat = -leadin;
-      dirtify();
     }
+    partbeats = getPartsValues();
+    currentpart = 0;
+    isRunning = false;
+    beat = -leadin;
+    SharedPreferences prefs =
+        getContext().getSharedPreferences("Taminations", Context.MODE_PRIVATE);
+    String numberpref = prefs.getString("numbers2","");
+    if (numberpref.contains("1-8"))
+      setNumbers(Dancer.NUMBERS_DANCERS);
+    else if (numberpref.contains("1-4"))
+      setNumbers(Dancer.NUMBERS_COUPLES);
+    else
+      setNumbers(Dancer.NUMBERS_OFF);
+    dirtify();
+  }
 
-    public synchronized void setListener(AnimationListener l)
-    {
-      Log.i("Thread","listener set");
-      listener = l;
-    }
+  public synchronized void setListener(AnimationListener l)
+  {
+    listener = l;
+  }
 
-  }  // end of AnimationThread class
 
-  /** The thread that actually draws the animation */
-  private AnimationThread thread;
-  private Element tam;
-  private AnimationListener listener = null;
-  private int interactiveDancer = -1;
 
   public AnimationView(Context context, AttributeSet attrs)
   {
     super(context,attrs);
-    // register our interest in hearing about changes to our surface
-    SurfaceHolder holder = getHolder();
-    holder.addCallback(this);
+    //  This enables the callbacks to surfaceCreated and surfaceDestroyed
+    getHolder().addCallback(this);
+    setOnTouchListener(this);
   }
 
-  /**
-   * Fetches the animation thread corresponding to this AnimationView.
-   *
-   * @return the animation thread
-   */
-  public AnimationThread getThread() {
-    return thread;
-  }
 
   public void setAnimation(Element tam)
   {
     setAnimation(tam,-1);
   }
 
-  public void setAnimation(Element tam, int intdan)
-  {
-    this.tam = tam;
-    this.interactiveDancer = intdan;
-    if (thread != null && tam != null) {
-      unregisterSensorListeners();
-      thread.setAnimation(tam,interactiveDancer);
-      registerSensorListeners();
-      //  Need to re-apply dancer numbers here because they get zapped
-      //  when dancers are re-created
-      if (numberpref.contains("1-8"))
-        thread.setNumbers(Dancer.NUMBERS_DANCERS);
-      else if (numberpref.contains("1-4"))
-        thread.setNumbers(Dancer.NUMBERS_COUPLES);
-      else
-        thread.setNumbers(Dancer.NUMBERS_OFF);
-    }
-  }
 
   public void setAnimationListener(AnimationListener l)
   {
-    Log.i("View","listener set");
     listener = l;
-    if (thread != null)
-      thread.setListener(listener);
   }
 
   /**
@@ -871,9 +837,10 @@ public class AnimationView extends SurfaceView
    * focus lost. e.g. user switches to take a call.
    */
   @Override
-  public void onWindowFocusChanged(boolean hasWindowFocus) {
-      if (!hasWindowFocus && thread != null)
-        thread.doPause();
+  public void onWindowFocusChanged(boolean hasWindowFocus)
+  {
+    if (!hasWindowFocus)
+      doPause();
   }
 
   /**
@@ -881,19 +848,14 @@ public class AnimationView extends SurfaceView
    * used.
    */
   static final Handler h = new Handler();
-  private String numberpref;
   @Override
-  public void surfaceCreated(SurfaceHolder holder) {
-    thread = new AnimationThread(holder, getContext(), h);
-    Log.i("View","thread created");
+  public void surfaceCreated(SurfaceHolder surface_) {
+    surface = surface_;
     readSettings();
     // start the thread here, it will wait until Play is pressed
-    if (listener != null) {
-      thread.setListener(listener);
       //if (tam != null)
       //  listener.onAnimationChanged(AnimationListener.ANIMATION_READY,0,0,0);
-    }
-    registerSensorListeners();
+    thread = new Thread(this);
     thread.start();
   }
 
@@ -901,19 +863,18 @@ public class AnimationView extends SurfaceView
   {
     SharedPreferences prefs =
         getContext().getSharedPreferences("Taminations", Context.MODE_PRIVATE);
-    numberpref = prefs.getString("numbers2","");
-    thread.setGridVisibility(prefs.getBoolean("grid", false));
-    thread.setPathVisibility(prefs.getBoolean("paths", false));
+    setGridVisibility(prefs.getBoolean("grid", false));
+    setPathVisibility(prefs.getBoolean("paths", false));
     String geom = prefs.getString("geometry","None");
     if (geom.equals("Hexagon"))
-      thread.setHexagon();
+      setHexagon();
     else if (geom.equals("Bi-gon"))
-      thread.setBigon();
+      setBigon();
     else
-      thread.setSquare();
-    thread.setLoop(prefs.getBoolean("loop",false));
-    thread.setSpeed(prefs.getString("speed", "Normal"));
-    thread.setPhantomVisibility(prefs.getBoolean("phantoms",false));
+      setSquare();
+    setLoop(prefs.getBoolean("loop",false));
+    setSpeed(prefs.getString("speed", "Normal"));
+    setPhantomVisibility(prefs.getBoolean("phantoms",false));
     if (tam != null)
       setAnimation(tam,interactiveDancer);
     if (listener != null && tam != null && interactiveDancer < 0)
@@ -927,21 +888,22 @@ public class AnimationView extends SurfaceView
 
   public void onDraw(Canvas c)
   {
-    if (thread != null)
-      thread.dirtify();
+    dirtify();
   }
 
   /**
-   * Callback invoked when the Surface has been destroyed and must no longer
-   * be touched. WARNING: after this method returns, the Surface/Canvas must
-   * never be touched again!
+   *  Callback invoked when the Surface has been destroyed and must no longer
+   *  be touched. After this method returns, the Surface/Canvas must
+   *  never be touched again!
    */
   @Override
   public void surfaceDestroyed(SurfaceHolder holder) {
     // we have to tell thread to shut down & wait for it to finish, or else
     // it might touch the Surface after we return and explode
     boolean retry = true;
-    thread.doQuit();
+    isRunning = false;
+    surface = null;
+    dirtify();
     while (retry) {
       try {
         thread.join();
@@ -950,52 +912,18 @@ public class AnimationView extends SurfaceView
         // retry again
       }
     }
-    unregisterSensorListeners();
-  }
-
-  private SensorManager sensorManager;
-  //private Sensor rotationVectorSensor;
-  //private Sensor accelerationSensor;
-  private void registerSensorListeners()
-  {
-    if (thread.idancer != null) {
-      //Context ctx = getContext();
-      //SharedPreferences prefs = ctx.getSharedPreferences("Taminations",Context.MODE_PRIVATE);
-      /*
-      if (prefs.getString("inputmethod", "touch").equals("walk")) {
-        sensorManager = (SensorManager)ctx.getSystemService(Context.SENSOR_SERVICE);
-        rotationVectorSensor = sensorManager.getDefaultSensor(Sensor.TYPE_ROTATION_VECTOR);
-        accelerationSensor = sensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER);
-        List<Sensor> slist =
-            sensorManager.getSensorList(Sensor.TYPE_LINEAR_ACCELERATION);
-        for (Sensor s: slist) {
-          Log.i("sensor vendor",s.getVendor());
-          if (s.getVendor().startsWith("Google"))
-            accelerationSensor = s;
-        }
-        sensorManager.registerListener(thread.idancer, rotationVectorSensor,SensorManager.SENSOR_DELAY_GAME);
-        sensorManager.registerListener(thread.idancer, accelerationSensor,SensorManager.SENSOR_DELAY_GAME);
-      }  */
-    }
-    //  register listener for clicks on dancers to show path
-    setOnTouchListener(this);
-  }
-
-  private void unregisterSensorListeners()
-  {
-    if (thread.idancer != null && sensorManager != null)
-      sensorManager.unregisterListener(thread.idancer);
   }
 
   @Override
   public boolean onTouch(View v, MotionEvent m)
   {
-    if (thread.idancer != null && sensorManager==null)
-      thread.idancer.doTouch(v,m);
+    if (idancer != null)
+      idancer.doTouch(v,m);
     else if (m.getAction()==MotionEvent.ACTION_DOWN && m.getPointerCount() > 0)
-      thread.doTouch(m.getX(),m.getY());
+      doTouch(m.getX(),m.getY());
     return true;
   }
+
 
 
 }

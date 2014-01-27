@@ -226,6 +226,28 @@
             android:text="C-3A" />
     </LinearLayout>
 
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1" >
+
+        <View
+            android:layout_width="20dp"
+            android:layout_height="match_parent"
+            android:background="#ffffc0c0" />
+
+        <Button
+            android:id="@+id/button_c3b"
+            style="@style/LevelButton"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginLeft="1sp"
+            android:layout_marginTop="1sp"
+            android:background="@drawable/level_background_c1c2"
+            android:onClick="processClick"
+            android:text="C-3B" />
+    </LinearLayout>
+    
     <Button
         android:id="@+id/button_index"
         style="@style/LevelButton"

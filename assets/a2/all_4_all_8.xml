@@ -633,7 +633,45 @@
     </path>
   </tam>
 
-<tam formation="Static Square" from="Static Square" group="All 4 Couples (A-1)" parts="6.5;3;3" title="All 4 Couples (A-1) Square Chain Thru">
+<tam formation="Squared Set" group="All 4 Couples (A-1)" title="All 4 Couples (A-1) Quarter In">
+    <path>
+      <move beats="3" scaleY="2" select="Extend Left" />
+      <move offsetX="1" select="Quarter Right" />
+    </path>
+    <path>
+      <move beats="3" scaleX="2" select="Extend Right" />
+      <move offsetY="-1" select="Quarter Left" />
+    </path>
+    <path>
+      <move beats="3" scaleY="2" select="Extend Left" />
+      <move offsetX="1" select="Quarter Right" />
+    </path>
+    <path>
+      <move beats="3" scaleX="2" select="Extend Right" />
+      <move offsetY="-1" select="Quarter Left" />
+    </path>
+  </tam>
+
+  <tam formation="Squared Set" group="All 4 Couples (A-1)" title="All 4 Couples (A-1) Quarter Out">
+    <path>
+      <move beats="3" scaleY="2" select="Extend Left" />
+      <move offsetX="1" select="Quarter Left" />
+    </path>
+    <path>
+      <move beats="3" scaleX="2" select="Extend Right" />
+      <move offsetY="-1" select="Quarter Right" />
+    </path>
+    <path>
+      <move beats="3" scaleY="2" select="Extend Left" />
+      <move offsetX="1" select="Quarter Left" />
+    </path>
+    <path>
+      <move beats="3" scaleX="2" select="Extend Right" />
+      <move offsetY="-1" select="Quarter Right" />
+    </path>
+  </tam>
+
+  <tam formation="Static Square" from="Static Square" group="All 4 Couples (A-1)" parts="6.5;3;3" title="All 4 Couples (A-1) Square Chain Thru">
     <path>
       <move beats="2" scaleX="2" scaleY="2" select="Extend Left" />
       <move select="Forward" />
@@ -1460,38 +1498,6 @@
     </path>
   </tam>
 
-<tam formation="Static Square" from="Static Square" group="All 4 Couples (C-2)" parts="9.5" title="All 4 Couples (C-2) Right and Left Thru With the Flow">
-    <path>
-      <move beats="2" scaleX="2" scaleY="2" select="Extend Left" />
-      <move select="Forward" />
-      <move select="Lead Right" />
-      <move beats="2" scaleY="2" select="Lead Left" />
-      <move select="Beau Wheel" />
-      <move beats="6" select="Dodge Right" />
-    </path>
-    <path>
-      <move beats="3.5" scaleX="3" select="Extend Right" />
-      <move select="Forward 2" />
-      <move select="Extend Left" />
-      <move select="Belle Wheel" />
-      <move select="Forward 6" />
-    </path>
-    <path>
-      <move beats="2" scaleX="2" scaleY="2" select="Extend Left" />
-      <move select="Forward" />
-      <move select="Lead Right" />
-      <move beats="2" scaleY="2" select="Lead Left" />
-      <move select="Beau Wheel" />
-      <move beats="6" select="Dodge Right" />
-    </path>
-    <path>
-      <move beats="3.5" scaleX="3" select="Extend Right" />
-      <move select="Forward 2" />
-      <move select="Extend Left" />
-      <move select="Belle Wheel" />
-      <move select="Forward 6" />
-    </path>
-  </tam>
 <tam formation="Static MiniWaves RH" group="All 8 (C-2)" title="All 8 (C-2) Criss Cross Your Neighbor">
     <path>
       <move beats="4" scaleX="3" scaleY="2" select="Extend Right" />
@@ -1661,6 +1667,25 @@
     <path>
       <move beats="1.5" offsetY="1" select="Quarter Left" />
       <move beats="3" scaleX="3" scaleY="3" select="Lead Right" />
+    </path>
+  </tam>
+
+  <tam formation="Static Facing Out" group="All 8 (C-3A)" title="All 8 (C-3A) Mini Chase">
+    <path>
+      <move beats="2" offsetY="-1" select="Quarter Right" />
+      <move beats="3" scaleX="3" scaleY="2" select="Extend Right" />
+    </path>
+    <path>
+      <move offsetX="-1.5" scaleY="1.5" select="Run Right" />
+      <move beats="2" scaleX="2.5" select="Lead Right" />
+    </path>
+    <path>
+      <move beats="2" offsetY="-1" select="Quarter Right" />
+      <move beats="3" scaleX="3" scaleY="2" select="Extend Right" />
+    </path>
+    <path>
+      <move offsetX="-1.5" scaleY="1.5" select="Run Right" />
+      <move beats="2" scaleX="2.5" select="Lead Right" />
     </path>
   </tam>
 

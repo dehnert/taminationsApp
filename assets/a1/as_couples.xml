@@ -1716,7 +1716,7 @@
     </path>
   </tam>
 
-  <tam formation="Normal Lines" from="Normal Lines" group="As Couples (C-2)" parts="" title="As Couples (C-2) Reverse Split Swap Around">
+  <tam formation="Normal Lines" from="Normal Lines" group="As Couples (C-2)" title="As Couples (C-2) Reverse Split Swap Around">
     <path>
       <move beats="4" offsetX="4" select="BackHinge Right" />
     </path>
@@ -1730,7 +1730,8 @@
       <move beats="4" offsetY="4" select="Hinge Left" />
     </path>
   </tam>
-<tam formation="Normal Lines" from="Normal Lines" group="As Couples (C-2)" parts="" title="As Couples (C-2) Split Swap Around">
+
+  <tam formation="Normal Lines" from="Normal Lines" group="As Couples (C-2)" title="As Couples (C-2) Split Swap Around">
     <path>
       <move beats="4" offsetY="-4" select="Hinge Right" />
     </path>
@@ -1744,7 +1745,8 @@
       <move beats="4" offsetX="4" select="BackHinge Left" />
     </path>
   </tam>
-<tam formation="Two-Faced Lines RH" group="As Couples (C-2)" title="As Couples (C-2) Trail to a Diamond">
+
+  <tam formation="Two-Faced Lines RH" group="As Couples (C-2)" title="As Couples (C-2) Trail to a Diamond">
     <path>
       <move hands="right" select="Forward 2" />
       <move beats="4" hands="right" scaleX="3" scaleY="3" select="Lead Right" />
@@ -1822,7 +1824,7 @@
     </path>
   </tam>
 
-  <tam formation="Two-Faced Lines RH" group="As Couples (C-3A)" title="As Couples (C-3A) 1/4 Mix">
+  <tam formation="Two-Faced Lines RH" group="As Couples (C-3A)" parts="2;3" title="As Couples (C-3A) 1/4 Mix">
     <path>
       <move beats="2" scaleX="1.5" scaleY="3" select="Hinge Right" />
       <move beats="6" hands="gripright" scaleX="2" scaleY="1.5" select="Run Left" />
@@ -2121,6 +2123,25 @@
     <path>
       <move beats="4" scaleX=".5" scaleY=".5" select="Lead Left" />
       <move beats="3" hands="right" scaleX="3" scaleY="1.5" select="Lead Right" />
+    </path>
+  </tam>
+
+  <tam formation="Lines Facing Out" group="As Couples (C-3A)" title="As Couples (C-3A) Mini Chase">
+    <path>
+      <move hands="left" select="Counter Rotate Right -2 0" />
+      <move beats="3" hands="left" offsetX="-1" offsetY="-1" select="U-Turn Right" />
+    </path>
+    <path>
+      <move hands="right" select="Counter Rotate Right 0 -2" />
+      <move hands="right" offsetX="-1" offsetY="-1" scaleX="2" scaleY="2" select="Run Right" />
+    </path>
+    <path>
+      <move hands="left" offsetX="1" offsetY="-1" select="Counter Rotate Right -2 0" />
+      <move beats="3" hands="left" select="Forward 2" />
+    </path>
+    <path>
+      <move hands="right" offsetX="1" offsetY="-1" select="Counter Rotate Right 0 -2" />
+      <move beats="3" hands="right" select="Forward 2" />
     </path>
   </tam>
 

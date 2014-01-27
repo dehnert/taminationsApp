@@ -1485,4 +1485,23 @@
     </path>
   </tam>
 
+  <tam formation="Completed Double Pass Thru" group="Concentric (C-3A)" title="Concentric (C-3A) Mini Chase">
+    <path>
+      <move offsetX="-.5" scaleY="1.5" select="Run Right" />
+      <move beats="3" scaleX="3.5" select="Lead Right" />
+    </path>
+    <path>
+      <move beats="2" offsetY="-1" select="Quarter Right" />
+      <move beats="4" scaleX="3" scaleY="2" select="Extend Right" />
+    </path>
+    <path>
+      <move offsetX="-.5" scaleY=".5" select="Run Right" />
+      <move beats="2" scaleX="1.5" select="Lead Right" />
+    </path>
+    <path>
+      <move beats="2" offsetY="-1" select="Quarter Right" />
+      <move beats="3" select="Forward" />
+    </path>
+  </tam>
+
   </tamination>

@@ -29,7 +29,6 @@ import android.widget.ImageButton;
 import android.widget.SeekBar;
 import android.widget.TextView;
 
-import com.bradchristie.taminationsapp.AnimationView.AnimationThread;
 import com.bradchristie.taminationsapp.LevelActivity.LevelData;
 
 public class AnimationActivity extends PortraitActivity
@@ -54,8 +53,7 @@ public class AnimationActivity extends PortraitActivity
       case ANIMATION_READY :
         //  Tell the tic view where to put the tic marks
         SliderTicView ticView = (SliderTicView)findViewById(R.id.slidertics);
-        mAnimationThread = mAnimationView.getThread();
-        ticView.setTics(mAnimationThread.getTotalBeats(),mAnimationThread.getParts());
+        ticView.setTics(mAnimationView.getTotalBeats(),mAnimationView.getParts());
         break;
       case ANIMATION_PROGRESS :
         //  Position slider to current location
@@ -76,9 +74,6 @@ public class AnimationActivity extends PortraitActivity
       }
     }
   };
-
-  /** A handle to the thread that's actually running the animation. */
-  private AnimationThread mAnimationThread;
 
   /** A handle to the View in which the animation is running. */
   private AnimationView mAnimationView;
@@ -117,9 +112,7 @@ public class AnimationActivity extends PortraitActivity
   @Override
   protected void onPause() {
     super.onPause();
-    AnimationThread th = mAnimationView.getThread();
-    if (th != null)  // sanity check
-      th.doPause(); // pause animation when Activity pauses
+    mAnimationView.doPause(); // pause animation when Activity pauses
   }
   public void onWindowFocusChanged (boolean hasFocus)
   {
@@ -139,18 +132,17 @@ public class AnimationActivity extends PortraitActivity
   @Override
   public void onSharedPreferenceChanged(SharedPreferences prefs, String key)
   {
-    mAnimationThread.setGridVisibility(prefs.getBoolean("grid",false));
-    mAnimationThread.setPathVisibility(prefs.getBoolean("paths",false));
+    mAnimationView.setGridVisibility(prefs.getBoolean("grid",false));
+    mAnimationView.setPathVisibility(prefs.getBoolean("paths",false));
   }
 
   @Override
   public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser)
   {
     if (fromUser) {
-      mAnimationThread = mAnimationView.getThread();
-      double b = mAnimationThread.getTotalBeats();
+      double b = mAnimationView.getTotalBeats();
       double loc = progress * b / seekBar.getMax();
-      mAnimationThread.setLocation(loc);
+      mAnimationView.setLocation(loc);
     }
   }
 

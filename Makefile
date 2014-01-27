@@ -5,7 +5,7 @@
 #  On Windows, use Cygwin
 
 #  These are the files to copy from Taminations to the app
-TAMDIRS = b1 b2 ms plus a1 a2 c1 c2 c3a src
+TAMDIRS = b1 b2 ms plus a1 a2 c1 c2 c3a c3b src
 TAMTYPES = xml html png css dtd
 SRC = $(foreach dir,$(TAMDIRS),\
       $(foreach type,$(TAMTYPES),\
@@ -15,21 +15,20 @@ SRC = $(foreach dir,$(TAMDIRS),\
 SRCNAMES = $(subst $(TAMINATIONS),,$(SRC))
 OBJDIR = assets
 OBJ = $(addprefix $(OBJDIR),$(SRCNAMES))
-PREVOBJ = $(wildcard $(OBJDIR)/*/*)
+PREVOBJ = $(filter-out assets/info/about.html,$(wildcard $(OBJDIR)/*/*))
 
 #  Dependencies
 .PHONY: all clean
 all : $(OBJ)
 
-$(OBJ) : $(SRC)
+#  The mobile site requires a viewport tag, but that breaks
+#  scrolling for Gingerbread on the app.  So remove the viewport tag here.
+assets/%.html : $(TAMINATIONS)/%.html
+	perl -p -e "s/.*viewport.*//" $(subst $(OBJDIR),$(TAMINATIONS),$@) >$@
+
+assets/% : $(TAMINATIONS)/%
+	cp $< $@
+
 
 clean :
 	-rm $(PREVOBJ)
-
-#  Commands to copy the files
-% :
-	cp $(subst $(OBJDIR),$(TAMINATIONS),$@) $@
-#  The mobile site requires a viewport tag, but that breaks
-#  scrolling for Gingerbread on the app.  So remove the viewport tag here.
-%.html :
-	perl -p -e "s/.*viewport.*//" $(subst $(OBJDIR),$(TAMINATIONS),$@) >$@

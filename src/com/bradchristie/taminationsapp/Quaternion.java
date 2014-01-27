@@ -65,10 +65,4 @@ public class Quaternion
                                -x*m.x-y*m.y-z*m.z);
   }
 
-
-  public String toString()
-  {
-    return String.format("%4.2f %4.2f %4.2f %4.2f",x,y,z,w);
-  }
-
 }
