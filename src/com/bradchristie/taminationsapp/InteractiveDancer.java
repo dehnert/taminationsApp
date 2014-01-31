@@ -1,8 +1,28 @@
+/*
+
+    Taminations Square Dance Animations App for Android
+    Copyright (C) 2014 Brad Christie
+
+    This program is free software: you can redistribute it and/or modify
+    it under the terms of the GNU General Public License as published by
+    the Free Software Foundation, either version 3 of the License, or
+    (at your option) any later version.
+
+    This program is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU General Public License for more details.
+
+    You should have received a copy of the GNU General Public License
+    along with this program.  If not, see <http://www.gnu.org/licenses/>.
+
+*/
 package com.bradchristie.taminationsapp;
 
 import java.util.List;
 
 import android.graphics.PointF;
+import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
 
@@ -20,7 +40,7 @@ public class InteractiveDancer extends Dancer
   public String linaccstr = "";
 
   //  These numbers control the touch sensitivity
-  private final double LEFTSENSITIVITY = 0.05;
+  private final double LEFTSENSITIVITY = 0.02;
   private final double RIGHTSENSITIVITY = 0.02;
 
   // for debugging
@@ -94,6 +114,7 @@ public class InteractiveDancer extends Dancer
   public void doTouch(View v, MotionEvent m)
   {
     int action = m.getActionMasked();
+    float s = 500f/v.getHeight();
     if (action == MotionEvent.ACTION_DOWN || action == MotionEvent.ACTION_POINTER_DOWN) {
       //  Touch down event
       //  Figure out if touching left or right side, and remember the point
@@ -101,12 +122,13 @@ public class InteractiveDancer extends Dancer
       int idx = m.getActionIndex();
       float x = m.getX(idx);
       float y = m.getY(idx);
+      Log.i(""+v.getWidth(),""+v.getHeight());
       if (x < v.getWidth()/2.0) {
-        leftTouch = new PointF(x,y);
+        leftTouch = new PointF(x*s,y*s);
         leftMove = leftTouch;
         leftid = m.getPointerId(idx);
       } else {
-        rightTouch = new PointF(x,y);
+        rightTouch = new PointF(x*s,y*s);
         rightMove = rightTouch;
         rightid = m.getPointerId(idx);
       }
@@ -131,9 +153,9 @@ public class InteractiveDancer extends Dancer
         float x = m.getX(i);
         float y = m.getY(i);
         if (id == leftid)
-          leftMove = new PointF(x,y);
+          leftMove = new PointF(x*s,y*s);
         else if (id == rightid)
-          rightMove = new PointF(x,y);
+          rightMove = new PointF(x*s,y*s);
       }
     }
   }

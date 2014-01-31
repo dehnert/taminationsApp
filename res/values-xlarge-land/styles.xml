@@ -8,4 +8,8 @@
       <item name="android:textSize">36sp</item>
   </style>
 
+    <style name="PracticeText">
+      <item name="android:textSize">36sp</item>
+  </style>
+
 </resources>

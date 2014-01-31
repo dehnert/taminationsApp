@@ -23,8 +23,9 @@ all : $(OBJ)
 
 #  The mobile site requires a viewport tag, but that breaks
 #  scrolling for Gingerbread on the app.  So remove the viewport tag here.
+#  Also remove scripts
 assets/%.html : $(TAMINATIONS)/%.html
-	perl -p -e "s/.*viewport.*//" $(subst $(OBJDIR),$(TAMINATIONS),$@) >$@
+	perl -p -e "s/^<.*(viewport|script|favicon).*//" $(subst $(OBJDIR),$(TAMINATIONS),$@) >$@
 
 assets/% : $(TAMINATIONS)/%
 	cp $< $@

@@ -1,7 +1,7 @@
 /*
 
     Taminations Square Dance Animations App for Android
-    Copyright (C) 2013 Brad Christie
+    Copyright (C) 2014 Brad Christie
 
     This program is free software: you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -37,6 +37,7 @@ public class CalllistActivity extends PortraitActivity
 {
 
   private CallListAdapter cla;
+  private CalllistFragment cf;
   /**
    *   This is an array of hashes, one array entry for each call,
    *   in alphabetical order as given by the list in menus.xml
@@ -109,6 +110,7 @@ public class CalllistActivity extends PortraitActivity
     }
     super.onCreate(savedInstanceState);
     setContentView(R.layout.activity_calllist);
+    cf = new CalllistFragment();
   }
 
   protected void onResume()
@@ -116,7 +118,6 @@ public class CalllistActivity extends PortraitActivity
     super.onResume();
     SharedPreferences prefs = getSharedPreferences("Taminations",MODE_PRIVATE);
     String upto = prefs.getString("navigateupto", "");
-    CalllistFragment cf = new CalllistFragment();
     replaceFragment(cf,R.id.fragment_calllist);
     if (upto.equals("CalllistActivity")) {
       prefs.edit().remove("navigateupto").commit();

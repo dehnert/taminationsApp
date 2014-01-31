@@ -112,13 +112,17 @@
       <item name="android:textSize">18sp</item>
   </style>
 
+  <style name="PracticeText">
+      <item name="android:textSize">18sp</item>
+  </style>
+
   <style name="PracticeInstructions">
-      <item name="android:textSize">24sp</item>
+      <item name="android:textSize">18sp</item>
   </style>
 
   <style name="PracticeLevelButton" parent="LevelButtonBase">
       <item name="android:gravity">center_horizontal|center_vertical</item>
-      <item name="android:textSize">24sp</item>
+      <item name="android:textSize">18sp</item>
   </style>
 
 

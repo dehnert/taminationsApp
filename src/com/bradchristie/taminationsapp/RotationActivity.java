@@ -1,7 +1,7 @@
 /*
 
     Taminations Square Dance Animations App for Android
-    Copyright (C) 2013 Brad Christie
+    Copyright (C) 2014 Brad Christie
 
     This program is free software: you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -21,8 +21,6 @@
 package com.bradchristie.taminationsapp;
 
 
-import com.bradchristie.taminationsapp.LevelActivity.LevelData;
-
 import android.content.SharedPreferences;
 import android.content.pm.ActivityInfo;
 import android.content.res.Configuration;
@@ -34,6 +32,8 @@ import android.view.View;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.widget.TextView;
+
+import com.bradchristie.taminationsapp.LevelActivity.LevelData;
 
 public class RotationActivity extends FragmentActivity
                               implements Animation.AnimationListener
@@ -114,10 +114,8 @@ public class RotationActivity extends FragmentActivity
            getResources().getBoolean(R.bool.portrait_only);
   }
 
-  public void setTitle(String t)
+  public void setTitle(String title)
   {
-    //  Remove extra stuff like (DBD) or (A-1)
-    title = t.replaceAll("\\s*\\(.*\\)", "");
     TextView titleView = (TextView)findViewById(R.id.title);
     if (titleView != null) {
       if (isPortrait()) {

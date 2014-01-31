@@ -1,7 +1,7 @@
 /*
 
     Taminations Square Dance Animations App for Android
-    Copyright (C) 2013 Brad Christie
+    Copyright (C) 2014 Brad Christie
 
     This program is free software: you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -28,8 +28,6 @@ import android.view.ViewGroup;
 
 public class LevelFragment extends RotationFragment
 {
-  static public final boolean SHOWLEVELSONLY = true;
-
 
   public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState)
   {

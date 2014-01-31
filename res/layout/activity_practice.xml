@@ -45,6 +45,7 @@
 
         <LinearLayout
             android:id="@+id/practice_complete_panel"
+            android:background="#c0ffffff"
             android:layout_width="wrap_content"
             android:layout_height="fill_parent"
             android:layout_alignParentLeft="true"
@@ -89,33 +90,38 @@
                 android:layout_width="fill_parent"
                 android:layout_height="20dp" />
 
-            <Button
-                android:id="@+id/button_practice_repeat"
+            <LinearLayout
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_gravity="center_horizontal"
-                android:onClick="clickRepeat"
-                android:text="Repeat"
-                style="@style/BWButton"
-                />
-            <Button
-                android:id="@+id/button_practice_continue"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center_horizontal"
-                android:onClick="clickContinue"
-                style="@style/BWButton"
-                android:text="Continue"
-                />
-            <Button
-                android:id="@+id/button_practice_return"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center_horizontal"
-                android:onClick="clickReturn"
-                style="@style/BWButton"
-                android:text="Go Back"
-                />
+                android:orientation="horizontal">
+                <Button
+                    android:id="@+id/button_practice_repeat"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_horizontal"
+                    android:onClick="clickRepeat"
+                    android:text="Repeat"
+                    style="@style/BWButton"
+                    />
+                <Button
+                    android:id="@+id/button_practice_continue"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_horizontal"
+                    android:onClick="clickContinue"
+                    style="@style/BWButton"
+                    android:text="Continue"
+                    />
+                <Button
+                    android:id="@+id/button_practice_return"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_horizontal"
+                    android:onClick="clickReturn"
+                    style="@style/BWButton"
+                    android:text="Go Back"
+                    />
+            </LinearLayout>
         </LinearLayout>
 
         <fragment android:name="com.bradchristie.taminationsapp.DefinitionFragment"

@@ -1,3 +1,22 @@
+/*
+
+    Taminations Square Dance Animations App for Android
+    Copyright (C) 2014 Brad Christie
+
+    This program is free software: you can redistribute it and/or modify
+    it under the terms of the GNU General Public License as published by
+    the Free Software Foundation, either version 3 of the License, or
+    (at your option) any later version.
+
+    This program is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU General Public License for more details.
+
+    You should have received a copy of the GNU General Public License
+    along with this program.  If not, see <http://www.gnu.org/licenses/>.
+
+*/
 package com.bradchristie.taminationsapp;
 
 import org.w3c.dom.Document;
@@ -31,6 +50,7 @@ public class PracticeActivity extends RotationActivity
   {
     super.onCreate(savedInstanceState);
     setContentView(R.layout.activity_practice);
+    prefs = getSharedPreferences("Taminations",Activity.MODE_PRIVATE);
     buttonDefinition = findViewById(R.id.button_practice_definition);
     fragmentDefinition = findViewById(R.id.fragment_definition);
     setTitle("Practice");
@@ -50,7 +70,6 @@ public class PracticeActivity extends RotationActivity
 
   protected void nextAnimation()
   {
-    prefs = getSharedPreferences("Taminations",Activity.MODE_PRIVATE);
     String gender = prefs.getString("gender", "boy");
     String selector = prefs.getString("selector","level='Basic and Mainstream' and @sublevel!='Styling'");
     NodeList calls = Tamination.evalXPath("/calls/call[@"+selector+"]",calldoc);
@@ -67,9 +86,13 @@ public class PracticeActivity extends RotationActivity
         //  For now, skip any "difficult" animations
         if (tam.getAttribute("difficulty").equals("3"))
           continue;
+        //  Skip any call with parens in the title - it could be a cross-reference
+        //  to a concept call from a higher level
+        if (tam.getAttribute("title").contains("("))
+          continue;
         setTitle(tam.getAttribute("title"));
         av.setSquare();
-        av.setAnimation(tam,gender.equals("boy")?Dancer.BOY:Dancer.GIRL);
+        av.setAnimation(tam,gender.equals("Boy")?Dancer.BOY:Dancer.GIRL);
         //  Save link for definition
         prefs.edit().putString("link",link).commit();
         found = true;
@@ -81,6 +104,10 @@ public class PracticeActivity extends RotationActivity
   public void onAnimationChanged(int action, double x, double y, double z)
   {
     if (action == AnimationListener.ANIMATION_READY) {
+      runOnUiThread(new Runnable() {
+        public void run() {
+          hideExtraStuff();
+        }});
       //  Force some settings required for practice
       av.setSpeed(prefs.getString("practicespeed","Slow"));
       av.setLoop(false);
@@ -104,7 +131,6 @@ public class PracticeActivity extends RotationActivity
           findViewById(R.id.text_instructions).setVisibility(View.GONE);
           findViewById(R.id.practice_complete_panel).setVisibility(View.VISIBLE);
           findViewById(R.id.button_practice_continue).setVisibility(View.VISIBLE);
-          buttonDefinition.setVisibility(View.VISIBLE);
           double score = Math.ceil(av.getScore());
           double perfect = av.getBeats()*10;
           String result = (int)score+" / "+(int)perfect;
@@ -128,11 +154,15 @@ public class PracticeActivity extends RotationActivity
   }
 
   //  These are hooks so the tutorial can get the result
+  //  Since the tutorial should not show the Definitions button
+  //  we will turn it on in these routines
   protected void success()
   {
+    buttonDefinition.setVisibility(View.VISIBLE);
   }
   protected void failure()
   {
+    buttonDefinition.setVisibility(View.VISIBLE);
   }
 
   public void clickRepeat(View v)
@@ -171,6 +201,16 @@ public class PracticeActivity extends RotationActivity
       buttonDefinition.setSelected(true);
     }
   }
+
+  /**
+   * Invoked when the Activity loses user focus.
+   */
+  @Override
+  protected void onPause() {
+    super.onPause();
+    av.doPause(); // pause animation when Activity pauses
+  }
+
 
   @Override
   public void onBackPressed()

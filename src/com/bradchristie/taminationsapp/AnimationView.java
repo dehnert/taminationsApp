@@ -1,7 +1,7 @@
 /*
 
     Taminations Square Dance Animations App for Android
-    Copyright (C) 2013 Brad Christie
+    Copyright (C) 2014 Brad Christie
 
     This program is free software: you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -79,6 +79,9 @@ public class AnimationView extends SurfaceView
   private InteractiveDancer idancer = null;
   private double iscore;
   private Thread thread;
+  /**  The intrinsic lock is used by Android for some View methods.
+   *   So as not to interfere with that, we will use a dedicated lock object.   */
+  private Object lock = new Object();
 
   /** Handle to the surface manager object we interact with */
   private SurfaceHolder surface = null;
@@ -99,49 +102,59 @@ public class AnimationView extends SurfaceView
   /**
    *   Starts the animation
    */
-  public synchronized void doStart()
+  public void doStart()
   {
-    mLastTime = System.currentTimeMillis();
-    if (beat > beats)
-      beat = -leadin;
-    isRunning = true;
-    iscore = 0;
-    dirtify();
+    synchronized (lock) {
+      mLastTime = System.currentTimeMillis();
+      if (beat > beats)
+        beat = -leadin;
+      isRunning = true;
+      iscore = 0;
+      dirtify();
+    }
   }
 
   /**
    * Pauses the dancers update & animation.
    */
-  public synchronized void doPause()
+  public void doPause()
   {
-    isRunning = false;
+    synchronized (lock) {
+      isRunning = false;
+    }
   }
 
   /**
    *  Rewinds to the start of the animation, even if it is running
    */
-  public synchronized void doRewind()
+  public void doRewind()
   {
-    beat = -leadin;
-    dirtify();
+    synchronized (lock) {
+      beat = -leadin;
+      dirtify();
+    }
   }
 
   /**
    *   Moves the animation back a little
    */
-  public synchronized void doBackup()
+  public void doBackup()
   {
-    beat = Math.max(beat-0.1, -leadin);
-    dirtify();
+    synchronized (lock) {
+      beat = Math.max(beat-0.1, -leadin);
+      dirtify();
+    }
   }
 
   /**
    *   Moves the animation forward a little
    */
-  public synchronized void doForward()
+  public void doForward()
   {
-    beat = Math.min(beat+0.1, beats);
-    dirtify();
+    synchronized (lock) {
+      beat = Math.min(beat+0.1, beats);
+      dirtify();
+    }
   }
 
   /**
@@ -169,68 +182,80 @@ public class AnimationView extends SurfaceView
   /**
    *   Moves the animation to the next part
    */
-  public synchronized void doNextPart()
+  public void doNextPart()
   {
-    double[] p = getPartsValues();
-    for (double x:p) {
-      if (x > beat) {
-        beat = x;
-        break;
+    synchronized (lock) {
+      double[] p = getPartsValues();
+      for (double x:p) {
+        if (x > beat) {
+          beat = x;
+          break;
+        }
       }
+      dirtify();
     }
-    dirtify();
   }
 
   /**
    *   Moves the animation to the previous part
    */
-  public synchronized void doPrevPart()
+  public void doPrevPart()
   {
-    double[] p = getPartsValues();
-    for (int i=p.length-1; i>=0; i--) {
-      if (p[i] < beat) {
-        beat = p[i];
-        break;
+    synchronized (lock) {
+      double[] p = getPartsValues();
+      for (int i=p.length-1; i>=0; i--) {
+        if (p[i] < beat) {
+          beat = p[i];
+          break;
+        }
       }
+      dirtify();
     }
-    dirtify();
   }
 
   /**
    *   Moves to the end of the animation, minus leadout
    */
-  public synchronized void doEnd()
+  public void doEnd()
   {
-    beat = beats;
-    dirtify();
+    synchronized (lock) {
+      beat = beats;
+      dirtify();
+    }
   }
 
   /**  Tells caller if the animation is running
    *
    */
-  public synchronized boolean running()
+  public boolean running()
   {
-    return isRunning;
+    synchronized (lock) {
+      return isRunning;
+    }
   }
 
   /**
    *   Set the visibility of the grid
    */
-  public synchronized void setGridVisibility(boolean show)
+  public void setGridVisibility(boolean show)
   {
-    showGrid = show;
-    dirtify();
+    synchronized (lock) {
+      showGrid = show;
+      dirtify();
+    }
   }
 
   /**
    *   Set the visibility of phantom dancers
    */
-  public synchronized void setPhantomVisibility(boolean show)
+  public void setPhantomVisibility(boolean show)
   {
-    showPhantoms = show;
-    if (dancers != null) {
-      for (Dancer d : dancers) {
-        d.hidden = d.isPhantom() && !show;
+    synchronized (lock) {
+      showPhantoms = show;
+      if (dancers != null) {
+        for (Dancer d : dancers) {
+          d.hidden = d.isPhantom() && !show;
+        }
       }
     }
   }
@@ -238,103 +263,131 @@ public class AnimationView extends SurfaceView
   /**
    *  Turn on drawing of dancer paths
    */
-  public synchronized void setPathVisibility(boolean show)
+  public void setPathVisibility(boolean show)
   {
-    showPaths = show;
-    dirtify();
+    synchronized (lock) {
+      showPaths = show;
+      dirtify();
+    }
   }
 
   /**
    *   Set animation looping
    */
-  public synchronized void setLoop(boolean loopit)
+  public void setLoop(boolean loopit)
   {
-    loop = loopit;
+    synchronized (lock) {
+      loop = loopit;
+    }
   }
 
   /**
    *   Set display of dancer numbers
    */
-  public synchronized void setNumbers(int numberem)
+  public void setNumbers(int numberem)
   {
-    //  For now at least, no numbers for practice
-    if (idancer != null)
-      numberem = Dancer.NUMBERS_OFF;
-    if (dancers != null) {
-      for (Dancer d : dancers)
-        d.showNumber = numberem;
-      dirtify();
+    synchronized (lock) {
+      //  For now at least, no numbers for practice
+      if (idancer != null)
+        numberem = Dancer.NUMBERS_OFF;
+      if (dancers != null) {
+        for (Dancer d : dancers)
+          d.showNumber = numberem;
+        dirtify();
+      }
     }
   }
 
   /**
    *   Set speed of animation
    */
-  public synchronized void setSpeed(String myspeed)
+  public void setSpeed(String myspeed)
   {
-    if (myspeed.equals("Slow"))
-      speed = SLOWSPEED;
-    else if (myspeed.equals("Moderate"))
-      speed = MODERATESPEED;
-    else if (myspeed.equals("Fast"))
-      speed = FASTSPEED;
-    else
-      speed = NORMALSPEED;  // default normal speed
+    synchronized (lock) {
+      if (myspeed.equals("Slow"))
+        speed = SLOWSPEED;
+      else if (myspeed.equals("Moderate"))
+        speed = MODERATESPEED;
+      else if (myspeed.equals("Fast"))
+        speed = FASTSPEED;
+      else
+        speed = NORMALSPEED;  // default normal speed
+    }
   }
 
   /**  Set hexagon geometry  */
-  public synchronized void setHexagon()
+  public void setHexagon()
   {
-    geometry = Geometry.HEXAGON;
+    synchronized (lock) {
+      geometry = Geometry.HEXAGON;
+    }
   }
 
   /**  Set bigon geometry  */
-  public synchronized void setBigon()
+  public void setBigon()
   {
-    geometry = Geometry.BIGON;
+    synchronized (lock) {
+      geometry = Geometry.BIGON;
+    }
   }
-  public synchronized void setSquare()
+  public void setSquare()
   {
-    geometry = Geometry.SQUARE;
+    synchronized (lock) {
+      geometry = Geometry.SQUARE;
+    }
   }
 
 
-  public synchronized double getTotalBeats()
+  public double getTotalBeats()
   {
-    return leadin+beats;
+    synchronized (lock) {
+      return leadin+beats;
+    }
   }
-  public synchronized double getBeats()
+  public double getBeats()
   {
-    return beats-leadout;
+    synchronized (lock) {
+      return beats-leadout;
+    }
   }
-  public synchronized double getLeadin()
+  public double getLeadin()
   {
-    return leadin;
+    synchronized (lock) {
+      return leadin;
+    }
   }
-  public synchronized double getLeadout()
+  public double getLeadout()
   {
-    return leadout;
+    synchronized (lock) {
+      return leadout;
+    }
   }
-  public synchronized double getScore()
+  public double getScore()
   {
-    return iscore;
+    synchronized (lock) {
+      return iscore;
+    }
   }
 
   /**
    *  Return animation parts, defined in formation xml
    */
-  public synchronized String getParts()
+  public String getParts()
   {
-    return parts;
+    synchronized (lock) {
+      return parts;
+    }
   }
 
   /**
    *   Set location of animation
    */
-  public synchronized void setLocation(double loc)
+  public void setLocation(double loc)
   {
-    beat = loc - 2.0;
-    dirtify();
+    synchronized (lock) {
+      beat = loc - 2.0;
+      dirtify();
+    }
   }
 
   /**
@@ -343,28 +396,30 @@ public class AnimationView extends SurfaceView
    * @param x  Screen coord
    * @param y  Screen coord
    */
-  public synchronized void doTouch(double x, double y)
+  public void doTouch(double x, double y)
   {
-    //  Convert x and y to dance floor coords
-    Rect r = surface.getSurfaceFrame();
-    double range = Math.min(r.width(), r.height());
-    double s = range/13.0;
-    double dx = -(y-r.height()/2.0)/s;
-    double dy = -(x-r.width()/2.0)/s;
-    //  Compare with dancer locations
-    Dancer bestd = null;
-    double bestdist = 0.5;
-    for (Dancer d : dancers) {
-      Pair<Float,Float> loc = d.location();
-      double distsq = (loc.first-dx)*(loc.first-dx) + (loc.second-dy)*(loc.second-dy);
-      if (distsq < bestdist) {
-        bestd = d;
-        bestdist = distsq;
+    synchronized (lock) {
+      //  Convert x and y to dance floor coords
+      Rect r = surface.getSurfaceFrame();
+      double range = Math.min(r.width(), r.height());
+      double s = range/13.0;
+      double dx = -(y-r.height()/2.0)/s;
+      double dy = -(x-r.width()/2.0)/s;
+      //  Compare with dancer locations
+      Dancer bestd = null;
+      double bestdist = 0.5;
+      for (Dancer d : dancers) {
+        Pair<Float,Float> loc = d.location();
+        double distsq = (loc.first-dx)*(loc.first-dx) + (loc.second-dy)*(loc.second-dy);
+        if (distsq < bestdist) {
+          bestd = d;
+          bestdist = distsq;
+        }
       }
-    }
-    if (bestd != null) {
-      bestd.showPath = !bestd.showPath;
-      dirtify();
+      if (bestd != null) {
+        bestd.showPath = !bestd.showPath;
+        dirtify();
+      }
     }
   }
 
@@ -372,10 +427,12 @@ public class AnimationView extends SurfaceView
    *   Called when a change is made that affects the display.
    *   Tell the display to redraw even if the animation is not running.
    */
-  public synchronized void dirtify()
+  public void dirtify()
   {
-    dirty = true;
-    notify();
+    synchronized (lock) {
+      dirty = true;
+      lock.notify();
+    }
   }
 
   /**
@@ -388,7 +445,7 @@ public class AnimationView extends SurfaceView
     if (listener != null)
       listener.onAnimationChanged(AnimationListener.ANIMATION_READY,0,0,0);
     while (surface != null) {
-      synchronized (this) {
+      synchronized (lock) {
         if (dirty || isRunning) {
           updateDancers();
           doDraw();
@@ -399,7 +456,7 @@ public class AnimationView extends SurfaceView
         if (!isRunning)
           //  animation is not running, so don't chew up the CPU
           try {
-            wait();
+            lock.wait();
           } catch (InterruptedException e) {
             // ignore spurious wakeups, only causes a redraw
           }
@@ -687,127 +744,131 @@ public class AnimationView extends SurfaceView
    * @param tam     XML element containing the call
    * @param intdan  Dancer controlled by the user, or -1 if not used
    */
-  public synchronized void setAnimation(Element tam, int intdan)
+  public void setAnimation(Element tam, int intdan)
   {
-    if (tam == null)  // sanity check
-      return;
-    this.tam = tam;
-    interactiveDancer = intdan;
-    leadin = intdan < 0 ? 2 : 3;
-    leadout = intdan < 0 ? 2 : 1;
-    beats = 0;
-    Element formation = null;
-    Tamination.loadMoves(getContext());
-    NodeList tlist = tam.getElementsByTagName("formation");
-    if (tlist.getLength() > 0)
-      formation = (Element)tlist.item(0);
-    else
-      formation = Tamination.getFormation(getContext(),tam.getAttribute("formation"));
-    parts = tam.getAttribute("parts");
-    NodeList flist = formation.getElementsByTagName("dancer");
-    dancers = new Dancer[flist.getLength()*geometry];
-    //  Except for the phantoms, these are the standard colors
-    //  used for teaching callers
-    int[] dancerColor = { Color.RED, Color.GREEN,
-        Color.BLUE, Color.YELLOW,
-        Color.LTGRAY, Color.LTGRAY };
-    //  Get numbers for dancers and couples
-    //  This fetches any custom numbers that might be defined in
-    //  the animation to match a Callerlab or Ceder Chest illustration
-    String[] numbers = Tamination.getNumbers(tam);
-    String[] couples = Tamination.getCouples(tam);
-    if (geometry == Geometry.HEXAGON) {
-      String[] hexnumbers = { "A","E","I",
-          "B","F","J",
-          "C","G","K",
-          "D","H","L",
-          "u","v","w","x","y","z" };
-      numbers = hexnumbers;
-      String[] hexcouples = { "1", "3", "5", "1", "3", "5",
-          "2", "4", "6", "2", "4", "6",
-          "7", "8", "7", "8", "7", "8" };
-      couples = hexcouples;
-      int[] hexcolor = { Color.RED, Color.GREEN,
-          Color.MAGENTA, Color.BLUE,
-          Color.YELLOW, Color.CYAN,
+    synchronized (lock) {
+      if (tam == null)  // sanity check
+        return;
+      this.tam = tam;
+      interactiveDancer = intdan;
+      leadin = intdan < 0 ? 2 : 3;
+      leadout = intdan < 0 ? 2 : 1;
+      beats = 0;
+      Element formation = null;
+      Tamination.loadMoves(getContext());
+      NodeList tlist = tam.getElementsByTagName("formation");
+      if (tlist.getLength() > 0)
+        formation = (Element)tlist.item(0);
+      else
+        formation = Tamination.getFormation(getContext(),tam.getAttribute("formation"));
+      parts = tam.getAttribute("parts");
+      NodeList flist = formation.getElementsByTagName("dancer");
+      dancers = new Dancer[flist.getLength()*geometry];
+      //  Except for the phantoms, these are the standard colors
+      //  used for teaching callers
+      int[] dancerColor = { Color.RED, Color.GREEN,
+          Color.BLUE, Color.YELLOW,
           Color.LTGRAY, Color.LTGRAY };
-      dancerColor = hexcolor;
-    }
-    else if (geometry == Geometry.BIGON) {
-      String[] bigonnumbers = { "1", "2", "3", "4", "5", "6" };
-      numbers = bigonnumbers;
-      String[] bigoncouples = { "1", "2", "3", "4", "5", "6" };
-      couples = bigoncouples;
-    }
-    int dnum = 0;
-    int icount = -1;
-    Vector<Geometry> geoms = Geometry.getGeometry(geometry);
-    if (intdan > 0) {
-      NodeList glist = Tamination.evalXPath("dancer[@gender='boy']",formation);
-      //  presumably we have the same number of girls and boys..
-      //  This selects a random one of them for the interactive dancer
-      icount = (int)(Math.random()*geoms.size()*glist.getLength());
-    }
-    //  Create dancers for each one listed in the formation
-    for (int i=0; i<flist.getLength(); i++) {
-      Element fd = (Element)flist.item(i);
-      float x = Float.valueOf(fd.getAttribute("x"));
-      float y = Float.valueOf(fd.getAttribute("y"));
-      double angle = Double.valueOf(fd.getAttribute("angle"));
-      String gender = fd.getAttribute("gender");
-      int g = 0;
-      if (gender.equals("boy"))
-        g = Dancer.BOY;
-      else if (gender.equals("girl"))
-        g = Dancer.GIRL;
-      else if (gender.equals("phantom"))
-        g = Dancer.PHANTOM;
-      Element pathelem = (Element)tam.getElementsByTagName("path").item(i);
-      List<Movement> movelist = Tamination.translatePath(pathelem);
-      //  Each dancer listed in the formation corresponds to
-      //  one, two, or three real dancers depending on the geometry
-      for (Geometry geom : geoms) {
-        Matrix m = new Matrix();
-        //  compute the transform for the start position
-        m.postRotate(Math.toRadians(angle));
-        m.postTranslate(x, y);
-        //  add one dancer
-        if (g == intdan && icount-- == 0) {
-          //  add the interactive dancer controlled by the user
-          idancer = new InteractiveDancer(numbers[dnum],couples[dnum],g,
-              dancerColor[Integer.valueOf(couples[dnum])-1],
-              m,geom,movelist);
-          dancers[dnum] = idancer;
-        }
-        else
-          dancers[dnum] = new Dancer(numbers[dnum],couples[dnum],g,
-              dancerColor[Integer.valueOf(couples[dnum])-1],
-              m,geom,movelist);
-        if (g == Dancer.PHANTOM && !showPhantoms)
-          dancers[dnum].hidden = true;
-        beats = Math.max(beats,dancers[dnum].beats()+leadout);
-        dnum++;
+      //  Get numbers for dancers and couples
+      //  This fetches any custom numbers that might be defined in
+      //  the animation to match a Callerlab or Ceder Chest illustration
+      String[] numbers = Tamination.getNumbers(tam);
+      String[] couples = Tamination.getCouples(tam);
+      if (geometry == Geometry.HEXAGON) {
+        String[] hexnumbers = { "A","E","I",
+            "B","F","J",
+            "C","G","K",
+            "D","H","L",
+            "u","v","w","x","y","z" };
+        numbers = hexnumbers;
+        String[] hexcouples = { "1", "3", "5", "1", "3", "5",
+            "2", "4", "6", "2", "4", "6",
+            "7", "8", "7", "8", "7", "8" };
+        couples = hexcouples;
+        int[] hexcolor = { Color.RED, Color.GREEN,
+            Color.MAGENTA, Color.BLUE,
+            Color.YELLOW, Color.CYAN,
+            Color.LTGRAY, Color.LTGRAY };
+        dancerColor = hexcolor;
       }
+      else if (geometry == Geometry.BIGON) {
+        String[] bigonnumbers = { "1", "2", "3", "4", "5", "6" };
+        numbers = bigonnumbers;
+        String[] bigoncouples = { "1", "2", "3", "4", "5", "6" };
+        couples = bigoncouples;
+      }
+      int dnum = 0;
+      int icount = -1;
+      Vector<Geometry> geoms = Geometry.getGeometry(geometry);
+      if (intdan > 0) {
+        NodeList glist = Tamination.evalXPath("dancer[@gender='boy']",formation);
+        //  presumably we have the same number of girls and boys..
+        //  This selects a random one of them for the interactive dancer
+        icount = (int)(Math.random()*geoms.size()*glist.getLength());
+      }
+      //  Create dancers for each one listed in the formation
+      for (int i=0; i<flist.getLength(); i++) {
+        Element fd = (Element)flist.item(i);
+        float x = Float.valueOf(fd.getAttribute("x"));
+        float y = Float.valueOf(fd.getAttribute("y"));
+        double angle = Double.valueOf(fd.getAttribute("angle"));
+        String gender = fd.getAttribute("gender");
+        int g = 0;
+        if (gender.equals("boy"))
+          g = Dancer.BOY;
+        else if (gender.equals("girl"))
+          g = Dancer.GIRL;
+        else if (gender.equals("phantom"))
+          g = Dancer.PHANTOM;
+        Element pathelem = (Element)tam.getElementsByTagName("path").item(i);
+        List<Movement> movelist = Tamination.translatePath(pathelem);
+        //  Each dancer listed in the formation corresponds to
+        //  one, two, or three real dancers depending on the geometry
+        for (Geometry geom : geoms) {
+          Matrix m = new Matrix();
+          //  compute the transform for the start position
+          m.postRotate(Math.toRadians(angle));
+          m.postTranslate(x, y);
+          //  add one dancer
+          if (g == intdan && icount-- == 0) {
+            //  add the interactive dancer controlled by the user
+            idancer = new InteractiveDancer(numbers[dnum],couples[dnum],g,
+                dancerColor[Integer.valueOf(couples[dnum])-1],
+                m,geom,movelist);
+            dancers[dnum] = idancer;
+          }
+          else
+            dancers[dnum] = new Dancer(numbers[dnum],couples[dnum],g,
+                dancerColor[Integer.valueOf(couples[dnum])-1],
+                m,geom,movelist);
+          if (g == Dancer.PHANTOM && !showPhantoms)
+            dancers[dnum].hidden = true;
+          beats = Math.max(beats,dancers[dnum].beats()+leadout);
+          dnum++;
+        }
+      }
+      partbeats = getPartsValues();
+      currentpart = 0;
+      isRunning = false;
+      beat = -leadin;
+      SharedPreferences prefs =
+          getContext().getSharedPreferences("Taminations", Context.MODE_PRIVATE);
+      String numberpref = prefs.getString("numbers2","");
+      if (numberpref.contains("1-8"))
+        setNumbers(Dancer.NUMBERS_DANCERS);
+      else if (numberpref.contains("1-4"))
+        setNumbers(Dancer.NUMBERS_COUPLES);
+      else
+        setNumbers(Dancer.NUMBERS_OFF);
+      dirtify();
     }
-    partbeats = getPartsValues();
-    currentpart = 0;
-    isRunning = false;
-    beat = -leadin;
-    SharedPreferences prefs =
-        getContext().getSharedPreferences("Taminations", Context.MODE_PRIVATE);
-    String numberpref = prefs.getString("numbers2","");
-    if (numberpref.contains("1-8"))
-      setNumbers(Dancer.NUMBERS_DANCERS);
-    else if (numberpref.contains("1-4"))
-      setNumbers(Dancer.NUMBERS_COUPLES);
-    else
-      setNumbers(Dancer.NUMBERS_OFF);
-    dirtify();
   }
 
-  public synchronized void setListener(AnimationListener l)
+  public void setListener(AnimationListener l)
   {
-    listener = l;
+    synchronized (lock) {
+      listener = l;
+    }
   }
 
 

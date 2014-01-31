@@ -37,6 +37,43 @@
 
         <!-- Second level for components of left panel  -->
         <LinearLayout
+            style="@style/Settings2"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:orientation="vertical" >
+
+            <TextView
+                style="@style/PracticeText"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:paddingTop="40dp"
+                android:text="Choose a gender"/>
+
+            <RadioGroup
+                android:id="@+id/gendergroup"
+                style="@style/Settings0"
+                android:orientation="vertical" >
+                <RadioButton
+                    style="@style/PracticeText"
+                    android:id="@+id/genderBoy"
+                    android:layout_height="0dp"
+                    android:layout_width="wrap_content"
+                    android:layout_weight="1"
+                    android:onClick="clickGender"
+                    android:text="Boy" />
+                <RadioButton
+                    android:id="@+id/genderGirl"
+                    style="@style/PracticeText"
+                    android:layout_height="0dp"
+                    android:layout_width="wrap_content"
+                    android:layout_weight="1"
+                    android:onClick="clickGender"
+                    android:text="Girl" />
+            </RadioGroup>
+
+        </LinearLayout>
+        <LinearLayout
             android:layout_width="0dp"
             android:layout_height="match_parent"
             android:layout_weight="1"
@@ -46,79 +83,46 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:paddingTop="40dp"
-                android:textAppearance="?android:attr/textAppearanceLarge"
-                android:text="Choose a gender"/>
-
-            <RadioGroup
-                android:id="@+id/gendergroup"
-                style="@style/Settings2"
-                android:orientation="horizontal" >
-                <RadioButton
-                    android:id="@+id/genderBoy"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:textSize="24sp"
-                    android:onClick="clickGender"
-                    android:text="Boy" />
-                <RadioButton
-                    android:id="@+id/genderGirl"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:textSize="24sp"
-                    android:onClick="clickGender"
-                    android:text="Girl" />
-            </RadioGroup>
-
-
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:paddingTop="40dp"
-                android:textAppearance="?android:attr/textAppearanceLarge"
+                style="@style/PracticeText"
                 android:text="Speed for Practice"/>
 
             <RadioGroup
                 android:id="@+id/speedgroup"
-                style="@style/Settings2"
-                android:orientation="horizontal" >
+                style="@style/Settings0"
+                android:orientation="vertical" >
                 <RadioButton
                     android:id="@+id/speedSlow"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
+                    style="@style/PracticeText"
+                    android:layout_height="0dp"
+                    android:layout_width="wrap_content"
                     android:layout_weight="1"
-                    android:textSize="24sp"
                     android:onClick="clickSpeed"
                     android:text="Slow" />
                 <RadioButton
                     android:id="@+id/speedModerate"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
+                    style="@style/PracticeText"
+                    android:layout_height="0dp"
+                    android:layout_width="wrap_content"
                     android:layout_weight="1"
-                    android:textSize="24sp"
                     android:onClick="clickSpeed"
                     android:text="Moderate" />
                 <RadioButton
                     android:id="@+id/speedNormal"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
+                    style="@style/PracticeText"
+                    android:layout_height="0dp"
+                    android:layout_width="wrap_content"
                     android:layout_weight="1"
-                    android:textSize="24sp"
                     android:onClick="clickSpeed"
                     android:text="Normal" />
                 </RadioGroup>
 
-
         </LinearLayout>
-
-
 
         <FrameLayout
             android:id="@+id/fragment_startpractice"
               android:layout_width="0dp"
               android:layout_height="match_parent"
-              android:layout_weight="1"
+              android:layout_weight="2"
             />
 
 

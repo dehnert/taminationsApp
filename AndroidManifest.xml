@@ -59,19 +59,19 @@
         </activity>
         <activity
             android:name="com.bradchristie.taminationsapp.StartPracticeActivity"
-            android:screenOrientation="landscape"
+            android:screenOrientation="sensorLandscape"
             android:theme="@android:style/Theme.Light.NoTitleBar"
             android:label="Start Practice" >
         </activity>
         <activity
             android:name="com.bradchristie.taminationsapp.PracticeActivity"
-            android:screenOrientation="landscape"
+            android:screenOrientation="sensorLandscape"
             android:theme="@android:style/Theme.Light.NoTitleBar"
             android:label="Practice" >
         </activity>
         <activity
             android:name="com.bradchristie.taminationsapp.TutorialActivity"
-            android:screenOrientation="landscape"
+            android:screenOrientation="sensorLandscape"
             android:theme="@android:style/Theme.Light.NoTitleBar"
             android:label="Practice" >
         </activity>
