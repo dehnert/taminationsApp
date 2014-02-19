@@ -491,16 +491,6 @@ public class AnimationView extends SurfaceView
       if (loop)
         infostr += "Loop";
       c.drawText(infostr, 10.0f, candim.height()-20.0f, p);
-      if (idancer != null) {
-        if (idancer.debugstr1 != null)
-          c.drawText(idancer.debugstr1, candim.width()/2.0f+range/2.0f, range*2/10.0f, p);
-        if (idancer.debugstr2 != null)
-          c.drawText(idancer.debugstr2, candim.width()/2.0f+range/2.0f, range*3/10.0f, p);
-        if (idancer.debugstr3 != null)
-          c.drawText(idancer.debugstr3, candim.width()/2.0f+range/2.0f, range*4/10.0f, p);
-        if (idancer.debugstr4 != null)
-          c.drawText(idancer.debugstr4, candim.width()/2.0f+range/2.0f, range*5/10.0f, p);
-      }
       //  For interactive leadin, show countdown
       if (idancer != null && beat < 0.0) {
         String tminus = ""+(int)Math.floor(beat);
@@ -521,7 +511,6 @@ public class AnimationView extends SurfaceView
         Matrix m = new Matrix();
         idancer.tx.invert(m);
         c.concat(m);
-        c.rotate((float)(-idancer.userAngle*180.0/Math.PI));
       }
       //  Draw grid if on
       if (showGrid)

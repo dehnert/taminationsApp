@@ -22,14 +22,12 @@ package com.bradchristie.taminationsapp;
 import java.util.List;
 
 import android.graphics.PointF;
-import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
 
 public class InteractiveDancer extends Dancer
 {
 
-  public double userAngle = 0.0;   //  angle user is holding the device
   private PointF leftTouch;
   private PointF leftMove;
   private PointF rightTouch;
@@ -37,17 +35,10 @@ public class InteractiveDancer extends Dancer
   private int leftid;
   private int rightid;
   public boolean onTrack;
-  public String linaccstr = "";
 
   //  These numbers control the touch sensitivity
   private final double LEFTSENSITIVITY = 0.02;
   private final double RIGHTSENSITIVITY = 0.02;
-
-  // for debugging
-  public String debugstr1;
-  public String debugstr2;
-  public String debugstr3;
-  public String debugstr4;
 
   public InteractiveDancer(String n, String nc, int g, int c, Matrix mat,
                            Geometry geometry, List<Movement> moves)
@@ -69,11 +60,11 @@ public class InteractiveDancer extends Dancer
     else {
       //  First save the user's current position
       Matrix savetx = new Matrix(tx);
-      //  Compute where the dancer should be
+      //  Compute and rememeber where the dancer should be
       super.animate(beat);
       Matrix computetx = new Matrix(tx);
-      //  Now restore the users' current position
-      tx = new Matrix(savetx);
+      //  Now restore the user's current position
+      tx = savetx;
 
       //  Apply any additional movement and angle from the user
       //  This processes left and right touches
@@ -122,7 +113,6 @@ public class InteractiveDancer extends Dancer
       int idx = m.getActionIndex();
       float x = m.getX(idx);
       float y = m.getY(idx);
-      Log.i(""+v.getWidth(),""+v.getHeight());
       if (x < v.getWidth()/2.0) {
         leftTouch = new PointF(x*s,y*s);
         leftMove = leftTouch;
