@@ -821,6 +821,13 @@ public class AnimationView extends SurfaceView
             ? "dancer[@gender='boy']" : "dancer[@gender='girl']";
         NodeList glist = Tamination.evalXPath(selector,formation);
         icount = (int)(Math.random()*glist.getLength());
+        //  If the animations starts with "Heads" or "Sides"
+        //  then select the first dancer.
+        //  Otherwise the formation could rotate 90 degrees
+        //  which would be confusing
+        String title = tam.getAttribute("title");
+        if (title.contains("Heads") || title.contains("Sides"))
+          icount = 0;
         //  Find the angle the interactive dancer faces at start
         //  We want to rotate the formation so that direction is up
         double iangle = Double.valueOf(((Element)glist.item(icount)).getAttribute("angle"));

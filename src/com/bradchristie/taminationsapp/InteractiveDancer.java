@@ -131,6 +131,7 @@ public class InteractiveDancer extends Dancer
         leftTouch = new PointF(x*s,y*s);
         leftMove = leftTouch;
         leftid = m.getPointerId(idx);
+        leftDirection = null;
       } else {
         rightTouch = new PointF(x*s,y*s);
         rightMove = rightTouch;
