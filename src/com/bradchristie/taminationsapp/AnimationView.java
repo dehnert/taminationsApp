@@ -505,13 +505,6 @@ public class AnimationView extends SurfaceView
       //  Flip and rotate
       c.scale(s,-s);
       c.rotate(90f);
-      //  Transform to interactive dancer's viewpoint
-      //  Canvas has a concat but not a preconcat method, so..
-      if (idancer != null) {
-        Matrix m = new Matrix();
-        idancer.tx.invert(m);
-        c.concat(m);
-      }
       //  Draw grid if on
       if (showGrid)
         Geometry.drawGrid(geometry,c);
@@ -582,6 +575,35 @@ public class AnimationView extends SurfaceView
       if (c != null)
         surface.unlockCanvasAndPost(c);
     }
+  }
+
+  private boolean isInteractiveDancerOnTrack()
+  {
+    //  Get where the dancer should be
+    Matrix computetx = idancer.computeMatrix(beat);
+    //  Get computed and actual location vectors
+    Vector3D ivu = idancer.tx.location();
+    Vector3D ivc = computetx.location();
+
+    //  Check dancer's facing direction
+    double au = idancer.tx.angle();
+    double ac = computetx.angle();
+    if (Math.abs(Vector3D.angleDiff(au,ac)) > Math.PI/4)
+      return false;
+
+    //  Check relationship with the other dancers
+    for (Dancer d: dancers) {
+      if (d != idancer) {
+        Vector3D dv = d.tx.location();
+        //  Compare angle to computed vs actual
+        Vector3D d2ivu = dv.vectorTo(ivu);
+        Vector3D d2ivc = dv.vectorTo(ivc);
+        double a = d2ivu.angleDiff(d2ivc);
+        if (Math.abs(a) > Math.PI/4) // 45 degrees  TODO parameterize?
+          return false;
+      }
+    }
+    return true;
   }
 
   /**
@@ -711,8 +733,11 @@ public class AnimationView extends SurfaceView
     }
 
     //  Update interactive dancer score
-    if (idancer != null && idancer.onTrack && beat > 0.0 && beat < beats-leadout)
-      iscore += (beat - Math.max(prevbeat, 0.0)) * 10.0;
+    if (idancer != null && beat > 0.0 && beat < beats-leadout) {
+      idancer.onTrack = isInteractiveDancerOnTrack();
+      if (idancer.onTrack)
+        iscore += (beat - Math.max(prevbeat, 0.0)) * 10.0;
+    }
 
     //  At end of animation?
     prevbeat = beat;
@@ -788,12 +813,19 @@ public class AnimationView extends SurfaceView
       }
       int dnum = 0;
       int icount = -1;
+      Matrix im = new Matrix();
       Vector<Geometry> geoms = Geometry.getGeometry(geometry);
       if (intdan > 0) {
-        NodeList glist = Tamination.evalXPath("dancer[@gender='boy']",formation);
-        //  presumably we have the same number of girls and boys..
-        //  This selects a random one of them for the interactive dancer
-        icount = (int)(Math.random()*geoms.size()*glist.getLength());
+        //  Select a random dancer of the correct gender for the interactive dancer
+        String selector = intdan == Dancer.BOY
+            ? "dancer[@gender='boy']" : "dancer[@gender='girl']";
+        NodeList glist = Tamination.evalXPath(selector,formation);
+        icount = (int)(Math.random()*glist.getLength());
+        //  Find the angle the interactive dancer faces at start
+        //  We want to rotate the formation so that direction is up
+        double iangle = Double.valueOf(((Element)glist.item(icount)).getAttribute("angle"));
+        im.preRotate(-Math.toRadians(iangle));
+        icount *= geoms.size();
       }
       //  Create dancers for each one listed in the formation
       for (int i=0; i<flist.getLength(); i++) {
@@ -818,6 +850,7 @@ public class AnimationView extends SurfaceView
           //  compute the transform for the start position
           m.postRotate(Math.toRadians(angle));
           m.postTranslate(x, y);
+          m.postConcat(im);
           //  add one dancer
           if (g == intdan && icount-- == 0) {
             //  add the interactive dancer controlled by the user

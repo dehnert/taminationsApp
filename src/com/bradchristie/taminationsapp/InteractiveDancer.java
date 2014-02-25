@@ -32,6 +32,7 @@ public class InteractiveDancer extends Dancer
   private PointF leftMove;
   private PointF rightTouch;
   private PointF rightMove;
+  private Vector3D leftDirection;
   private int leftid;
   private int rightid;
   public boolean onTrack;
@@ -39,6 +40,8 @@ public class InteractiveDancer extends Dancer
   //  These numbers control the touch sensitivity
   private final double LEFTSENSITIVITY = 0.02;
   private final double RIGHTSENSITIVITY = 0.02;
+  private final double DIRECTIONALPHA = 0.9;
+  private final double DIRECTIONTHRESHOLD = 0.01;
 
   public InteractiveDancer(String n, String nc, int g, int c, Matrix mat,
                            Geometry geometry, List<Movement> moves)
@@ -50,53 +53,64 @@ public class InteractiveDancer extends Dancer
     mat.mapVectors(vec);
   }
 
+  public Matrix computeMatrix(double beat)
+  {
+    Matrix savetx = new Matrix(tx);
+    super.animate(beat);
+    Matrix computetx = tx;
+    tx = savetx;
+    return computetx;
+  }
+
   public void animate(double beat)
   {
-    fillColor = Color.veryBright(drawColor);
-    onTrack = true;
-    if (beat <= -2.0) {
+    if (beat <= 0.0 || onTrack)
+      fillColor = Color.veryBright(drawColor);
+    else
+      fillColor = Color.GRAY;
+    if (tx == null || beat <= -2.0) {
       tx = new Matrix(starttx);
     }
     else {
-      //  First save the user's current position
-      Matrix savetx = new Matrix(tx);
-      //  Compute and rememeber where the dancer should be
-      super.animate(beat);
-      Matrix computetx = new Matrix(tx);
-      //  Now restore the user's current position
-      tx = savetx;
 
       //  Apply any additional movement and angle from the user
       //  This processes left and right touches
       if (leftMove != null) {
         double dx = -(leftMove.y - leftTouch.y) * LEFTSENSITIVITY;
         double dy = -(leftMove.x - leftTouch.x) * LEFTSENSITIVITY;
-        tx.preTranslate(dx, dy);
+        tx.postTranslate(dx, dy);
         leftTouch = leftMove;
+        if (rightMove == null) {
+          //  Right finger is up - rotation follows movement
+          if (leftDirection == null)
+            leftDirection = new Vector3D(dx,dy,0);
+          else {
+            leftDirection.x = DIRECTIONALPHA * leftDirection.x +
+                              (1-DIRECTIONALPHA) * dx;
+            leftDirection.y = DIRECTIONALPHA * leftDirection.y +
+                              (1-DIRECTIONALPHA) * dy;
+          }
+          if (leftDirection.length() >= DIRECTIONTHRESHOLD) {
+            float vm[] = {1.0f, 0.0f};
+            tx.mapVectors(vm);
+            double a1 = Math.atan2(vm[1],vm[0]);
+            double a2 = Math.atan2(leftDirection.y,leftDirection.x);
+            tx.preRotate(a2-a1);
+          }
+        }
       }
       if (rightMove != null) {
-        double da = -(rightMove.x - rightTouch.x) * RIGHTSENSITIVITY;
+        //  Rotation follow right finger
+        //  Get the vector of the user's finger
+        double dx = -(rightMove.y - rightTouch.y) * RIGHTSENSITIVITY;
+        double dy = -(rightMove.x - rightTouch.x) * RIGHTSENSITIVITY;
+        Vector3D vf = new Vector3D(dx,dy,0);
+        //  Get the vector the dancer is facing
+        Vector3D vu = tx.direction();
+        //  Amount of rotation is z of the cross product of the two
+        double da = vu.cross(vf).z;
         tx.preRotate(da);
         rightTouch = rightMove;
-      }
-
-      //  See how close the user is to the computed position
-      //  Compute difference in location
-      float pu[] = {0.0f, 0.0f};
-      tx.mapPoints(pu);
-      float pc[] = {0.0f, 0.0f};
-      computetx.mapPoints(pc);
-      double dsq = (pu[0]-pc[0])*(pu[0]-pc[0]) + (pu[1]-pc[1])*(pu[1]-pc[1]);
-      //  Compute difference in angle
-      float vu[] = {1.0f, 0.0f};
-      tx.mapVectors(vu);
-      float vc[] = {1.0f, 0.0f};
-      computetx.mapVectors(vc);
-      //  Cheap way of testing for diff angle < 45 degrees
-      double vsq = (vu[0]-vc[0])*(vu[0]-vc[0]) + (vu[1]-vc[1])*(vu[1]-vc[1]);
-      if (dsq > 1.0 || vsq > (2.0-Math.sqrt(2.0))) {
-        onTrack = false;
-        fillColor = Color.GRAY;
       }
     }
   }
@@ -130,9 +144,11 @@ public class InteractiveDancer extends Dancer
       int id = m.getPointerId(idx);
       if (id == leftid) {
         leftid = -1;
+        leftMove = null;
       }
       else if (id == rightid) {
         rightid = -1;
+        rightMove = null;
       }
     }
     else if (action == MotionEvent.ACTION_MOVE) {

@@ -26,11 +26,18 @@ public class Vector3D
   public double y;
   public double z;
 
-  public Vector3D(double x_, double y_, double z_)
+  public Vector3D(double x, double y, double z)
   {
-    x = x_;
-    y = y_;
-    z = z_;
+    this.x = x;
+    this.y = y;
+    this.z = z;
+  }
+
+  public Vector3D(double x, double y)
+  {
+    this.x = x;
+    this.y = y;
+    this.z = 0;
   }
 
   public Quaternion postMultiply(Quaternion m)
@@ -50,6 +57,46 @@ public class Vector3D
   public double length()
   {
     return Math.sqrt(x*x+y*y+z*z);
+  }
+
+  /**
+   * @return  Angle off the X-axis
+   */
+  public double angle()
+  {
+    return Math.atan2(y,x);
+  }
+
+  /**
+   *   Returns difference angle between two vectors
+   *   in the range of -pi to pi
+   * @param v
+   * @return
+   */
+  public static double angleDiff(double a1, double a2)
+  {
+    return ((a1-a2 + Math.PI*3) % (Math.PI*2)) - Math.PI;
+  }
+  public double angleDiff(Vector3D v)
+  {
+    return angleDiff(v.angle(),angle());
+  }
+
+  public Vector3D vectorTo(Vector3D v)
+  {
+    return new Vector3D(v.x-x,v.y-y,v.z-z);
+  }
+
+  /**  Computes the cross product with another vector
+   *
+   * @param vector  2nd vector of cross product
+   * @return   this x vector
+   */
+  public Vector3D cross(Vector3D vector)
+  {
+    return new Vector3D(y*vector.z - z*vector.y,
+                        z*vector.x - x*vector.z,
+                        x*vector.y - y*vector.x);
   }
 
 }

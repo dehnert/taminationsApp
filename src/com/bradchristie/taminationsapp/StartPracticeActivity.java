@@ -71,6 +71,23 @@ public class StartPracticeActivity extends RotationActivity
     replaceFragment(new PracticeLevelFragment(),R.id.fragment_startpractice);
   }
 
+  @Override
+  protected void onResume()
+  {
+    super.onResume();
+    boolean tutdone = prefs.getBoolean("tutorialcomplete", false);
+    findViewById(R.id.button_basic_1).setEnabled(tutdone);
+    findViewById(R.id.button_basic_2).setEnabled(tutdone);
+    findViewById(R.id.button_mainstream).setEnabled(tutdone);
+    findViewById(R.id.button_plus).setEnabled(tutdone);
+    findViewById(R.id.button_a_1).setEnabled(tutdone);
+    findViewById(R.id.button_a_2).setEnabled(tutdone);
+    findViewById(R.id.button_c1).setEnabled(tutdone);
+    findViewById(R.id.button_c2).setEnabled(tutdone);
+    findViewById(R.id.button_c3a).setEnabled(tutdone);
+    findViewById(R.id.button_c3b).setEnabled(tutdone);
+  }
+
   private void setRadioButton(int id, boolean isChecked)
   {
     RadioButton rb = (RadioButton)findViewById(id);
@@ -108,7 +125,6 @@ public class StartPracticeActivity extends RotationActivity
   public void processClick(View v)
   {
     LevelData d = LevelData.find((String) ((TextView)v).getText());
-    SharedPreferences prefs = getSharedPreferences("Taminations",MODE_PRIVATE);
     prefs.edit().putString("level",d.name).putString("selector",d.selector).commit();
     startActivity(new Intent(this,PracticeActivity.class));
   }

@@ -56,6 +56,25 @@ public class Matrix extends android.graphics.Matrix
     return postScale((float)d,(float)e);
   }
 
+  public Vector3D location()
+  {
+    float vm[] = {0.0f, 0.0f};
+    mapPoints(vm);
+    return new Vector3D(vm[0],vm[1]);
+  }
 
+  public Vector3D direction()
+  {
+    float vm[] = {1.0f, 0.0f};
+    mapVectors(vm);
+    return new Vector3D(vm[0],vm[1]);
+  }
+
+  public double angle()
+  {
+    float vm[] = {1.0f, 0.0f};
+    mapVectors(vm);
+    return Math.atan2(vm[1],vm[0]);
+  }
 
 }
