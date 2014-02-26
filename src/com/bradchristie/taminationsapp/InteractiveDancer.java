@@ -27,14 +27,14 @@ import android.view.View;
 
 public class InteractiveDancer extends Dancer
 {
-
-  private PointF leftTouch;
-  private PointF leftMove;
-  private PointF rightTouch;
-  private PointF rightMove;
-  private Vector3D leftDirection;
-  private int leftid;
-  private int rightid;
+  private boolean primaryIsLeft;
+  private PointF primaryTouch;
+  private PointF primaryMove;
+  private PointF secondaryTouch;
+  private PointF secondaryMove;
+  private Vector3D primaryDirection;
+  private int primaryid;
+  private int secondaryid;
   public boolean onTrack;
 
   //  These numbers control the touch sensitivity
@@ -44,11 +44,13 @@ public class InteractiveDancer extends Dancer
   private final double DIRECTIONTHRESHOLD = 0.01;
 
   public InteractiveDancer(String n, String nc, int g, int c, Matrix mat,
-                           Geometry geometry, List<Movement> moves)
+                           Geometry geometry, List<Movement> moves,
+                           String primaryControl)
   {
     super(n, nc, g, c, mat, geometry, moves);
-    leftid = -1;
-    rightid = -1;
+    primaryid = -1;
+    secondaryid = -1;
+    primaryIsLeft = primaryControl.contains("Left");
     float[] vec = {1.0f, 0.0f};
     mat.mapVectors(vec);
   }
@@ -75,42 +77,42 @@ public class InteractiveDancer extends Dancer
 
       //  Apply any additional movement and angle from the user
       //  This processes left and right touches
-      if (leftMove != null) {
-        double dx = -(leftMove.y - leftTouch.y) * LEFTSENSITIVITY;
-        double dy = -(leftMove.x - leftTouch.x) * LEFTSENSITIVITY;
+      if (primaryMove != null) {
+        double dx = -(primaryMove.y - primaryTouch.y) * LEFTSENSITIVITY;
+        double dy = -(primaryMove.x - primaryTouch.x) * LEFTSENSITIVITY;
         tx.postTranslate(dx, dy);
-        leftTouch = leftMove;
-        if (rightMove == null) {
+        primaryTouch = primaryMove;
+        if (secondaryMove == null) {
           //  Right finger is up - rotation follows movement
-          if (leftDirection == null)
-            leftDirection = new Vector3D(dx,dy,0);
+          if (primaryDirection == null)
+            primaryDirection = new Vector3D(dx,dy,0);
           else {
-            leftDirection.x = DIRECTIONALPHA * leftDirection.x +
+            primaryDirection.x = DIRECTIONALPHA * primaryDirection.x +
                               (1-DIRECTIONALPHA) * dx;
-            leftDirection.y = DIRECTIONALPHA * leftDirection.y +
+            primaryDirection.y = DIRECTIONALPHA * primaryDirection.y +
                               (1-DIRECTIONALPHA) * dy;
           }
-          if (leftDirection.length() >= DIRECTIONTHRESHOLD) {
+          if (primaryDirection.length() >= DIRECTIONTHRESHOLD) {
             float vm[] = {1.0f, 0.0f};
             tx.mapVectors(vm);
             double a1 = Math.atan2(vm[1],vm[0]);
-            double a2 = Math.atan2(leftDirection.y,leftDirection.x);
+            double a2 = Math.atan2(primaryDirection.y,primaryDirection.x);
             tx.preRotate(a2-a1);
           }
         }
       }
-      if (rightMove != null) {
+      if (secondaryMove != null) {
         //  Rotation follow right finger
         //  Get the vector of the user's finger
-        double dx = -(rightMove.y - rightTouch.y) * RIGHTSENSITIVITY;
-        double dy = -(rightMove.x - rightTouch.x) * RIGHTSENSITIVITY;
+        double dx = -(secondaryMove.y - secondaryTouch.y) * RIGHTSENSITIVITY;
+        double dy = -(secondaryMove.x - secondaryTouch.x) * RIGHTSENSITIVITY;
         Vector3D vf = new Vector3D(dx,dy,0);
         //  Get the vector the dancer is facing
         Vector3D vu = tx.direction();
         //  Amount of rotation is z of the cross product of the two
         double da = vu.cross(vf).z;
         tx.preRotate(da);
-        rightTouch = rightMove;
+        secondaryTouch = secondaryMove;
       }
     }
   }
@@ -127,15 +129,15 @@ public class InteractiveDancer extends Dancer
       int idx = m.getActionIndex();
       float x = m.getX(idx);
       float y = m.getY(idx);
-      if (x < v.getWidth()/2.0) {
-        leftTouch = new PointF(x*s,y*s);
-        leftMove = leftTouch;
-        leftid = m.getPointerId(idx);
-        leftDirection = null;
+      if (x > v.getWidth()/2.0 ^ primaryIsLeft) {
+        primaryTouch = new PointF(x*s,y*s);
+        primaryMove = primaryTouch;
+        primaryid = m.getPointerId(idx);
+        primaryDirection = null;
       } else {
-        rightTouch = new PointF(x*s,y*s);
-        rightMove = rightTouch;
-        rightid = m.getPointerId(idx);
+        secondaryTouch = new PointF(x*s,y*s);
+        secondaryMove = secondaryTouch;
+        secondaryid = m.getPointerId(idx);
       }
     }
     else if (action == MotionEvent.ACTION_UP || action == MotionEvent.ACTION_POINTER_UP) {
@@ -143,13 +145,13 @@ public class InteractiveDancer extends Dancer
       //  Stop moving and rotating
       int idx = m.getActionIndex();
       int id = m.getPointerId(idx);
-      if (id == leftid) {
-        leftid = -1;
-        leftMove = null;
+      if (id == primaryid) {
+        primaryid = -1;
+        primaryMove = null;
       }
-      else if (id == rightid) {
-        rightid = -1;
-        rightMove = null;
+      else if (id == secondaryid) {
+        secondaryid = -1;
+        secondaryMove = null;
       }
     }
     else if (action == MotionEvent.ACTION_MOVE) {
@@ -159,10 +161,10 @@ public class InteractiveDancer extends Dancer
         int id = m.getPointerId(i);
         float x = m.getX(i);
         float y = m.getY(i);
-        if (id == leftid)
-          leftMove = new PointF(x*s,y*s);
-        else if (id == rightid)
-          rightMove = new PointF(x*s,y*s);
+        if (id == primaryid)
+          primaryMove = new PointF(x*s,y*s);
+        else if (id == secondaryid)
+          secondaryMove = new PointF(x*s,y*s);
       }
     }
   }

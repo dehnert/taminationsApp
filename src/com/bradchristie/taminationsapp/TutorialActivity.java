@@ -37,16 +37,19 @@ public class TutorialActivity extends PracticeActivity
     public String title;
     public String animforBoy;
     public String animforGirl;
-    public String instructions;
+    public String instructionsLeft;
+    public String instructionsRight;
     public TutorialData(String xmlfile, String title,
                         String animforBoy, String animforGirl,
-                        String instructions)
+                        String instructionsLeft,
+                        String instructionsRight)
     {
       this.xmlfile = xmlfile;
       this.title = title;
       this.animforBoy = animforBoy;
       this.animforGirl = animforGirl;
-      this.instructions = instructions;
+      this.instructionsLeft = instructionsLeft;
+      this.instructionsRight = instructionsRight;
     }
   }
   private static final TutorialData tutdata[] = {
@@ -54,22 +57,26 @@ public class TutorialActivity extends PracticeActivity
                      "Walk and Dodge",
                      "Right-Hand Box",
                      "Left-Hand Box",
-                     "Use Left Thumb or Finger\nto Move Forward"),
-    new TutorialData("ms/walk_and_dodge.xml",
-                     "Walk and Dodge",
-                     "Left-Hand Box",
-                     "Right-Hand Box",
-                     "Use Left Thumb or Finger\nto Slide Sideways"),
-    new TutorialData("b1/turn_back.xml",
-                     "U-Turn Back",
-                     "Facing Couples",
-                     "Sashayed Couples",
-                     "Slide Right Finger Right\nto Turn Right"),
+        "Use Left Finger\nto Move Forward",
+        "Use Right Finger\nto Move Forward"),
     new TutorialData("b1/circulate.xml",
                      "Box Circulate",
                      "Left-Hand Box",
                      "Right-Hand Box",
-                     "Move Forward with Left Finger\nwhile Turning with Right Finger")
+        "Follow Path with Left Finger",
+        "Follow Path with Right Finger"),
+    new TutorialData("ms/walk_and_dodge.xml",
+                     "Walk and Dodge",
+                     "Left-Hand Box",
+                     "Right-Hand Box",
+        "Hold Down Right Finger\nSlide with Left Finger",
+        "Hold Down Left Finger\nSlide with Right Finger"),
+    new TutorialData("b1/turn_back.xml",
+                     "U-Turn Back",
+                     "Facing Couples",
+                     "Sashayed Couples",
+        "Rotate Right Finger Right\nto Turn Right",
+        "Rotate Left Finger Right\nto Turn Right"),
   };
   private int tutnum = 0;
   private SharedPreferences prefs;
@@ -84,12 +91,13 @@ public class TutorialActivity extends PracticeActivity
     Document tamdoc = Tamination.getXMLAsset(this,td.xmlfile);
     prefs = getSharedPreferences("Taminations",Context.MODE_PRIVATE);
     int gender = prefs.getString("gender", "Boy").equals("Boy") ? Dancer.BOY : Dancer.GIRL;
+    boolean primaryIsLeft = prefs.getString("primarycontroller", "Right").equals("Left");
     String from = gender == Dancer.BOY ? td.animforBoy : td.animforGirl;
     String selector = "[@title='"+td.title+"' and @from='"+from+"']";
     NodeList tamlist = Tamination.evalXPath("/tamination/tam"+selector, tamdoc);
     Element tam = (Element)tamlist.item(0);
     TextView instr = (TextView)findViewById(R.id.text_instructions);
-    instr.setText(td.instructions);
+    instr.setText(primaryIsLeft ? td.instructionsLeft : td.instructionsRight);
     instr.setVisibility(View.VISIBLE);
     av.setAnimation(tam,gender);
   }

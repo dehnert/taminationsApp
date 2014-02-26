@@ -72,7 +72,37 @@
                     android:text="Girl" />
             </RadioGroup>
 
+            <TextView
+                style="@style/PracticeText"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:paddingTop="40dp"
+                android:text="Primary Control"/>
+
+            <RadioGroup
+                android:id="@+id/primarycontrolgroup"
+                style="@style/Settings0"
+                android:orientation="vertical" >
+                <RadioButton
+                    style="@style/PracticeText"
+                    android:id="@+id/primaryRight"
+                    android:layout_height="0dp"
+                    android:layout_width="wrap_content"
+                    android:layout_weight="1"
+                    android:onClick="clickPrimaryControl"
+                    android:text="Right Finger" />
+                <RadioButton
+                    android:id="@+id/primaryLeft"
+                    style="@style/PracticeText"
+                    android:layout_height="0dp"
+                    android:layout_width="wrap_content"
+                    android:layout_weight="1"
+                    android:onClick="clickPrimaryControl"
+                    android:text="Left Finger" />
+            </RadioGroup>
+
         </LinearLayout>
+
         <LinearLayout
             android:layout_width="0dp"
             android:layout_height="match_parent"

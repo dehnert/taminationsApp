@@ -768,6 +768,10 @@ public class AnimationView extends SurfaceView
       leadin = intdan < 0 ? 2 : 3;
       leadout = intdan < 0 ? 2 : 1;
       beats = 0;
+      SharedPreferences prefs =
+          getContext().getSharedPreferences("Taminations", Context.MODE_PRIVATE);
+      String numberpref = prefs.getString("numbers2","");
+      String primaryControl = prefs.getString("primarycontrol", "Right");
       Element formation = null;
       Tamination.loadMoves(getContext());
       NodeList tlist = tam.getElementsByTagName("formation");
@@ -863,7 +867,7 @@ public class AnimationView extends SurfaceView
             //  add the interactive dancer controlled by the user
             idancer = new InteractiveDancer(numbers[dnum],couples[dnum],g,
                 dancerColor[Integer.valueOf(couples[dnum])-1],
-                m,geom,movelist);
+                m,geom,movelist,primaryControl);
             dancers[dnum] = idancer;
           }
           else
@@ -880,9 +884,6 @@ public class AnimationView extends SurfaceView
       currentpart = 0;
       isRunning = false;
       beat = -leadin;
-      SharedPreferences prefs =
-          getContext().getSharedPreferences("Taminations", Context.MODE_PRIVATE);
-      String numberpref = prefs.getString("numbers2","");
       if (numberpref.contains("1-8"))
         setNumbers(Dancer.NUMBERS_DANCERS);
       else if (numberpref.contains("1-4"))

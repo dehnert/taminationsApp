@@ -64,6 +64,9 @@ public class StartPracticeActivity extends RotationActivity
     String gender = prefs.getString("gender", "Boy");
     setRadioButton(R.id.genderBoy,gender.equals("Boy"));
     setRadioButton(R.id.genderGirl,gender.equals("Girl"));
+    String primary = prefs.getString("primarycontrol","Right");
+    setRadioButton(R.id.primaryRight,primary.equals("Right"));
+    setRadioButton(R.id.primaryLeft,primary.equals("Left"));
     String speed = prefs.getString("practicespeed", "Slow");
     setRadioButton(R.id.speedSlow,speed.equals("Slow"));
     setRadioButton(R.id.speedModerate,speed.equals("Moderate"));
@@ -98,6 +101,12 @@ public class StartPracticeActivity extends RotationActivity
   {
     String gender = ((RadioButton)v).getText().toString();
     prefs.edit().putString("gender",gender).commit();
+  }
+
+  public void clickPrimaryControl(View v)
+  {
+    String primary = ((RadioButton)v).getText().toString().split(" ")[0];
+    prefs.edit().putString("primarycontrol",primary).commit();
   }
 
   public void clickSpeed(View v)
