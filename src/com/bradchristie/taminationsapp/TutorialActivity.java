@@ -23,13 +23,40 @@ import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.NodeList;
 
+import android.app.AlertDialog;
+import android.app.Dialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.SharedPreferences;
+import android.os.Bundle;
+import android.support.v4.app.DialogFragment;
 import android.view.View;
 import android.widget.TextView;
 
 public class TutorialActivity extends PracticeActivity
 {
+
+  private class TutorialInstructionFragment extends DialogFragment {
+    private String message;
+    TutorialInstructionFragment(String message)
+    {
+      this.message = message;
+    }
+    @Override
+    public Dialog onCreateDialog(Bundle savedInstanceState) {
+        // Use the Builder class for convenient dialog construction
+        AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+        builder.setMessage(message)
+               .setPositiveButton("Ok", new DialogInterface.OnClickListener() {
+                   public void onClick(DialogInterface dialog, int id) {
+                     av.setInteractiveDancerPathVisibility(true);
+                     av.doStart();
+                   }
+               });
+        // Create the AlertDialog object and return it
+        return builder.create();
+    }
+}
 
   private static class TutorialData
   {
@@ -37,19 +64,16 @@ public class TutorialActivity extends PracticeActivity
     public String title;
     public String animforBoy;
     public String animforGirl;
-    public String instructionsLeft;
-    public String instructionsRight;
+    public String instructions;
     public TutorialData(String xmlfile, String title,
                         String animforBoy, String animforGirl,
-                        String instructionsLeft,
-                        String instructionsRight)
+                        String instructions)
     {
       this.xmlfile = xmlfile;
       this.title = title;
       this.animforBoy = animforBoy;
       this.animforGirl = animforGirl;
-      this.instructionsLeft = instructionsLeft;
-      this.instructionsRight = instructionsRight;
+      this.instructions = instructions;
     }
   }
   private static final TutorialData tutdata[] = {
@@ -57,29 +81,36 @@ public class TutorialActivity extends PracticeActivity
                      "Walk and Dodge",
                      "Right-Hand Box",
                      "Left-Hand Box",
-        "Use Left Finger\nto Move Forward",
-        "Use Right Finger\nto Move Forward"),
+        "Use your %primary% Finger on the %primary% side of the screen."
+        + "  Do not touch the dancer directly."
+        + "  Slide your finger forward to move the dancer forward."),
     new TutorialData("b1/circulate.xml",
                      "Box Circulate",
                      "Left-Hand Box",
                      "Right-Hand Box",
-        "Follow Path with Left Finger",
-        "Follow Path with Right Finger"),
+        "Follow Path with %primary% Finger"),
     new TutorialData("ms/walk_and_dodge.xml",
                      "Walk and Dodge",
                      "Left-Hand Box",
                      "Right-Hand Box",
-        "Hold Down Right Finger\nSlide with Left Finger",
-        "Hold Down Left Finger\nSlide with Right Finger"),
+        "Hold Down Right Finger\nSlide with Left Finger"),
     new TutorialData("b1/turn_back.xml",
                      "U-Turn Back",
                      "Facing Couples",
                      "Sashayed Couples",
-        "Rotate Right Finger Right\nto Turn Right",
-        "Rotate Left Finger Right\nto Turn Right"),
+        "Rotate Right Finger Right\nto Turn Right")
   };
   private int tutnum = 0;
   private SharedPreferences prefs;
+
+  private void showInstructions()
+  {
+    boolean primaryIsLeft = prefs.getString("primarycontrol", "Right").equals("Left");
+    String instructions = tutdata[tutnum].instructions;
+    instructions = instructions.replace("%primary%",primaryIsLeft?"Left":"Right")
+                               .replace("%secondary%",primaryIsLeft?"Right":"Left");
+    (new TutorialInstructionFragment(instructions)).show(getSupportFragmentManager(),null);
+  }
 
   @Override
   protected void nextAnimation()
@@ -91,22 +122,26 @@ public class TutorialActivity extends PracticeActivity
     Document tamdoc = Tamination.getXMLAsset(this,td.xmlfile);
     prefs = getSharedPreferences("Taminations",Context.MODE_PRIVATE);
     int gender = prefs.getString("gender", "Boy").equals("Boy") ? Dancer.BOY : Dancer.GIRL;
-    boolean primaryIsLeft = prefs.getString("primarycontroller", "Right").equals("Left");
     String from = gender == Dancer.BOY ? td.animforBoy : td.animforGirl;
     String selector = "[@title='"+td.title+"' and @from='"+from+"']";
     NodeList tamlist = Tamination.evalXPath("/tamination/tam"+selector, tamdoc);
     Element tam = (Element)tamlist.item(0);
-    TextView instr = (TextView)findViewById(R.id.text_instructions);
-    instr.setText(primaryIsLeft ? td.instructionsLeft : td.instructionsRight);
-    instr.setVisibility(View.VISIBLE);
     av.setAnimation(tam,gender);
+    av.setInteractiveDancerPathVisibility(true);
+    showInstructions();
+  }
+
+  //  This overrides the parent method which starts the animation
+  //  Do not start the animation until the instructions are dismissed
+  @Override
+  protected void animationReady()
+  {
   }
 
   @Override
   public void clickRepeat(View v)
   {
-    findViewById(R.id.text_instructions).setVisibility(View.VISIBLE);
-    super.clickRepeat(v);
+    showInstructions();
   }
 
   @Override
@@ -119,6 +154,7 @@ public class TutorialActivity extends PracticeActivity
       findViewById(R.id.button_practice_continue).setVisibility(View.GONE);
       tutnum = 0;
     }
+    findViewById(R.id.button_practice_repeat).setVisibility(View.GONE);
     prefs.edit().putInt("tutorial", tutnum).commit();
   }
 

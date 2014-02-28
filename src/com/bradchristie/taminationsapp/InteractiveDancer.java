@@ -64,6 +64,11 @@ public class InteractiveDancer extends Dancer
     return computetx;
   }
 
+  protected void animateComputed(double beat)
+  {
+    super.animate(beat);
+  }
+
   public void animate(double beat)
   {
     if (beat <= 0.0 || onTrack)

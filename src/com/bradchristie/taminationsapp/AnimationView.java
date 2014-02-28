@@ -271,6 +271,16 @@ public class AnimationView extends SurfaceView
     }
   }
 
+  public void setInteractiveDancerPathVisibility(boolean show)
+  {
+    synchronized (lock) {
+      if (idancer != null) {
+        idancer.showPath = show;
+        dirtify();
+      }
+    }
+  }
+
   /**
    *   Set animation looping
    */

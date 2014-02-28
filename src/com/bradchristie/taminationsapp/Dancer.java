@@ -102,12 +102,17 @@ public class Dancer implements Comparable<Dancer> {
     Pair<Float, Float> loc = location();
     pathpath.moveTo(loc.first, loc.second);
     for (double beat = 0.1; beat < beats(); beat += 0.1) {
-      animate(beat);
+      animateComputed(beat);
       loc = location();
       pathpath.lineTo(loc.first, loc.second);
     }
     //  Restore dancer to start position
     animate(-2.0);
+  }
+
+  protected void animateComputed(double beat)
+  {
+    animate(beat);
   }
 
   public boolean isPhantom() {

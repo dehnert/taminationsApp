@@ -100,6 +100,13 @@ public class PracticeActivity extends RotationActivity
     }
   }
 
+  //  This is a hook for TutorialActivity, which postpones the start
+  //  until the user dismisses the instructions
+  protected void animationReady()
+  {
+    av.doStart();
+  }
+
   @Override
   public void onAnimationChanged(int action, double x, double y, double z)
   {
@@ -115,7 +122,7 @@ public class PracticeActivity extends RotationActivity
       av.setPathVisibility(false);
       av.setPhantomVisibility(false);
       av.setNumbers(Dancer.NUMBERS_OFF);
-      av.doStart();
+      animationReady();
     }
     if (action == AnimationListener.ANIMATION_PROGRESS) {
       final int iscore = (int)Math.ceil(av.getScore());
