@@ -36,80 +36,80 @@ import android.widget.TextView;
 public class TutorialActivity extends PracticeActivity
 {
 
-  private class TutorialInstructionFragment extends DialogFragment {
+  private class TutorialInstructionFragment extends DialogFragment
+                 implements DialogInterface.OnClickListener
+  {
     private String message;
-    TutorialInstructionFragment(String message)
+    private String title;
+    TutorialInstructionFragment(String message,String title)
     {
       this.message = message;
+      this.title = title;
     }
     @Override
     public Dialog onCreateDialog(Bundle savedInstanceState) {
         // Use the Builder class for convenient dialog construction
         AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
-        builder.setMessage(message)
-               .setPositiveButton("Ok", new DialogInterface.OnClickListener() {
-                   public void onClick(DialogInterface dialog, int id) {
-                     av.setInteractiveDancerPathVisibility(true);
-                     av.doStart();
-                   }
-               });
+        builder.setTitle(title)
+               .setMessage(message)
+               .setPositiveButton("Ok", this);
         // Create the AlertDialog object and return it
         return builder.create();
     }
-}
-
-  private static class TutorialData
-  {
-    public String xmlfile;
-    public String title;
-    public String animforBoy;
-    public String animforGirl;
-    public String instructions;
-    public TutorialData(String xmlfile, String title,
-                        String animforBoy, String animforGirl,
-                        String instructions)
+    public void onClick(DialogInterface dialog, int id)
     {
-      this.xmlfile = xmlfile;
-      this.title = title;
-      this.animforBoy = animforBoy;
-      this.animforGirl = animforGirl;
-      this.instructions = instructions;
+      av.setInteractiveDancerPathVisibility(true);
+      av.doStart();
     }
   }
-  private static final TutorialData tutdata[] = {
-    new TutorialData("ms/walk_and_dodge.xml",
-                     "Walk and Dodge",
-                     "Right-Hand Box",
-                     "Left-Hand Box",
+
+  private class CongratulationsFragment extends TutorialInstructionFragment
+  {
+    CongratulationsFragment(String message)
+    {
+      super(message,"Tutorial Complete");
+    }
+    public void onClick(DialogInterface dialog, int id)
+    {
+      finish();
+    }
+  }
+
+  private static final String tutdata[] = {
         "Use your %primary% Finger on the %primary% side of the screen."
-        + "  Do not touch the dancer directly."
-        + "  Slide your finger forward to move the dancer forward."),
-    new TutorialData("b1/circulate.xml",
-                     "Box Circulate",
-                     "Left-Hand Box",
-                     "Right-Hand Box",
-        "Follow Path with %primary% Finger"),
-    new TutorialData("ms/walk_and_dodge.xml",
-                     "Walk and Dodge",
-                     "Left-Hand Box",
-                     "Right-Hand Box",
-        "Hold Down Right Finger\nSlide with Left Finger"),
-    new TutorialData("b1/turn_back.xml",
-                     "U-Turn Back",
-                     "Facing Couples",
-                     "Sashayed Couples",
-        "Rotate Right Finger Right\nto Turn Right")
+        + "  Do not put your finger on the dancer."
+        + "  Slide your finger forward to move the dancer forward."
+        + "  Try to keep pace with the adjacent dancer.",
+
+        "Use your %primary% Finger to follow the turning path."
+        + "  Try to keep pace with the adjacent dancer.",
+
+        "Normally your dancer faces the direction you are moving.  "
+        + "  But you can use your %secondary% Finger to hold or change the facing direction."
+        + "  Press and hold your %secondary% finger on the %secondary% side"
+        + " of the screen.  This will keep your dancer facing forward."
+        + "  Then use your %primary% finger on the %primary% side"
+        + " of the screen to slide your dancer horizontally.",
+
+        "Use your %secondary% finger to turn in place."
+        + "  To U-Turn Left, make a 'C' movement with your %secondary% finger."
   };
+
+  private static final String tutcompletemsg =
+      "Congratulations!  You have successfully completed the tutorial."
+      + "  Now select the level you would like to practice.";
+
   private int tutnum = 0;
   private SharedPreferences prefs;
 
   private void showInstructions()
   {
     boolean primaryIsLeft = prefs.getString("primarycontrol", "Right").equals("Left");
-    String instructions = tutdata[tutnum].instructions;
+    String instructions = tutdata[tutnum];
     instructions = instructions.replace("%primary%",primaryIsLeft?"Left":"Right")
                                .replace("%secondary%",primaryIsLeft?"Right":"Left");
-    (new TutorialInstructionFragment(instructions)).show(getSupportFragmentManager(),null);
+    String title = "Tutorial "+(tutnum+1)+" of "+tutdata.length;
+    (new TutorialInstructionFragment(instructions,title)).show(getSupportFragmentManager(),null);
   }
 
   @Override
@@ -117,15 +117,13 @@ public class TutorialActivity extends PracticeActivity
   {
     if (tutnum >= tutdata.length)
       tutnum = 0;
-    TutorialData td = tutdata[tutnum];
-    setTitle(td.title);
-    Document tamdoc = Tamination.getXMLAsset(this,td.xmlfile);
+    Document tamdoc = Tamination.getXMLAsset(this,"src/tutorial.xml");
     prefs = getSharedPreferences("Taminations",Context.MODE_PRIVATE);
     int gender = prefs.getString("gender", "Boy").equals("Boy") ? Dancer.BOY : Dancer.GIRL;
-    String from = gender == Dancer.BOY ? td.animforBoy : td.animforGirl;
-    String selector = "[@title='"+td.title+"' and @from='"+from+"']";
-    NodeList tamlist = Tamination.evalXPath("/tamination/tam"+selector, tamdoc);
-    Element tam = (Element)tamlist.item(0);
+    int offset = gender == Dancer.BOY ? 0 : 1;
+    NodeList tamlist = Tamination.evalXPath("/tamination/tam", tamdoc);
+    Element tam = (Element)tamlist.item(tutnum*2 + offset);
+    setTitle(tam.getAttribute("title"));
     av.setAnimation(tam,gender);
     av.setInteractiveDancerPathVisibility(true);
     showInstructions();
@@ -141,21 +139,28 @@ public class TutorialActivity extends PracticeActivity
   @Override
   public void clickRepeat(View v)
   {
+    hideExtraStuff();
     showInstructions();
+  }
+
+  @Override
+  public void clickContinue(View v)
+  {
+    tutnum++;
+    super.clickContinue(v);
   }
 
   @Override
   protected void success()
   {
-    if (++tutnum >= tutdata.length) {
+    if (tutnum+1 >= tutdata.length) {
       TextView congrats = (TextView)findViewById(R.id.contgrats);
       congrats.setText("Tutorial Complete");
       prefs.edit().putBoolean("tutorialcomplete", true).commit();
       findViewById(R.id.button_practice_continue).setVisibility(View.GONE);
+      (new CongratulationsFragment(tutcompletemsg)).show(getSupportFragmentManager(),null);
       tutnum = 0;
     }
-    findViewById(R.id.button_practice_repeat).setVisibility(View.GONE);
-    prefs.edit().putInt("tutorial", tutnum).commit();
   }
 
   @Override

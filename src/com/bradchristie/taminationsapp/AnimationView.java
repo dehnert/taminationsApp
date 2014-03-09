@@ -119,9 +119,11 @@ public class AnimationView extends SurfaceView
    */
   public void doPause()
   {
-    synchronized (lock) {
+  	//  This is called when the user hits the Back button, locking
+  	//  causes a deadlock
+    //synchronized (lock) {
       isRunning = false;
-    }
+    //}
   }
 
   /**
@@ -754,7 +756,7 @@ public class AnimationView extends SurfaceView
     if (beat >= beats) {
       if (loop && isRunning)
         prevbeat = beat = -leadin;
-      else {
+      else if (isRunning) {
         doPause();
         if (listener != null)
           listener.onAnimationChanged(AnimationListener.ANIMATION_DONE,1.0,beats,0);

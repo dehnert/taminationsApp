@@ -47,7 +47,6 @@
                 style="@style/PracticeText"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:paddingTop="40dp"
                 android:text="Choose a gender"/>
 
             <RadioGroup
@@ -76,7 +75,6 @@
                 style="@style/PracticeText"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:paddingTop="40dp"
                 android:text="Primary Control"/>
 
             <RadioGroup
@@ -112,7 +110,6 @@
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:paddingTop="40dp"
                 style="@style/PracticeText"
                 android:text="Speed for Practice"/>
 

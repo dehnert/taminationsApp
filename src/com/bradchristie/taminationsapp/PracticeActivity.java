@@ -61,7 +61,7 @@ public class PracticeActivity extends RotationActivity
     nextAnimation();
   }
 
-  private void hideExtraStuff()
+  protected void hideExtraStuff()
   {
     findViewById(R.id.practice_complete_panel).setVisibility(View.GONE);
     buttonDefinition.setVisibility(View.GONE);
@@ -135,7 +135,6 @@ public class PracticeActivity extends RotationActivity
     if (action == AnimationListener.ANIMATION_DONE) {
       runOnUiThread(new Runnable() {
         public void run() {
-          findViewById(R.id.text_instructions).setVisibility(View.GONE);
           findViewById(R.id.practice_complete_panel).setVisibility(View.VISIBLE);
           findViewById(R.id.button_practice_continue).setVisibility(View.VISIBLE);
           double score = Math.ceil(av.getScore());

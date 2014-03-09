@@ -4,10 +4,27 @@
     android:layout_height="match_parent"
     android:orientation="vertical" >
 
-    <TextView
-        android:id="@+id/title"
+    <!-- This is the header -->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
         style="@style/ActivityTitle"
-        android:text="Practice" />
+        android:baselineAligned="false" >
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/ic_launcher"
+            android:onClick="onLogoClicked"
+            android:contentDescription="logo" />
+        <TextView
+            android:id="@+id/title"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            style="@style/ActivityTitleText"
+            android:text="Practice" />
+    </LinearLayout>
 
     <RelativeLayout
         android:layout_height="fill_parent"
@@ -20,16 +37,6 @@
             android:layout_alignParentTop="true"
             android:layout_width="fill_parent"
             android:layout_height="fill_parent" />
-
-        <TextView
-            android:id="@+id/text_instructions"
-            android:layout_alignParentLeft="true"
-            android:layout_alignParentTop="true"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            style="@style/PracticeInstructions"
-            android:text=" "
-            />
 
         <TextView
             android:id="@+id/text_score"

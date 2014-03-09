@@ -12,4 +12,8 @@
       <item name="android:textSize">36sp</item>
   </style>
 
+  <style name="PracticeText">
+      <item name="android:textSize">18sp</item>
+  </style>
+
 </resources>
