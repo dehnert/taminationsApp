@@ -78,6 +78,7 @@ public class CalllistFragment extends RotationFragment implements OnItemClickLis
         continue;
       CallListItem item = new CallListItem(e1.getAttribute("text"),
                                            e1.getAttribute("level"),
+                                           e1.getAttribute("sublevel"),
                                            e1.getAttribute("link"));
       cla.add(item);
     }
@@ -107,10 +108,12 @@ public class CalllistFragment extends RotationFragment implements OnItemClickLis
     public String call;
     public String link;
     public String level;
-    public CallListItem(String _call, String _level, String _link)
+    public String sublevel;
+    public CallListItem(String _call, String _level, String _sublevel, String _link)
     {
       call = _call;
       level = _level;
+      sublevel = _sublevel;
       link = _link;
     }
     public String toString()
@@ -128,7 +131,7 @@ public class CalllistFragment extends RotationFragment implements OnItemClickLis
     private LayoutInflater mInflater;
     CallListAdapter(Context context, int textViewResourceId)
     {
-      super(context,textViewResourceId);
+      super(context,R.layout.calllist_item,R.id.button_calllist);
       mInflater = (LayoutInflater)context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
     }
 
@@ -162,20 +165,23 @@ public class CalllistFragment extends RotationFragment implements OnItemClickLis
     }
 
     @Override
-    public View getView (int position, View convertView, ViewGroup parent)
+    public View getView(int position, View convertView, ViewGroup parent)
     {
-      TextView myview = (TextView)mInflater.inflate(R.layout.calllist_item,parent,false);
+      View cellview = mInflater.inflate(R.layout.calllist_item,null);
+      TextView myview = (TextView)cellview.findViewById(R.id.button_calllist);
       CallListItem item = getItem(position);
       myview.setText(item.toString());
+      TextView mylevel = (TextView)cellview.findViewById(R.id.level_calllist);
+      mylevel.setText(item.sublevel);
       if (item.level.equals("Basic and Mainstream"))
-        myview.setBackgroundColor(0xffe0e0ff);
+        cellview.setBackgroundColor(0xffe0e0ff);
       else if (item.level.equals("Plus"))
-        myview.setBackgroundColor(0xffe0ffe0);
+        cellview.setBackgroundColor(0xffe0ffe0);
       else if (item.level.equals("Advanced"))
-        myview.setBackgroundColor(0xfffff0c0);
+        cellview.setBackgroundColor(0xfffff0c0);
       else if (item.level.equals("Challenge"))
-        myview.setBackgroundColor(0xffffe0e0);
-      return myview;
+        cellview.setBackgroundColor(0xffffe0e0);
+      return cellview;
     }
 
   }
