@@ -26,55 +26,118 @@ import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.NodeList;
 
-import com.bradchristie.taminationsapp.LevelActivity.LevelData;
-
 import android.app.Activity;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.text.Editable;
+import android.text.TextWatcher;
+import android.view.KeyEvent;
 import android.view.LayoutInflater;
+import android.view.MotionEvent;
 import android.view.View;
+import android.view.View.OnTouchListener;
 import android.view.ViewGroup;
+import android.view.WindowManager;
+import android.view.inputmethod.EditorInfo;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.ArrayAdapter;
+import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.SectionIndexer;
 import android.widget.TextView;
+import android.widget.TextView.OnEditorActionListener;
 
 public class CalllistFragment extends RotationFragment implements OnItemClickListener
 {
   private CallListAdapter cla;
   private View fragment;
+  private String levelname;
+  private EditText editText;
 
+  @Override
   public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState)
   {
     // Inflate the layout for this fragment
     fragment = inflater.inflate(R.layout.fragment_calllist, container, false);
-    resetView();
+    editText = (EditText) fragment.findViewById(R.id.searchtext);
+    editText.setOnEditorActionListener(new OnEditorActionListener() {
+      @Override
+      public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
+        boolean handled = false;
+        if (actionId == EditorInfo.IME_ACTION_SEARCH) {
+          hideKeyboard();
+          handled = true;
+        }
+        return handled;
+      }
+    });
+    editText.setOnTouchListener(new OnTouchListener()
+    {
+      @Override
+      public boolean onTouch(View v, MotionEvent event) {
+        if (editText.getCompoundDrawables()[2] == null)
+          return false;
+        if (event.getAction() != MotionEvent.ACTION_UP)
+          return false;
+        if (event.getX() > editText.getWidth() - editText.getPaddingRight() - 40) {
+          editText.setText("");
+        }
+        return false;
+      }
+    });
+    editText.addTextChangedListener(new TextWatcher() {
+      @Override
+      public void beforeTextChanged(CharSequence s, int start, int count, int after) { }
+      @Override
+      public void onTextChanged(CharSequence s, int start, int before, int count) { }
+      @Override
+      public void afterTextChanged(Editable s)
+      {
+        resetView(s.toString());
+      }
+    });
+    //  Hide the keyboard until the user asks for it
+    getActivity().getWindow().setSoftInputMode(
+        WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN);
+    resetView("");
     return fragment;
   }
 
-  public void resetView()
+  @Override
+  public void onResume()
+  {
+    super.onResume();
+    //  If the level has changed, re-generate the call list
+    SharedPreferences prefs = getActivity().getSharedPreferences("Taminations",Activity.MODE_PRIVATE);
+    if (!prefs.getString("level","Basic and Mainstream").equals(levelname)) {
+      resetView("");
+      editText.setText("");
+    }
+  }
+
+  private void hideKeyboard() {
+    InputMethodManager imm = (InputMethodManager)getActivity().getSystemService(
+        Context.INPUT_METHOD_SERVICE);
+    imm.hideSoftInputFromWindow(fragment.getWindowToken(), 0);
+  }
+
+  private void resetView(String query)
   {
     //  Set the title to the current dance level
     SharedPreferences prefs = getActivity().getSharedPreferences("Taminations",Activity.MODE_PRIVATE);
-    String levelname = prefs.getString("level","Basic and Mainstream");
+    levelname = prefs.getString("level","Basic and Mainstream");
     String selector = prefs.getString("selector","level='Basic and Mainstream' and @sublevel!='Styling'");
-    String query = null;
-    if (levelname.equals("Search Calls")) {
-      query = selector;
-      selector = LevelData.find("All Calls").selector;
-      setTitle("Taminations - "+levelname+": "+query);
-    } else
-      setTitle("Taminations - "+levelname);
+    setTitle("Taminations - "+levelname);
     //  Fetch all the calls for this level and store in the array of objects
     Document doc = Tamination.getXMLAsset(getActivity(),"src/calls.xml");
     NodeList list1 = Tamination.evalXPath("/calls/call[@"+selector+"]",doc);
     cla = new CallListAdapter(getActivity(),R.layout.calllist_item);
     for (int j=0; j<list1.getLength(); j++) {
       Element e1 = (Element)list1.item(j);
-      if (query != null && !e1.getAttribute("text").toLowerCase(Locale.US).contains(query))
+      if (!e1.getAttribute("text").toLowerCase(Locale.US).contains(query.toLowerCase()))
         continue;
       CallListItem item = new CallListItem(e1.getAttribute("text"),
                                            e1.getAttribute("level"),
@@ -90,7 +153,9 @@ public class CalllistFragment extends RotationFragment implements OnItemClickLis
   }
 
   //  Process a click on one of the calls
-  public void onItemClick(AdapterView<?> parent, View v, int position, long id) {
+  public void onItemClick(AdapterView<?> parent, View v, int position, long id)
+  {
+    hideKeyboard();
     //  Save the call info
     CallListItem item = cla.getItem(position);
     CallClickListener act = (CallClickListener)getActivity();

@@ -5,6 +5,16 @@
     android:orientation="vertical"
     tools:context=".CalllistFragment" >
 
+    <EditText
+        android:id="@+id/searchtext"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:inputType="text"
+        android:textSize="20sp"
+        android:imeOptions="actionSearch"
+        android:drawableRight="@drawable/cancel"
+        android:hint="Search Calls" />
+
     <ListView
         android:id="@+id/listview_calls"
         android:layout_width="match_parent"

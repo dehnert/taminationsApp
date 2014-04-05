@@ -58,8 +58,7 @@ public class LevelActivity extends RotationActivity
       new LevelData("C-3A","c3a","sublevel='C-3A'",R.id.button_c3a),
       new LevelData("C-3B","c3b","sublevel='C-3B'",R.id.button_c3b),
       new LevelData("All Calls","","level!='Info' and @sublevel!='Styling'",R.id.button_index),
-      new LevelData("Index of All Calls","","level!='Info' and @sublevel!='Styling'",R.id.button_index),
-      new LevelData("Search Calls","","",R.id.button_search)
+      new LevelData("Index of All Calls","","level!='Info' and @sublevel!='Styling'",R.id.button_index)
     };
     public static LevelData find(String s)
     {
@@ -71,18 +70,25 @@ public class LevelActivity extends RotationActivity
       }
       return null;
     }
-  }
+  }  // end of LevelData class
 
   View selectedView = null;
+  private CalllistFragment cf;
 
+  /**
+   *    Called once after Activity is started
+   */
   @Override
-  protected void onCreate(Bundle savedInstanceState) {
+  protected void onCreate(Bundle savedInstanceState)
+  {
     super.onCreate(savedInstanceState);
     setContentView(R.layout.activity_level);
     setTitle("Taminations");
     if (findViewById(R.id.fragment_calllist) != null) {
-      //  Multi-fragment display - switch calllist fragment
+      //  Multi-fragment display - switch calllist fragment to show About
       RotationFragment af = new AboutFragment();
+      //  But if user was running Taminations previously then switch to
+      //  the most recent list of calls
       SharedPreferences prefs = getSharedPreferences("Taminations",MODE_PRIVATE);
       if (!prefs.getString("level", "").equals(""))
         af = new CalllistFragment();
@@ -90,11 +96,19 @@ public class LevelActivity extends RotationActivity
     }
   }
 
+  /**
+   *   Called whenever this activity is re-displayed
+   */
   protected void onResume()
   {
     super.onResume();
+    //  Clear hack to jump up to this level  TODO should be factored up??
     SharedPreferences prefs = getSharedPreferences("Taminations",MODE_PRIVATE);
-    prefs.edit().remove("navigateupto").commit();
+    if (prefs.contains("navigateupto")) {
+      cf = null;
+      prefs.edit().remove("navigateupto").commit();
+    }
+    //  For portrait view, make sure none of the levels are highlighted
     if (isPortrait()) {
       setTitle("Taminations");
       if (selectedView != null) {
@@ -102,9 +116,12 @@ public class LevelActivity extends RotationActivity
         selectedView = null;
       }
     }
+    //  Landscape multi-panel view
     else {
-      CalllistFragment cf = new CalllistFragment();
-      replaceFragment(cf,R.id.fragment_calllist);
+      if (cf == null) {
+        cf = new CalllistFragment();
+        replaceFragment(cf,R.id.fragment_calllist);
+      }
       String level = prefs.getString("level", "Basic and Mainstream");
       LevelData data = LevelData.find(level);
       if (data != null) {
@@ -112,7 +129,6 @@ public class LevelActivity extends RotationActivity
         highlightClick(findViewById(id));
       }
       else
-        //  Search
         highlightClick(null);
     }
   }
@@ -135,17 +151,13 @@ public class LevelActivity extends RotationActivity
     LevelData d = LevelData.find((String) ((TextView)v).getText());
     SharedPreferences prefs = getSharedPreferences("Taminations",MODE_PRIVATE);
     prefs.edit().putString("level",d.name).putString("selector",d.selector).commit();
-    if (d.name.equals("Search Calls"))
-      onSearchRequested();
-    else {
-      if (isPortrait()) {
-        //  Single-fragment display - start calllist activity
-        startActivity(new Intent(this,CalllistActivity.class));
-      } else {
-        //  Multi-fragment display - switch calllist fragment
-        CalllistFragment cf = new CalllistFragment();
-        replaceFragment(cf,R.id.fragment_calllist);
-      }
+    if (isPortrait()) {
+      //  Single-fragment display - start calllist activity
+      startActivity(new Intent(this,CalllistActivity.class));
+    } else {
+      //  Multi-fragment display - switch calllist fragment
+      CalllistFragment cf = new CalllistFragment();
+      replaceFragment(cf,R.id.fragment_calllist);
     }
   }
 

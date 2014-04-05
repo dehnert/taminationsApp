@@ -247,7 +247,7 @@
             android:onClick="processClick"
             android:text="C-3B" />
     </LinearLayout>
-    
+
     <Button
         android:id="@+id/button_index"
         style="@style/LevelButton"
@@ -258,17 +258,6 @@
         android:background="@drawable/level_background_index"
         android:onClick="processClick"
         android:text="Index of All Calls" />
-
-    <Button
-        android:id="@+id/button_search"
-        style="@style/LevelButton"
-        android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_marginTop="1sp"
-        android:layout_weight="1"
-        android:background="@drawable/level_background_index"
-        android:onClick="processClick"
-        android:text="Search Calls" />
 
     <Button
         android:id="@+id/button_practice"
