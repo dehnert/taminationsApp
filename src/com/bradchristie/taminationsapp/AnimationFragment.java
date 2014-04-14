@@ -115,7 +115,8 @@ public class AnimationFragment extends RotationFragment
     int anim = prefs.getInt("anim",0);
     //  Read the xml file and select the requested animation
     Document tamdoc = Tamination.getXMLAsset(getActivity(), xmlname);
-    Element tam = (Element)tamdoc.getElementsByTagName("tam").item(anim);
+    Element tam = (Element)Tamination.tamList(tamdoc).item(anim);
+         // tamdoc.getElementsByTagName("tam").item(anim);
     if (tam != null)
       setTitle(tam.getAttribute("title"));
     //  Display any Taminator quote

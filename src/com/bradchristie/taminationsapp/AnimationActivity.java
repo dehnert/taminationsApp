@@ -83,9 +83,7 @@ public class AnimationActivity extends PortraitActivity
     super.onCreate(savedInstanceState);
     setContentView(R.layout.activity_animation);
     SharedPreferences prefs = getSharedPreferences("Taminations",MODE_PRIVATE);
-    String title = prefs.getString("title","no title");
-    //  Remove extra stuff like (DBD) or (A-1) from title
-    setTitle(title.replaceAll("\\s*\\(.*\\)", ""));
+    setTitle(prefs.getString("title","no title"));
     String xmlname = prefs.getString("link", getString(android.R.string.untitled))
         .replace("html", "xml");
     String level = xmlname.split("/")[0];

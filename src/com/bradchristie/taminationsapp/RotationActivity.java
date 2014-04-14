@@ -116,6 +116,8 @@ public class RotationActivity extends FragmentActivity
 
   public void setTitle(String title)
   {
+    //  Remove extra stuff like (DBD) or (A-1) from title
+    title = title.replaceAll("\\(.*?\\)","");
     TextView titleView = (TextView)findViewById(R.id.title);
     if (titleView != null) {
       if (isPortrait()) {

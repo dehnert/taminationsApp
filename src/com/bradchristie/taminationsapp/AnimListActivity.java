@@ -111,7 +111,6 @@ public class AnimListActivity extends RotationActivity
 
   private String xmlname;
   private int[] posanim;
-  private TextView titleView;
   private AnimListAdapter adapter;
   private boolean multifragment;
   private AnimationFragment animfrag;
@@ -129,9 +128,8 @@ public class AnimListActivity extends RotationActivity
     xmlname = prefs.getString("link", getString(android.R.string.untitled))
         .replace("html", "xml");
     Document doc = Tamination.getXMLAsset(this, xmlname);
-    NodeList tams = doc.getElementsByTagName("tam");
+    NodeList tams = Tamination.tamList(doc);
     multifragment = findViewById(R.id.fragment_animation) != null;
-    titleView = (TextView)findViewById(R.id.title);
     String titlestr = prefs.getString("call",
         getString(android.R.string.untitled));
     if (multifragment) {
@@ -218,7 +216,7 @@ public class AnimListActivity extends RotationActivity
       adapter.add(new AnimListItem("",title, "", R.layout.animlist_header, -1));
     } else if (multifragment) {
       AnimListItem item = adapter.getItem(firstanim);
-      titleView.setText(item.title);
+      setTitle(item.title);
       prefs.edit().putString("title",item.title).commit();
     }
     // Build the list of animations
@@ -305,7 +303,7 @@ public class AnimListActivity extends RotationActivity
            .putString("xmlname", xmlname).commit();
       if (findViewById(R.id.animation) != null) {
         // Multi-fragment display - switch animation
-        titleView.setText(item.title);
+        setTitle(item.title);
         replaceFragment2(new RotationActivity.FragmentFactory() {
           @Override
           public RotationFragment getFragment() {

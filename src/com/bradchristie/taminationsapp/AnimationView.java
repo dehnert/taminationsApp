@@ -119,8 +119,8 @@ public class AnimationView extends SurfaceView
    */
   public void doPause()
   {
-  	//  This is called when the user hits the Back button, locking
-  	//  causes a deadlock
+    //  This is called when the user hits the Back button, locking
+    //  causes a deadlock
     //synchronized (lock) {
       isRunning = false;
     //}
@@ -412,25 +412,27 @@ public class AnimationView extends SurfaceView
   {
     synchronized (lock) {
       //  Convert x and y to dance floor coords
-      Rect r = surface.getSurfaceFrame();
-      double range = Math.min(r.width(), r.height());
-      double s = range/13.0;
-      double dx = -(y-r.height()/2.0)/s;
-      double dy = -(x-r.width()/2.0)/s;
-      //  Compare with dancer locations
-      Dancer bestd = null;
-      double bestdist = 0.5;
-      for (Dancer d : dancers) {
-        Pair<Float,Float> loc = d.location();
-        double distsq = (loc.first-dx)*(loc.first-dx) + (loc.second-dy)*(loc.second-dy);
-        if (distsq < bestdist) {
-          bestd = d;
-          bestdist = distsq;
+      if (surface != null) {  // sanity check
+        Rect r = surface.getSurfaceFrame();
+        double range = Math.min(r.width(), r.height());
+        double s = range/13.0;
+        double dx = -(y-r.height()/2.0)/s;
+        double dy = -(x-r.width()/2.0)/s;
+        //  Compare with dancer locations
+        Dancer bestd = null;
+        double bestdist = 0.5;
+        for (Dancer d : dancers) {
+          Pair<Float,Float> loc = d.location();
+          double distsq = (loc.first-dx)*(loc.first-dx) + (loc.second-dy)*(loc.second-dy);
+          if (distsq < bestdist) {
+            bestd = d;
+            bestdist = distsq;
+          }
         }
-      }
-      if (bestd != null) {
-        bestd.showPath = !bestd.showPath;
-        dirtify();
+        if (bestd != null) {
+          bestd.showPath = !bestd.showPath;
+          dirtify();
+        }
       }
     }
   }
@@ -770,12 +772,12 @@ public class AnimationView extends SurfaceView
    * @param tam     XML element containing the call
    * @param intdan  Dancer controlled by the user, or -1 if not used
    */
-  public void setAnimation(Element tam, int intdan)
+  public void setAnimation(Element xtam, int intdan)
   {
     synchronized (lock) {
-      if (tam == null)  // sanity check
+      if (xtam == null)  // sanity check
         return;
-      this.tam = tam;
+      this.tam = Tamination.tamXref(this.getContext(),xtam);
       interactiveDancer = intdan;
       leadin = intdan < 0 ? 2 : 3;
       leadout = intdan < 0 ? 2 : 1;

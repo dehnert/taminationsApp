@@ -148,7 +148,7 @@ public class LevelActivity extends RotationActivity
   public void processClick(View v)
   {
     highlightClick(v);
-    LevelData d = LevelData.find((String) ((TextView)v).getText());
+    LevelData d = LevelData.find(((TextView)v).getText().toString());
     SharedPreferences prefs = getSharedPreferences("Taminations",MODE_PRIVATE);
     prefs.edit().putString("level",d.name).putString("selector",d.selector).commit();
     if (isPortrait()) {

@@ -23,7 +23,6 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
 
@@ -86,9 +85,36 @@ public class Tamination {
     try {
       retval = (NodeList) xpath.evaluate(expr, node, XPathConstants.NODESET);
     } catch (XPathExpressionException e) {
-      //  TODO report error
+      //Log.e("evalXpath",e.toString());
     }
     return retval;
+  }
+
+  /**
+   *    Returns list of animations from an xml document
+   */
+  static public NodeList tamList(Document doc)
+  {
+    return evalXPath("//tam | //tamxref",doc);
+  }
+
+  /**
+   *  Returns animation element, looking up cross-reference if needed.
+   */
+  static public Element tamXref(Context ctx, Element tam)
+  {
+    if (tam.hasAttribute("xref-link")) {
+      String link = tam.getAttribute("xref-link") + ".xml";
+      Document xdoc = getXMLAsset(ctx,link);
+      String s = "//tam";
+      if (tam.hasAttribute("xref-title"))
+        s += "[@title='" + tam.getAttribute("xref-title") + "']";
+      if (tam.hasAttribute("xref-from"))
+        s += "[@from='" + tam.getAttribute("xref-from") + "']";
+      NodeList n = evalXPath(s,xdoc);
+      tam = (Element)n.item(0);
+    }
+    return tam;
   }
 
   static public String audioAssetName(String call)
@@ -339,26 +365,6 @@ public class Tamination {
       }
     }
     return retval;
-  }
-
-  static String levelDir2Namexxx(String dir)
-  {
-    @SuppressWarnings("serial")
-    HashMap<String,String>levelnames =
-        new HashMap<String,String>() {
-      {
-        put("b1","Basic 1");
-        put("b2","Basic 2");
-        put("ms","Mainstream");
-        put("plus","Plus");
-        put("a1","A-1");
-        put("a2","A-2");
-        put("c1","C-1");
-        put("c2","C-2");
-        put("c3a","C-3A");
-      }
-    };
-    return levelnames.get(dir);
   }
 
 }
