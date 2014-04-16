@@ -800,6 +800,7 @@ public class AnimationView extends SurfaceView
       //  used for teaching callers
       int[] dancerColor = { Color.RED, Color.GREEN,
           Color.BLUE, Color.YELLOW,
+          Color.LTGRAY, Color.LTGRAY,
           Color.LTGRAY, Color.LTGRAY };
       //  Get numbers for dancers and couples
       //  This fetches any custom numbers that might be defined in
@@ -820,13 +821,14 @@ public class AnimationView extends SurfaceView
         int[] hexcolor = { Color.RED, Color.GREEN,
             Color.MAGENTA, Color.BLUE,
             Color.YELLOW, Color.CYAN,
+            Color.LTGRAY, Color.LTGRAY,
             Color.LTGRAY, Color.LTGRAY };
         dancerColor = hexcolor;
       }
       else if (geometry == Geometry.BIGON) {
-        String[] bigonnumbers = { "1", "2", "3", "4", "5", "6" };
+        String[] bigonnumbers = { "1", "2", "3", "4", "5", "6", "7", "8" };
         numbers = bigonnumbers;
-        String[] bigoncouples = { "1", "2", "3", "4", "5", "6" };
+        String[] bigoncouples = { "1", "2", "3", "4", "5", "6", "7", "8" };
         couples = bigoncouples;
       }
       int dnum = 0;
@@ -876,17 +878,24 @@ public class AnimationView extends SurfaceView
           m.postRotate(Math.toRadians(angle));
           m.postTranslate(x, y);
           m.postConcat(im);
+          //  handle numbers and colors for phantoms
+          String nstr = " ";
+          String cstr = " ";
+          int cnum = Color.LTGRAY;
+          if (g != Dancer.PHANTOM) {
+            nstr = numbers[dnum];
+            cstr = couples[dnum];
+            cnum = dancerColor[Integer.valueOf(cstr)-1];
+          }
           //  add one dancer
           if (g == intdan && icount-- == 0) {
             //  add the interactive dancer controlled by the user
-            idancer = new InteractiveDancer(numbers[dnum],couples[dnum],g,
-                dancerColor[Integer.valueOf(couples[dnum])-1],
+            idancer = new InteractiveDancer(nstr,cstr,g,cnum,
                 m,geom,movelist,primaryControl);
             dancers[dnum] = idancer;
           }
           else
-            dancers[dnum] = new Dancer(numbers[dnum],couples[dnum],g,
-                dancerColor[Integer.valueOf(couples[dnum])-1],
+            dancers[dnum] = new Dancer(nstr,cstr,g,cnum,
                 m,geom,movelist);
           if (g == Dancer.PHANTOM && !showPhantoms)
             dancers[dnum].hidden = true;

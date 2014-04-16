@@ -327,7 +327,6 @@ public class Tamination {
   /**
    *   Returns an array of numbers to use numering the dancers
    */
-  private static String[] phantomNums = { "a", "b", "c", "d" };
   static String[] getNumbers(Element tam)
   {
     NodeList paths = tam.getElementsByTagName("path");
@@ -341,8 +340,8 @@ public class Tamination {
         retval[i*2+1] = n.substring(2,3);
       }
       else if (i > 3) {  // phantoms
-        retval[i*2] = phantomNums[i*2-8];
-        retval[i*2+1] = phantomNums[i*2-7];
+        retval[i*2] = " ";
+        retval[i*2+1] = " ";
       }
       else { // default numbers
         retval[i*2] = String.valueOf(i+1);
@@ -354,7 +353,10 @@ public class Tamination {
 
   static String[] getCouples(Element tam)
   {
-    String[] retval = {"1","3","1","3","2","4","2","4","5","6","5","6"};
+    String[] retval = {"1","3","1","3",
+                       "2","4","2","4",
+                       "5","6","5","6",
+                       " "," "," "," "};
     NodeList paths = tam.getElementsByTagName("path");
     for (int i=0; i<paths.getLength(); i++) {
       Element p = (Element)paths.item(i);
