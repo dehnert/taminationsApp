@@ -69,7 +69,7 @@ public class InteractiveDancer extends Dancer
     super.animate(beat);
   }
 
-  public void animate(double beat)
+  public synchronized void animate(double beat)
   {
     if (beat <= 0.0 || onTrack)
       fillColor = Color.veryBright(drawColor);
@@ -123,7 +123,7 @@ public class InteractiveDancer extends Dancer
   }
 
 
-  public void doTouch(View v, MotionEvent m)
+  public synchronized void doTouch(View v, MotionEvent m)
   {
     int action = m.getActionMasked();
     float s = 500f/v.getHeight();
