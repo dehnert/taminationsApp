@@ -216,8 +216,9 @@ public class Dancer implements Comparable<Dancer> {
     p.setColor(drawColor);
     c.drawCircle(0.5f, 0f, 0.33f, p);
     //  Draw the body
-    p.setColor(showNumber == NUMBERS_OFF ? fillColor : Color
-        .veryBright(fillColor));
+    p.setColor(showNumber == NUMBERS_OFF || gender == PHANTOM
+        ? fillColor
+        : Color.veryBright(fillColor));
     if (gender == BOY)
       c.drawRect(rect, p);
     else if (gender == GIRL)

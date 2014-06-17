@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.bradchristie.taminationsapp"
-    android:versionCode="29"
-    android:versionName="1.2.7" >
+    android:versionCode="30"
+    android:versionName="1.2.8" >
 
     <uses-sdk
-        android:minSdkVersion="9"
+        android:minSdkVersion="8"
         android:targetSdkVersion="19" />
 
     <application
@@ -52,19 +52,19 @@
         </activity>
         <activity
             android:name="com.bradchristie.taminationsapp.StartPracticeActivity"
-            android:screenOrientation="sensorLandscape"
+            android:screenOrientation="landscape"
             android:theme="@android:style/Theme.Light.NoTitleBar"
             android:label="Start Practice" >
         </activity>
         <activity
             android:name="com.bradchristie.taminationsapp.PracticeActivity"
-            android:screenOrientation="sensorLandscape"
+            android:screenOrientation="landscape"
             android:theme="@android:style/Theme.Light.NoTitleBar"
             android:label="Practice" >
         </activity>
         <activity
             android:name="com.bradchristie.taminationsapp.TutorialActivity"
-            android:screenOrientation="sensorLandscape"
+            android:screenOrientation="landscape"
             android:theme="@android:style/Theme.Light.NoTitleBar"
             android:label="Practice" >
         </activity>
