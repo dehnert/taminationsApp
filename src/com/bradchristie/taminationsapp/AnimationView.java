@@ -484,7 +484,8 @@ public class AnimationView extends SurfaceView
   private void doDraw() {
     Canvas c = null;
     try {
-      c = surface.lockCanvas();
+      if (surface != null)
+        c = surface.lockCanvas();
       if (c == null)
         return;  // sanity check
       //  Draw background
