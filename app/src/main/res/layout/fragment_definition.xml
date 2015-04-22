@@ -1,0 +1,33 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    tools:context=".DefinitionActivity" >
+
+    <WebView
+        android:id="@+id/definitionView"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1" />
+
+    <RadioGroup
+        android:id="@+id/definitionGroup"
+        style="@style/Settings2"
+        android:orientation="horizontal" >
+        <RadioButton
+            android:id="@+id/definitionAbbrevRadioButton"
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:layout_height="wrap_content"
+            android:text="@string/button_abbreviated" />
+        <RadioButton
+            android:id="@+id/definitionFullRadioButton"
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:layout_height="wrap_content"
+            android:text="@string/button_full" />
+    </RadioGroup>
+
+
+</LinearLayout>

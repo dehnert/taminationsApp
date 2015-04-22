@@ -1,0 +1,11 @@
+<resources xmlns:android="http://schemas.android.com/apk/res/android">
+
+  <style name="LevelButton" parent="LevelButtonBase">
+      <item name="android:textSize">24sp</item>
+  </style>
+
+  <style name="PracticeLevelButton" parent="LevelButtonBase">
+      <item name="android:textSize">36sp</item>
+  </style>
+
+</resources>

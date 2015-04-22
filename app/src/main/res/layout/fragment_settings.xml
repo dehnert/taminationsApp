@@ -1,0 +1,179 @@
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:background="#ff808080"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent" >
+<LinearLayout
+    android:layout_width="fill_parent"
+    android:layout_height="wrap_content"
+    android:background="#ff808080"
+    android:orientation="vertical" >
+
+  <LinearLayout
+      style="@style/Settings1"
+      android:orientation="vertical" >
+    <TextView
+        style="@style/Settings2"
+        android:text="Dancer Speed"
+        android:textAppearance="?android:attr/textAppearanceMedium" />
+    <RadioGroup
+        android:id="@+id/speedgroup"
+        style="@style/Settings2"
+        android:orientation="horizontal" >
+        <RadioButton
+            android:id="@+id/speedSlowRadioButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Slow" />
+        <RadioButton
+            android:id="@+id/speedNormalRadioButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Normal" />
+        <RadioButton
+            android:id="@+id/speedFastRadioButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Fast" />
+    </RadioGroup>
+    <TextView
+        android:id="@+id/speedText"
+        style="@style/Settings2"
+        android:text="Dancers move at a Normal pace"
+        android:textAppearance="?android:attr/textAppearanceSmall" />
+  </LinearLayout>
+
+  <LinearLayout
+      android:id="@+id/loopPanel"
+      style="@style/Settings1"
+      android:orientation="vertical" >
+      <LinearLayout
+          style="@style/Settings2"
+          android:orientation="horizontal" >
+        <CheckBox
+              android:id="@+id/loopCheckBox"
+              style="@style/Settings0"
+              android:text="Loop" />
+      </LinearLayout>
+      <TextView
+          style="@style/Settings2"
+          android:text="Repeat the animation continuously"
+          android:textAppearance="?android:attr/textAppearanceSmall" />
+    </LinearLayout>
+
+  <LinearLayout
+      android:id="@+id/gridPanel"
+      style="@style/Settings1"
+      android:orientation="vertical" >
+      <LinearLayout
+          style="@style/Settings2"
+          android:orientation="horizontal" >
+        <CheckBox
+            android:id="@+id/gridCheckBox"
+            style="@style/Settings0"
+            android:text="Grid" />
+      </LinearLayout>
+    <TextView
+        style="@style/Settings2"
+        android:text="Show a dancer-sized grid"
+        android:textAppearance="?android:attr/textAppearanceSmall" />
+  </LinearLayout>
+
+  <LinearLayout
+      android:id="@+id/pathsPanel"
+      style="@style/Settings1"
+      android:orientation="vertical" >
+      <LinearLayout
+          style="@style/Settings2"
+          android:orientation="horizontal" >
+        <CheckBox
+              android:id="@+id/pathsCheckBox"
+              style="@style/Settings0"
+              android:text="Paths" />
+      </LinearLayout>
+      <TextView
+        style="@style/Settings2"
+        android:text="Draw a line for each dancer's route"
+        android:textAppearance="?android:attr/textAppearanceSmall" />
+    </LinearLayout>
+
+  <LinearLayout
+      style="@style/Settings1"
+      android:orientation="vertical" >
+    <TextView
+        style="@style/Settings2"
+        android:text="Numbers"
+        android:textAppearance="?android:attr/textAppearanceMedium" />
+    <RadioGroup
+        android:id="@+id/numbergroup"
+        style="@style/Settings2"
+        android:orientation="horizontal" >
+        <RadioButton
+            android:id="@+id/numbersOffRadioButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="None" />
+        <RadioButton
+            android:id="@+id/numbersDancersRadioButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="1-8" />
+        <RadioButton
+            android:id="@+id/numbersCouplesRadioButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="1-4" />
+    </RadioGroup>
+    <TextView
+        android:id="@+id/numbersText"
+        style="@style/Settings2"
+        android:text="Dancers not numbered"
+        android:textAppearance="?android:attr/textAppearanceSmall" />
+  </LinearLayout>
+
+  <LinearLayout
+      style="@style/Settings1"
+      android:orientation="vertical" >
+    <LinearLayout
+          style="@style/Settings2"
+          android:orientation="horizontal" >
+      <CheckBox
+            android:id="@+id/phantomsCheckBox"
+            style="@style/Settings0"
+            android:text="Phantoms" />
+    </LinearLayout>
+    <TextView
+        style="@style/Settings2"
+        android:text="Show phantoms dancers where used for Challenge calls"
+        android:textAppearance="?android:attr/textAppearanceSmall" />
+  </LinearLayout>
+
+  <LinearLayout
+      style="@style/Settings1"
+      android:orientation="vertical" >
+    <TextView
+        style="@style/Settings2"
+        android:text="Special Geometry"
+        android:textAppearance="?android:attr/textAppearanceMedium" />
+    <RadioGroup
+        android:id="@+id/geometrygroup"
+        style="@style/Settings2"
+        android:orientation="horizontal" >
+        <RadioButton
+            android:id="@+id/geometryNoneRadioButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="None" />
+        <RadioButton
+            android:id="@+id/geometryHexagonRadioButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Hexagon" />
+        <RadioButton
+            android:id="@+id/geometryBigonRadioButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Bi-Gon" />
+    </RadioGroup>
+  </LinearLayout>
+
+</LinearLayout></ScrollView>

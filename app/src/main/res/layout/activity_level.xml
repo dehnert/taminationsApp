@@ -1,0 +1,21 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    tools:context=".LevelActivity" >
+
+    <TextView
+        android:id="@+id/title"
+        style="@style/ActivityTitle"
+        android:text="@string/app_name" />
+
+    <fragment
+        android:id="@+id/fragment_level"
+        android:name="com.bradchristie.taminationsapp.LevelFragment"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        tools:layout="@layout/fragment_level" />
+
+</LinearLayout>
