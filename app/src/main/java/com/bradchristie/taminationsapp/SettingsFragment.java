@@ -137,7 +137,7 @@ public class SettingsFragment extends RotationFragment
           @Override
           public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
             if (isChecked) {
-              prefs.edit().putString("speed","Slow").commit();
+              prefs.edit().putString("speed","Slow").apply();
               broadcast(AnimationSettingsListener.SPEED_SETTING_CHANGED);
               ((TextView)fragment.findViewById(R.id.speedText))
                   .setText("Dancers move at a Slow pace");
@@ -150,7 +150,7 @@ public class SettingsFragment extends RotationFragment
           public void onCheckedChanged(CompoundButton buttonView,
               boolean isChecked) {
             if (isChecked) {
-              prefs.edit().putString("speed","Normal").commit();
+              prefs.edit().putString("speed","Normal").apply();
               broadcast(AnimationSettingsListener.SPEED_SETTING_CHANGED);
               ((TextView)fragment.findViewById(R.id.speedText))
                   .setText("Dancers move at a Normal pace");
@@ -163,7 +163,7 @@ public class SettingsFragment extends RotationFragment
           public void onCheckedChanged(CompoundButton buttonView,
               boolean isChecked) {
             if (isChecked) {
-              prefs.edit().putString("speed","Fast").commit();
+              prefs.edit().putString("speed","Fast").apply();
               broadcast(AnimationSettingsListener.SPEED_SETTING_CHANGED);
               ((TextView)fragment.findViewById(R.id.speedText))
                   .setText("Dancers move at a Fast pace");
@@ -176,7 +176,7 @@ public class SettingsFragment extends RotationFragment
           @Override
           public void onCheckedChanged(CompoundButton buttonView,
               boolean isChecked) {
-            prefs.edit().putBoolean("loop", isChecked).commit();
+            prefs.edit().putBoolean("loop", isChecked).apply();
             broadcast(AnimationSettingsListener.LOOP_SETTING_CHANGED);
           }
         });
@@ -186,7 +186,7 @@ public class SettingsFragment extends RotationFragment
           @Override
           public void onCheckedChanged(CompoundButton buttonView,
               boolean isChecked) {
-            prefs.edit().putBoolean("grid", isChecked).commit();
+            prefs.edit().putBoolean("grid", isChecked).apply();
             broadcast(AnimationSettingsListener.GRID_SETTING_CHANGED);
           }
         });
@@ -196,7 +196,7 @@ public class SettingsFragment extends RotationFragment
           @Override
           public void onCheckedChanged(CompoundButton buttonView,
               boolean isChecked) {
-            prefs.edit().putBoolean("paths", isChecked).commit();
+            prefs.edit().putBoolean("paths", isChecked).apply();
             broadcast(AnimationSettingsListener.PATHS_SETTING_CHANGED);
           }
         });
@@ -207,7 +207,7 @@ public class SettingsFragment extends RotationFragment
           public void onCheckedChanged(CompoundButton buttonView,
               boolean isChecked) {
             if (isChecked) {
-              prefs.edit().putString("numbers2","off").commit();
+              prefs.edit().putString("numbers2","off").apply();
               broadcast(AnimationSettingsListener.NUMBERS_SETTING_CHANGED);
               ((TextView)fragment.findViewById(R.id.numbersText))
                   .setText("Dancers not numbered");
@@ -220,7 +220,7 @@ public class SettingsFragment extends RotationFragment
           public void onCheckedChanged(CompoundButton buttonView,
               boolean isChecked) {
             if (isChecked) {
-              prefs.edit().putString("numbers2","1-8").commit();
+              prefs.edit().putString("numbers2","1-8").apply();
               broadcast(AnimationSettingsListener.NUMBERS_SETTING_CHANGED);
               ((TextView)fragment.findViewById(R.id.numbersText))
                   .setText("Number dancers 1-8");
@@ -233,7 +233,7 @@ public class SettingsFragment extends RotationFragment
           public void onCheckedChanged(CompoundButton buttonView,
               boolean isChecked) {
             if (isChecked) {
-              prefs.edit().putString("numbers2","1-4").commit();
+              prefs.edit().putString("numbers2","1-4").apply();
               broadcast(AnimationSettingsListener.NUMBERS_SETTING_CHANGED);
               ((TextView)fragment.findViewById(R.id.numbersText))
                   .setText("Number couples 1-4");
@@ -246,7 +246,7 @@ public class SettingsFragment extends RotationFragment
           @Override
           public void onCheckedChanged(CompoundButton buttonView,
               boolean isChecked) {
-            prefs.edit().putBoolean("phantoms", isChecked).commit();
+            prefs.edit().putBoolean("phantoms", isChecked).apply();
             broadcast(AnimationSettingsListener.PHANTOMS_SETTING_CHANGED);
           }
         });
@@ -257,7 +257,7 @@ public class SettingsFragment extends RotationFragment
           public void onCheckedChanged(CompoundButton buttonView,
               boolean isChecked) {
             if (isChecked) {
-              prefs.edit().putString("geometry","None").commit();
+              prefs.edit().putString("geometry","None").apply();
               broadcast(AnimationSettingsListener.GEOMETRY_SETTING_CHANGED);
             }
           }
@@ -268,7 +268,7 @@ public class SettingsFragment extends RotationFragment
           public void onCheckedChanged(CompoundButton buttonView,
               boolean isChecked) {
             if (isChecked) {
-              prefs.edit().putString("geometry","Hexagon").commit();
+              prefs.edit().putString("geometry","Hexagon").apply();
               broadcast(AnimationSettingsListener.GEOMETRY_SETTING_CHANGED);
             }
           }
@@ -279,7 +279,7 @@ public class SettingsFragment extends RotationFragment
           public void onCheckedChanged(CompoundButton buttonView,
               boolean isChecked) {
             if (isChecked) {
-              prefs.edit().putString("geometry","Bi-gon").commit();
+              prefs.edit().putString("geometry","Bi-gon").apply();
               broadcast(AnimationSettingsListener.GEOMETRY_SETTING_CHANGED);
             }
           }

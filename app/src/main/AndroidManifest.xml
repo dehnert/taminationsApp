@@ -1,49 +1,55 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.bradchristie.taminationsapp"
-    android:versionCode="37"
-    android:versionName="1.2.15" >
+    android:versionCode="38"
+
+    android:versionName="1.2.16" >
 
     <application
         android:allowBackup="true"
+        android:theme="@android:style/Theme.Light.NoTitleBar"
         android:icon="@drawable/ic_launcher"
         android:label="@string/app_name" >
         <activity
             android:name="com.bradchristie.taminationsapp.LevelActivity"
-            android:theme="@android:style/Theme.Light.NoTitleBar"
+            android:launchMode="singleTask"
             android:label="@string/app_name" >
+            <!-- This is the activity to start the app -->
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
-        </activity>
-        <activity
-            android:name="com.bradchristie.taminationsapp.CalllistActivity"
-            android:theme="@android:style/Theme.Light.NoTitleBar"
-            android:label="@string/title_activity_call" >
+            <!-- Search for calls -->
             <intent-filter>
                 <action android:name="com.google.android.gms.actions.SEARCH_ACTION"/>
                 <category android:name="android.intent.category.DEFAULT"/>
             </intent-filter>
+            <!-- Allow web apps to launch Taminations by linking to intent -->
+            <intent-filter>
+                <action android:name="android.intent.action.VIEW"/>
+                <category android:name="android.intent.category.DEFAULT"/>
+                <category android:name="android.intent.category.BROWSABLE"/>
+                <data android:scheme="Taminations" />
+            </intent-filter>
+        </activity>
+        <activity
+            android:name="com.bradchristie.taminationsapp.CalllistActivity"
+            android:label="@string/title_activity_call" >
         </activity>
         <activity
             android:name="com.bradchristie.taminationsapp.AnimListActivity"
-            android:theme="@android:style/Theme.Light.NoTitleBar"
             android:label="@string/title_activity_anim_list" >
         </activity>
         <activity
             android:name="com.bradchristie.taminationsapp.AnimationActivity"
-            android:theme="@android:style/Theme.Light.NoTitleBar"
             android:label="@string/title_activity_animation" >
         </activity>
         <activity
             android:name="com.bradchristie.taminationsapp.SettingsActivity"
-            android:theme="@android:style/Theme.Light.NoTitleBar"
             android:label="@string/title_activity_settings" >
         </activity>
         <activity
             android:name="com.bradchristie.taminationsapp.DefinitionActivity"
-            android:theme="@android:style/Theme.Light.NoTitleBar"
             android:label="@string/title_activity_definition" >
         </activity>
         <activity
@@ -53,19 +59,16 @@
         <activity
             android:name="com.bradchristie.taminationsapp.StartPracticeActivity"
             android:screenOrientation="landscape"
-            android:theme="@android:style/Theme.Light.NoTitleBar"
             android:label="Start Practice" >
         </activity>
         <activity
             android:name="com.bradchristie.taminationsapp.PracticeActivity"
             android:screenOrientation="landscape"
-            android:theme="@android:style/Theme.Light.NoTitleBar"
             android:label="Practice" >
         </activity>
         <activity
             android:name="com.bradchristie.taminationsapp.TutorialActivity"
             android:screenOrientation="landscape"
-            android:theme="@android:style/Theme.Light.NoTitleBar"
             android:label="Practice" >
         </activity>
     </application>

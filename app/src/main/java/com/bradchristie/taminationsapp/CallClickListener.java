@@ -20,7 +20,9 @@
 
 package com.bradchristie.taminationsapp;
 
+import android.content.Intent;
+
 public interface CallClickListener
 {
-  public void onCallClick(String call, String link);
+  void onCallClick(Intent intent);
 }

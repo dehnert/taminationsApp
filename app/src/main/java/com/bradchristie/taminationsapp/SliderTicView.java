@@ -47,6 +47,7 @@ public class SliderTicView extends View
     //  Clear background
     c.getClipBounds(candim);
     cd.setBounds(candim);
+    int height = candim.height();
     cd.draw(c);
     if (beats > 0.0) {
       //  Draw tic marks
@@ -54,12 +55,12 @@ public class SliderTicView extends View
       p.setStrokeWidth(0f);
       for (double loc=1.0; loc<beats; loc+=1.0) {
         x = candim.left+candim.width()*loc/beats;
-        c.drawLine((float)x, 0f, (float)x, 10f, p);
+        c.drawLine((float)x, 0f, (float)x, height/4, p);
       }
       //  Draw tic labels
-      double y = 30.0;
+      double y = height*5/8;
       x = candim.left+candim.width()*2f/beats;
-      p.setTextSize(20f);
+      p.setTextSize(height/3);
       p.setTextAlign(Paint.Align.CENTER);
       c.drawText("Start",(float)x,(float)y,p);
       x = candim.left+candim.width()*(beats-2.0)/beats;
@@ -75,6 +76,7 @@ public class SliderTicView extends View
     }
   }
 
+  //  Called by AnimationFragment which passes how the call is divided into parts
   public void setTics(double b, String partstr)
   {
     beats = b;

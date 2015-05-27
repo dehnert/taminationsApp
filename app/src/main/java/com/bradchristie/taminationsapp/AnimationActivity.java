@@ -63,8 +63,9 @@ public class AnimationActivity extends PortraitActivity
       switch (action) {
       case ANIMATION_READY :
         //  Tell the tic view where to put the tic marks
+        AnimationView av = (AnimationView)findViewById(R.id.animation);
         SliderTicView ticView = (SliderTicView)findViewById(R.id.slidertics);
-        ticView.setTics(mAnimationView.getTotalBeats(),mAnimationView.getParts());
+        ticView.setTics(av.getTotalBeats(),av.getParts());
         break;
       case ANIMATION_PROGRESS :
         //  Position slider to current location
@@ -86,33 +87,36 @@ public class AnimationActivity extends PortraitActivity
     }
   }
 
-  /** A handle to the View in which the animation is running. */
-  private AnimationView mAnimationView;
-
   @Override
   protected void onCreate(Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
     setContentView(R.layout.activity_animation);
-    SharedPreferences prefs = getSharedPreferences("Taminations",MODE_PRIVATE);
-    setTitle(prefs.getString("title","no title"));
-    String xmlname = prefs.getString("link", getString(android.R.string.untitled))
-        .replace("html", "xml");
+    setTitle(intentString("title"));
+    String xmlname = intentString("link").replace("html", "xml");
     String level = xmlname.split("/")[0];
     Button levelButton = (Button)findViewById(R.id.button_level);
     levelButton.setText(LevelData.find(level).name);
     //boolean hasAudio = Tamination.assetExists(this, level, Tamination.audioAssetName(title));
-    //findViewById(R.id.speaker).setVisibility(hasAudio ? View.VISIBLE : View.GONE);
-    mAnimationView = (AnimationView)findViewById(R.id.animation);
+    findViewById(R.id.speaker).setVisibility( /* hasAudio ? View.VISIBLE : */ View.GONE);
   }
 
 
   //  Definition
   public void onButtonDefinitionClicked(View v) {
-    startActivity(new Intent(this,DefinitionActivity.class));
+    startActivity(getIntent().setClass(this, DefinitionActivity.class));
   }
   //  Settings
   public void onButtonSettingsClicked(View v) {
     startActivity(new Intent(this,SettingsActivity.class));
+  }
+
+  @Override
+  protected void onResume()
+  {
+    super.onResume();
+    AnimationFragment af = new AnimationFragment();
+    af.setArguments(getIntent().getExtras());
+    replaceFragment(af, R.id.fragment_animation);
   }
 
   /**
@@ -121,7 +125,8 @@ public class AnimationActivity extends PortraitActivity
   @Override
   protected void onPause() {
     super.onPause();
-    mAnimationView.doPause(); // pause animation when Activity pauses
+    AnimationView av = (AnimationView)findViewById(R.id.animation);
+    av.doPause(); // pause animation when Activity pauses
   }
   public void onWindowFocusChanged (boolean hasFocus)
   {
@@ -141,17 +146,19 @@ public class AnimationActivity extends PortraitActivity
   @Override
   public void onSharedPreferenceChanged(SharedPreferences prefs, String key)
   {
-    mAnimationView.setGridVisibility(prefs.getBoolean("grid",false));
-    mAnimationView.setPathVisibility(prefs.getBoolean("paths",false));
+    AnimationView av = (AnimationView)findViewById(R.id.animation);
+    av.setGridVisibility(prefs.getBoolean("grid",false));
+    av.setPathVisibility(prefs.getBoolean("paths",false));
   }
 
   @Override
   public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser)
   {
     if (fromUser) {
-      double b = mAnimationView.getTotalBeats();
+      AnimationView av = (AnimationView)findViewById(R.id.animation);
+      double b = av.getTotalBeats();
       double loc = progress * b / seekBar.getMax();
-      mAnimationView.setLocation(loc);
+      av.setLocation(loc);
     }
   }
 

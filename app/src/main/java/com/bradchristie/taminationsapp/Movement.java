@@ -28,8 +28,8 @@ public class Movement {
   static public final int BOTHHANDS = 3;
   static public final int GRIPLEFT = 5;
   static public final int GRIPRIGHT = 6;
-  static public final int GRIPBOTH =  7;
-  static public final int ANYGRIP =  4;
+  //static public final int GRIPBOTH =  7;
+  //static public final int ANYGRIP =  4;
 
   public double beats;
   public int hands;

@@ -20,6 +20,7 @@
 
 package com.bradchristie.taminationsapp;
 
+import android.os.Bundle;
 import android.support.v4.app.Fragment;
 
 public class RotationFragment extends Fragment
@@ -33,4 +34,17 @@ public class RotationFragment extends Fragment
   {
     return (RotationActivity)getActivity();
   }
+
+  public String intentString(String key)
+  {
+    Bundle b = getArguments();
+    return b == null ? null : b.getString(key);
+  }
+  public int intentInt(String key)
+  {
+    Bundle b = getArguments();
+    return b == null ? 0 : b.getInt(key);
+  }
+
+
 }

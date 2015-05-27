@@ -32,10 +32,6 @@ import android.webkit.WebViewClient;
 import android.widget.CompoundButton;
 import android.widget.RadioButton;
 
-import org.w3c.dom.Document;
-import org.w3c.dom.Element;
-import org.w3c.dom.NodeList;
-
 @SuppressLint("SetJavaScriptEnabled")
 public class DefinitionFragment extends RotationFragment
 {
@@ -62,7 +58,7 @@ public class DefinitionFragment extends RotationFragment
           public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
             if (isChecked) {
               defview.loadUrl("javascript:setAbbrev(true)");
-              prefs.edit().putBoolean("isabbrev",true).commit();
+              prefs.edit().putBoolean("isabbrev",true).apply();
             }
           }
         });
@@ -74,11 +70,11 @@ public class DefinitionFragment extends RotationFragment
               public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                 if (isChecked) {
                   defview.loadUrl("javascript:setAbbrev(false)");
-                  prefs.edit().putBoolean("isabbrev", false).commit();
+                  prefs.edit().putBoolean("isabbrev", false).apply();
                 }
               }
             });
-    setDefinition(prefs.getString("link",getString(android.R.string.untitled)));
+    setDefinition(intentString("link"));
     return fragment;
   }
 
@@ -141,8 +137,7 @@ public class DefinitionFragment extends RotationFragment
   //  different parts of the call
   public void setPart(int part)
   {
-    SharedPreferences prefs = getActivity().getSharedPreferences("Taminations",Context.MODE_PRIVATE);
-    String name = prefs.getString("title",getString(android.R.string.untitled));
+    String name = intentString("title");
     name = name.replaceAll("\\s+", "");
     defview.loadUrl("javascript:currentcall='"+name+"'");
     defview.loadUrl("javascript:setPart("+part+")");

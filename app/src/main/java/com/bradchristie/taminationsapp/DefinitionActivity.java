@@ -20,10 +20,8 @@
 
 package com.bradchristie.taminationsapp;
 
-import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.View;
-import android.webkit.WebView;
 import android.widget.Button;
 
 import com.bradchristie.taminationsapp.LevelActivity.LevelData;
@@ -37,8 +35,16 @@ public class DefinitionActivity extends PortraitActivity {
   protected void onCreate(Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
     setContentView(R.layout.activity_definition);
-    SharedPreferences prefs = getSharedPreferences("Taminations", MODE_PRIVATE);
-    String link = prefs.getString("link",getString(android.R.string.untitled));
+  }
+
+  @Override
+  protected void onResume()
+  {
+    super.onResume();
+    DefinitionFragment df = new DefinitionFragment();
+    df.setArguments(getIntent().getExtras());
+    replaceFragment(df, R.id.fragment_definition);
+    String link = intentString("link");
     String xmlname = link + ".xml";
     String level = xmlname.split("/")[0];
     Button levelButton = (Button)findViewById(R.id.button_level);
@@ -47,12 +53,7 @@ public class DefinitionActivity extends PortraitActivity {
     Element tamination = (Element)tamdoc.getElementsByTagName("tamination").item(0);
     String titlestr = tamination.getAttribute("title");
     setTitle(titlestr);
-    WebView defview = (WebView)findViewById(R.id.definitionView);
-    //  Turn on pinch-to-zoom, which is off(!) by default
-    defview.getSettings().setBuiltInZoomControls(true);
-    Tamination.loadDefinition(link,defview,this);
   }
-
 
   public void onLogoClicked(View view) {
     super.onLogoClicked(view);

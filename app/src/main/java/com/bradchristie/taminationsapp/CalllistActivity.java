@@ -20,10 +20,7 @@
 
 package com.bradchristie.taminationsapp;
 
-import android.app.Activity;
-import android.app.SearchManager;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.View;
 
@@ -36,44 +33,24 @@ public class CalllistActivity extends PortraitActivity
 
   @Override
   protected void onCreate(Bundle savedInstanceState) {
-    Intent intent = getIntent();
-    String action = intent.getAction();
-    SharedPreferences prefs = getSharedPreferences("Taminations",Activity.MODE_PRIVATE);
-    if (action != null && action.endsWith("SEARCH_ACTION")) {
-      String query = intent.getStringExtra(SearchManager.QUERY);
-      prefs.edit().putString("level","Index of All Calls")
-                  .putString("selector","level!='Info' and @sublevel!='Styling'" )
-                  .putString("query",query)
-                  .commit();
-    }
-    else  //  clear out any previous query
-      prefs.edit().putString("query","").commit();
     super.onCreate(savedInstanceState);
     setContentView(R.layout.activity_calllist);
     cf = new CalllistFragment();
+    cf.setArguments(getIntent().getExtras());
   }
 
   protected void onResume()
   {
     super.onResume();
-    SharedPreferences prefs = getSharedPreferences("Taminations",MODE_PRIVATE);
-    String upto = prefs.getString("navigateupto", "");
-    replaceFragment(cf,R.id.fragment_calllist);
-    if (upto.equals("CalllistActivity")) {
-      prefs.edit().remove("navigateupto").commit();
-    }
-    else if (upto.length() > 0)
-      finish();
+    replaceFragment(cf, R.id.fragment_calllist);
+    //  Make sure intents are only processed once
+    getIntent().setAction(Intent.ACTION_MAIN);
   }
 
-  public void onCallClick(String call, String link)
+  public void onCallClick(Intent intent)
   {
-    SharedPreferences prefs = getSharedPreferences("Taminations",MODE_PRIVATE);
-    prefs.edit().putString("call",call)
-         .putString("link",link)
-         .putInt("anim",0).commit();
     //  Start the next activity
-    startActivity(new Intent(this,AnimListActivity.class));
+    startActivity(intent.setClass(this, AnimListActivity.class));
   }
 
   public void onLogoClicked(View view) {

@@ -127,7 +127,7 @@ public class TutorialActivity extends PracticeActivity
     if (tutnum+1 >= tutdata.length) {
       TextView congrats = (TextView)findViewById(R.id.contgrats);
       congrats.setText("Tutorial Complete");
-      prefs.edit().putBoolean("tutorialcomplete", true).commit();
+      prefs.edit().putBoolean("tutorialcomplete", true).apply();
       findViewById(R.id.button_practice_continue).setVisibility(View.GONE);
       TutorialInstructionFragment cf = new TutorialInstructionFragment();
       cf.setTitle("Tutorial Complete");

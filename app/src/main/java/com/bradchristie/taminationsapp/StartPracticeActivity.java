@@ -99,19 +99,19 @@ public class StartPracticeActivity extends RotationActivity
   public void clickGender(View v)
   {
     String gender = ((RadioButton)v).getText().toString();
-    prefs.edit().putString("gender",gender).commit();
+    prefs.edit().putString("gender",gender).apply();
   }
 
   public void clickPrimaryControl(View v)
   {
     String primary = ((RadioButton)v).getText().toString().split(" ")[0];
-    prefs.edit().putString("primarycontrol",primary).commit();
+    prefs.edit().putString("primarycontrol",primary).apply();
   }
 
   public void clickSpeed(View v)
   {
     String speed = ((RadioButton)v).getText().toString();
-    prefs.edit().putString("practicespeed",speed).commit();
+    prefs.edit().putString("practicespeed",speed).apply();
   }
 
   /**
@@ -133,7 +133,7 @@ public class StartPracticeActivity extends RotationActivity
   public void processClick(View v)
   {
     LevelData d = LevelData.find((String) ((TextView)v).getText());
-    prefs.edit().putString("level",d.name).putString("selector",d.selector).commit();
+    prefs.edit().putString("level",d.name).putString("selector",d.selector).apply();
     startActivity(new Intent(this,PracticeActivity.class));
   }
 

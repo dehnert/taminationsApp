@@ -44,7 +44,7 @@
 
     </LinearLayout>
 
-    <fragment android:name="com.bradchristie.taminationsapp.DefinitionFragment"
+    <FrameLayout
               android:id="@+id/fragment_definition"
               android:layout_width="match_parent"
               android:layout_height="0dp"

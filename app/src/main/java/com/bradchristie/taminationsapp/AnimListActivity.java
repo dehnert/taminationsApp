@@ -24,9 +24,9 @@ import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.NodeList;
 
+import android.app.AlertDialog;
 import android.content.Context;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -131,26 +131,18 @@ public class AnimListActivity extends RotationActivity
     super.onCreate(savedInstanceState);
     setContentView(R.layout.activity_animlist);
     // Read the xml file with the list of animations
-    SharedPreferences prefs = getSharedPreferences("Taminations", MODE_PRIVATE);
-    xmlname = prefs.getString("link", getString(android.R.string.untitled)) + ".xml";
+    xmlname = intentString("link") + ".xml";
     Document doc = Tamination.getXMLAsset(this, xmlname);
     NodeList tams = Tamination.tamList(doc);
     multifragment = findViewById(R.id.fragment_animation) != null;
     Element tamination = (Element)doc.getElementsByTagName("tamination").item(0);
     String titlestr = tamination.getAttribute("title");
+    setTitle(titlestr);
     //  If we came from the master index, the user clicked call could be
     //  something different than the main title of this call
-    String clickedtitlestr = prefs.getString("call",getString(android.R.string.untitled));
-    //  For landscape tablet, set up the other panels
-    if (multifragment) {
-      if (tams.getLength() > 0) {
-        animfrag = new AnimationFragment();
-        replaceFragment(animfrag, R.id.fragment_animation);
-      }
-      deffrag = new DefinitionFragment();
-      replaceFragment(deffrag, R.id.fragment_definition);
-    }
-    setTitle(titlestr);
+    String clickedtitlestr = intentString("call");
+    String webquery = intentString("webquery");
+    boolean foundwebquery = false;
     //  Set up the level button at the top right of the title
     level = xmlname.split("/")[0];
     Button levelButton = (Button)findViewById(R.id.button_level);
@@ -160,9 +152,9 @@ public class AnimListActivity extends RotationActivity
     selectedPosition = -1;
     firstViewBackground = null;
     //boolean hasAudio = Tamination.assetExists(this, level, Tamination.audioAssetName(titlestr));
-    //View speaker = findViewById(R.id.speaker);
-    //if (speaker != null)  // null if not landscape
-    //  speaker.setVisibility(hasAudio ? View.VISIBLE : View.INVISIBLE);
+    View speaker = findViewById(R.id.speaker);
+    if (speaker != null)  // null if not landscape
+      speaker.setVisibility( /* hasAudio ? View.VISIBLE : */ View.INVISIBLE);
 
     // Fetch the list of animations and build the table
     String prevtitle = "";
@@ -220,6 +212,14 @@ public class AnimListActivity extends RotationActivity
       //  selection from the master index
       if (selectanim < 0 && title.equals(clickedtitlestr))
         selectanim = adapter.getCount();
+      //  Check for a match to a web link
+      if (webquery != null) {
+        String webtarget = group.length() > 0 ? group + title : title + "from" + from;
+        if (webquery.toLowerCase().equals(webtarget.toLowerCase().replaceAll("\\s",""))) {
+          selectanim = adapter.getCount();
+          foundwebquery = true;
+        }
+      }
       // Put out a selectable item
       if (group.matches("\\s+"))
         adapter.add(new AnimListItem(title,from, "", R.layout.animlist_item, d));
@@ -234,8 +234,16 @@ public class AnimListActivity extends RotationActivity
 
     //  List of all animations completed
     //  User selection from master index supercedes default 1st animation
+    Intent intent = new Intent(getIntent());
     if (selectanim >= 0)
       firstanim = selectanim;
+    if (webquery != null && !foundwebquery) {
+      AlertDialog.Builder ab = new AlertDialog.Builder(this);
+      ab.setTitle("Error loading Taminations link");
+      ab.setMessage("Incorrect animation: "+webquery);
+      ab.setNegativeButton("Cancel",null);
+      ab.create().show();
+    }
     if (tams.getLength() == 0) {
       // Special handling if there are no animations for this call
       String title = "Sorry, there are no animations for " + titlestr;
@@ -246,8 +254,8 @@ public class AnimListActivity extends RotationActivity
       AnimListItem item = adapter.getItem(firstanim);
       setTitle(item.title);
       selectedPosition = firstanim;
-      prefs.edit().putInt("anim", posanim[firstanim])
-                  .putString("title",item.title).commit();
+      intent.putExtra("anim", posanim[firstanim]);
+      intent.putExtra("title", item.title);
     }
     //  Hook up the list of animations
     ListView lv = (ListView)findViewById(R.id.listview_anim);
@@ -256,16 +264,36 @@ public class AnimListActivity extends RotationActivity
     // Show the difficulty legend only if difficulties are set
     View dv = findViewById(R.id.layout_difficulty);
     dv.setVisibility(diffsum > 0 ? View.VISIBLE : View.GONE);
+    //  For landscape tablet, set up the other panels
+    if (multifragment) {
+      if (tams.getLength() > 0) {
+        animfrag = new AnimationFragment();
+        animfrag.setArguments(intent.getExtras());
+        replaceFragment(animfrag, R.id.fragment_animation);
+      }
+      deffrag = new DefinitionFragment();
+      deffrag.setArguments(intent.getExtras());
+      replaceFragment(deffrag, R.id.fragment_definition);
+    }
+    //  If in portrait and we have a specific requested animation,
+    //  go there immediately
+    else if (webquery != null && foundwebquery) {
+      AnimListItem item = adapter.getItem(selectanim);
+      intent.putExtra("anim", posanim[selectanim]);
+      intent.putExtra("title", item.title);
+      startActivity(intent.setClass(this, AnimationActivity.class));
+    }
   }
 
   // Definition
   public void onButtonDefinitionClicked(View v) {
     if (multifragment) {
       deffrag = new DefinitionFragment();
-      replaceFragment(deffrag,R.id.fragment_definition);
+      deffrag.setArguments(getIntent().getExtras());
+      replaceFragment(deffrag, R.id.fragment_definition);
     }
     else
-      startActivity(new Intent(this,DefinitionActivity.class));
+      startActivity(getIntent().setClass(this, DefinitionActivity.class));
   }
   public void setPart(int part)
   {
@@ -297,7 +325,6 @@ public class AnimListActivity extends RotationActivity
     }
   }
 
-
   public void settingsChanged(int setting)
   {
     if (multifragment)
@@ -324,12 +351,11 @@ public class AnimListActivity extends RotationActivity
       // Save info and start animation activity
       AnimListItem item = adapter.getItem(position);
       item.wasSelected = true;
-      SharedPreferences prefs = getSharedPreferences("Taminations",
-          MODE_PRIVATE);
-      prefs.edit().putInt("anim", posanim[position])
-           .putString("title",item.title)
-           .putString("name",item.group+" "+item.name)
-           .putString("xmlname", xmlname).commit();
+      final Intent intent = new Intent((getIntent()));
+      intent.putExtra("anim", posanim[position]);
+      intent.putExtra("title",item.title);
+      intent.putExtra("name",item.group+" "+item.name);
+      intent.putExtra("xmlname", xmlname);
       if (findViewById(R.id.animation) != null) {
         // Multi-fragment display - switch animation
         setTitle(item.title);
@@ -337,15 +363,16 @@ public class AnimListActivity extends RotationActivity
           @Override
           public RotationFragment getFragment() {
             animfrag = new AnimationFragment();
+            animfrag.setArguments(intent.getExtras());
             return animfrag;
           }
         }, R.id.fragment_animation);
-        boolean hasAudio = Tamination.assetExists(this, level, Tamination.audioAssetName(item.title));
-        findViewById(R.id.speaker).setVisibility(hasAudio ? View.VISIBLE : View.INVISIBLE);
+        //boolean hasAudio = Tamination.assetExists(this, level, Tamination.audioAssetName(item.title));
+        findViewById(R.id.speaker).setVisibility( /* hasAudio ? View.VISIBLE : */ View.INVISIBLE);
 
       } else
         // Single fragment - start animation activity
-        startActivity(new Intent(this, AnimationActivity.class));
+        startActivity(intent.setClass(this, AnimationActivity.class));
     }
   }
 

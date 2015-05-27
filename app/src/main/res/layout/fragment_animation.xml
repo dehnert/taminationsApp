@@ -46,45 +46,44 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content" >
 
-        <ImageButton
+        <Button
             android:id="@+id/button_rewind"
-            android:src="@android:drawable/ic_media_rew"
+            android:text="&lt;&lt;"
+            style="@style/BWButton"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:contentDescription="@string/button_animation_rewind" />
+            android:layout_weight="1" />
 
-        <ImageButton
+        <Button
             android:id="@+id/button_prev"
-            android:src="@android:drawable/ic_media_previous"
+            android:text="&lt;"
+            style="@style/BWButton"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:contentDescription="@string/button_animation_prev" />
+            android:layout_weight="1"/>
 
         <ImageButton
             android:id="@+id/button_play"
             android:src="@drawable/button_play"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:contentDescription="@string/button_animation_play"/>
+            android:layout_weight="1" />
 
-        <ImageButton
+        <Button
             android:id="@+id/button_next"
-            android:src="@android:drawable/ic_media_next"
             android:layout_width="0dp"
+            android:text="&gt;"
+            style="@style/BWButton"
             android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:contentDescription="@string/button_animation_next" />
+            android:layout_weight="1" />
 
-        <ImageButton
+        <Button
             android:id="@+id/button_end"
-            android:src="@android:drawable/ic_media_ff"
+            android:text="&gt;&gt;"
+            style="@style/BWButton"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:contentDescription="@string/button_animation_end" />
+            android:layout_weight="1" />
 
       </LinearLayout>
 

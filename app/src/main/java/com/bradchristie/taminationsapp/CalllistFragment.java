@@ -27,9 +27,9 @@ import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.NodeList;
 
-import android.app.Activity;
+import android.app.AlertDialog;
 import android.content.Context;
-import android.content.SharedPreferences;
+import android.content.Intent;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
@@ -84,16 +84,15 @@ public class CalllistFragment extends RotationFragment implements OnItemClickLis
     getActivity().getWindow().setSoftInputMode(
         WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN);
     //  Read all the data now so searching is more interactive
-    SharedPreferences prefs = getActivity().getSharedPreferences("Taminations",Activity.MODE_PRIVATE);
-    String selector = prefs.getString("selector","level='Basic and Mainstream' and @sublevel!='Styling'");
-    levelname = prefs.getString("level","Basic and Mainstream");
+    String selector = intentString("selector");
+    levelname = intentString("level");
     Document doc = Tamination.getXMLAsset(getActivity(),"src/calls.xml");
     NodeList list1 = Tamination.evalXPath("/calls/call[@"+selector+"]",doc);
     String query = "";
     if (levelname.equals("Index of All Calls")) {
       doc = Tamination.getXMLAsset(getActivity(),"src/callindex.xml");
       list1 = Tamination.evalXPath("/calls/call",doc);
-      query = prefs.getString("query","");
+      query = intentString("query");
       editText.setText(query);
     }
     calllistdata = new CallListData[list1.getLength()];
@@ -152,8 +151,7 @@ public class CalllistFragment extends RotationFragment implements OnItemClickLis
   {
     super.onResume();
     //  If the level has changed, re-generate the call list
-    SharedPreferences prefs = getActivity().getSharedPreferences("Taminations",Activity.MODE_PRIVATE);
-    if (!prefs.getString("level","Basic and Mainstream").equals(levelname)) {
+    if (!intentString("level").equals(levelname)) {
       resetView("");
       editText.setText("");
     }
@@ -195,12 +193,19 @@ public class CalllistFragment extends RotationFragment implements OnItemClickLis
     //  Finally repair the upper case and dup numbers
     query = query.toLowerCase();
     query = query.replaceAll("([0-9])\\1", "$1");
-    //  The query has to match the entire call string, so add "anything"
+    //  The regex has to match the entire call string, so add "anything"
     //  prefix and postfix expressions
-    String substrquery = ".*" + query + ".*";
-    Pattern p = Pattern.compile(substrquery);
+    Pattern p = Pattern.compile(".*" + query + ".*");
     int exactmatches = 0;
     CallListItem exactcla = null;
+    String action = intentString("action");
+    String weblink = null;
+    if (action.contains("SEARCH") || action.contains("VIEW"))
+      weblink = intentString("link");
+    //  Prepare for matching a link from a web site
+    if (weblink != null)
+      weblink = LevelActivity.LevelData.find(intentString("level")).dir
+                    + "/" + weblink.replace(".html","");
     for (CallListData c : calllistdata) {
       if (p.matcher(c.title.toLowerCase(Locale.US)).matches()) {
         CallListItem item = new CallListItem(c.title,
@@ -214,17 +219,41 @@ public class CalllistFragment extends RotationFragment implements OnItemClickLis
           exactcla = item;
           exactmatches += 1;
         }
+        //  If a website link was passed in, see if it matches
+        if (weblink != null && weblink.equals(c.link)) {
+          exactcla = item;
+          exactmatches += 1;
+        }
       }
     }
     if (exactmatches == 1) {
       CallClickListener act = (CallClickListener)getActivity();
-      act.onCallClick(exactcla.call, exactcla.link);
+      Intent intent = new Intent();
+      intent.putExtras(getArguments());
+      intent.putExtra("call",exactcla.call);
+      intent.putExtra("link",exactcla.link);
+      act.onCallClick(intent);
+    }
+    else if (weblink != null) {
+      AlertDialog.Builder ab = new AlertDialog.Builder(getActivity());
+      ab.setTitle("Error loading Taminations link");
+      ab.setMessage("Incorrect call: " + intentString("link"));
+      ab.setNegativeButton("Cancel", null);
+      ab.create().show();
     }
     //  Build the list from the array
     ListView lv = (ListView)fragment.findViewById(R.id.listview_calls);
     lv.setAdapter(cla);
     lv.setFastScrollEnabled(cla.getCount() > 20);
     lv.setOnItemClickListener(this);
+    //  Make sure web link is only processed once
+    Bundle b = getArguments();
+    if (b != null) {
+      b.putString("action", Intent.ACTION_MAIN);
+      b.remove("webquery");
+      //  A bit of a hack, reaching up into the activity
+      getActivity().getIntent().removeExtra("webquery");
+    }
   }
 
   //  Process a click on one of the calls
@@ -234,7 +263,10 @@ public class CalllistFragment extends RotationFragment implements OnItemClickLis
     //  Save the call info
     CallListItem item = cla.getItem(position);
     CallClickListener act = (CallClickListener)getActivity();
-    act.onCallClick(item.call, item.link);
+    Intent intent = new Intent();
+    intent.putExtra("call",item.call);
+    intent.putExtra("link",item.link);
+    act.onCallClick(intent);
   }
 
   /**

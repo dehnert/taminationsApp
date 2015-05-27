@@ -20,8 +20,10 @@
 
 package com.bradchristie.taminationsapp;
 
+import android.app.AlertDialog;
+import android.app.SearchManager;
 import android.content.Intent;
-import android.content.SharedPreferences;
+import android.net.Uri;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.TextView;
@@ -72,8 +74,7 @@ public class LevelActivity extends RotationActivity
     }
   }  // end of LevelData class
 
-  View selectedView = null;
-  private CalllistFragment cf;
+  private View selectedView = null;
 
   /**
    *    Called once after Activity is started
@@ -85,30 +86,70 @@ public class LevelActivity extends RotationActivity
     setContentView(R.layout.activity_level);
     setTitle("Taminations");
     if (findViewById(R.id.fragment_calllist) != null) {
-      //  Multi-fragment display - switch calllist fragment to show About
+      //  Multi-fragment display - set calllist fragment to show About
       RotationFragment af = new AboutFragment();
-      //  But if user was running Taminations previously then switch to
-      //  the most recent list of calls
-      SharedPreferences prefs = getSharedPreferences("Taminations",MODE_PRIVATE);
-      if (!prefs.getString("level", "").equals(""))
-        af = new CalllistFragment();
       replaceFragment(af,R.id.fragment_calllist);
     }
+  }
+
+  protected void onNewIntent(Intent intent)
+  {
+    setIntent(intent);
+    //  Then onResume is called, and getIntent will retrieve the new intent
   }
 
   /**
    *   Called whenever this activity is re-displayed
    */
-  protected void onResume()
-  {
+  protected void onResume() {
     super.onResume();
-    //  Clear hack to jump up to this level  TODO should be factored up??
-    SharedPreferences prefs = getSharedPreferences("Taminations",MODE_PRIVATE);
-    if (prefs.contains("navigateupto")) {
-      cf = null;
-      prefs.edit().remove("navigateupto").commit();
+    String action = getIntent().getAction();
+
+    //  Process request from Google to search Taminations
+    if (action != null) {
+      if (action.contains("SEARCH")) {
+        Intent intent = new Intent(getIntent());
+        intent.putExtra("action",action);
+        intent.putExtra("query", getIntent().getStringExtra(SearchManager.QUERY));
+        gotoLevel(LevelData.find("Index of All Calls"),intent);
+      }
+
+      //  Process link to app
+      if (action.contains("VIEW")) {
+        Uri u = getIntent().getData();
+        Intent intent = new Intent(getIntent());
+        intent.putExtra("action",action);
+        if (u != null) {
+          if (u.getQuery() != null)
+            intent.putExtra("webquery", u.getQuery());
+          if (u.getPath() != null) {
+            String[] parts = u.getPath().split("/");
+            //  Level is parts[1], call link is parts[2]
+            if (parts.length > 1) {
+              LevelData d = LevelData.find(parts[1]);
+              if (d != null) {
+                if (parts.length > 2)
+                  intent.putExtra("link", parts[2]);
+                gotoLevel(d,intent);
+              } else {  //  bad level in link
+                AlertDialog.Builder ab = new AlertDialog.Builder(this);
+                ab.setTitle("Error loading Taminations link");
+                ab.setMessage("Incorrect level: "+parts[1]);
+                ab.setNegativeButton("Cancel",null);
+                ab.create().show();
+              }
+            }
+          }
+        }
+      }
     }
+
+    //  End of processing intent
+    //  So reset it to MAIN so we don't repeat when the user navigates back up
+    getIntent().setAction(Intent.ACTION_MAIN);
+
     //  For portrait view, make sure none of the levels are highlighted
+    String level = intentString("level");
     if (isPortrait()) {
       setTitle("Taminations");
       if (selectedView != null) {
@@ -117,20 +158,14 @@ public class LevelActivity extends RotationActivity
       }
     }
     //  Landscape multi-panel view
-    else {
-      if (cf == null) {
-        cf = new CalllistFragment();
-        replaceFragment(cf,R.id.fragment_calllist);
-      }
-      String level = prefs.getString("level", "Basic and Mainstream");
+    else if (level != null) {
+      CalllistFragment cf = new CalllistFragment();
+      cf.setArguments(getIntent().getExtras());
+      replaceFragment(cf, R.id.fragment_calllist);
       LevelData data = LevelData.find(level);
-      if (data != null) {
-        int id = data.id;
-        highlightClick(findViewById(id));
-      }
-      else
-        highlightClick(null);
+      highlightClick(findViewById(data.id));
     }
+
   }
 
   /**
@@ -145,34 +180,33 @@ public class LevelActivity extends RotationActivity
       v.setSelected(true);
     selectedView = v;
   }
-  public void processClick(View v)
-  {
+  public void processClick(View v) {
     highlightClick(v);
-    LevelData d = LevelData.find(((TextView)v).getText().toString());
-    SharedPreferences prefs = getSharedPreferences("Taminations",MODE_PRIVATE);
-    prefs.edit().putString("level",d.name)
-                .putString("query","")
-                .putString("selector",d.selector).commit();
+    LevelData d = LevelData.find(((TextView) v).getText().toString());
+    gotoLevel(d, new Intent().putExtra("action",Intent.ACTION_MAIN));
+  }
+
+  private void gotoLevel(LevelData d, Intent intent)
+  {
+    intent.putExtra("level", d.name);
+    intent.putExtra("selector", d.selector);
     if (isPortrait()) {
       //  Single-fragment display - start calllist activity
-      startActivity(new Intent(this,CalllistActivity.class));
+      startActivity(intent.setClass(this, CalllistActivity.class));
     } else {
       //  Multi-fragment display - switch calllist fragment
       CalllistFragment cf = new CalllistFragment();
+      cf.setArguments(intent.getExtras());
       replaceFragment(cf,R.id.fragment_calllist);
     }
   }
 
   //  Process a click on one of the calls
-  public void onCallClick(String call, String link)
+  public void onCallClick(Intent intent)
   {
     //  Save the call info
-    SharedPreferences prefs = getSharedPreferences("Taminations",MODE_PRIVATE);
-    prefs.edit().putString("call",call)
-                .putString("link",link)
-                .putInt("anim", 0).commit();
     //  Start the next activity
-    startActivity(new Intent(this,AnimListActivity.class));
+    startActivity(intent.setClass(this, AnimListActivity.class));
   }
 
   public void onPracticeClick(View v)

@@ -62,6 +62,8 @@ public class Tamination {
     Document doc = null;
     //  Read the xml file
     try {
+      if (!name.endsWith(".xml"))
+        name = name + ".xml";
       DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
       DocumentBuilder db = dbf.newDocumentBuilder();
       InputStream is = ctx.getAssets().open(name);

@@ -25,14 +25,13 @@ import org.w3c.dom.Element;
 import org.w3c.dom.NodeList;
 
 import android.app.Activity;
-import android.content.Context;
-import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.widget.ImageButton;
+import android.widget.Button;
 import android.widget.SeekBar;
 import android.widget.TextView;
 
@@ -110,9 +109,8 @@ public class AnimationFragment extends RotationFragment
   public void resetAnimation()
   {
     //  Load the animation xml file
-    SharedPreferences prefs = getActivity().getSharedPreferences("Taminations",Context.MODE_PRIVATE);
-    String xmlname = prefs.getString("link",getString(android.R.string.untitled)) + ".xml";
-    int anim = prefs.getInt("anim",0);
+    String xmlname = intentString("link");
+    int anim = intentInt("anim");
     //  Read the xml file and select the requested animation
     Document tamdoc = Tamination.getXMLAsset(getActivity(), xmlname);
     Element tam = (Element)Tamination.tamList(tamdoc).item(anim);
@@ -148,7 +146,7 @@ public class AnimationFragment extends RotationFragment
     mAnimationView.setAnimationListener(this);
     SeekBar sb = (SeekBar)fragment.findViewById(R.id.seekBar1);
     sb.setOnSeekBarChangeListener(this);
-    resetAnimation();
+    //resetAnimation();
     //  Add listeners for buttons
     View rewindButton = fragment.findViewById(R.id.button_rewind);
     rewindButton.setOnClickListener(new OnClickListener() {
@@ -156,13 +154,13 @@ public class AnimationFragment extends RotationFragment
         mAnimationView.doPrevPart();
       }
     });
-    ImageButton prevButton = (ImageButton)fragment.findViewById(R.id.button_prev);
+    Button prevButton = (Button)fragment.findViewById(R.id.button_prev);
     prevButton.setOnClickListener(new OnClickListener() {
       public void onClick(View v) {
         mAnimationView.doBackup();
       }
     });
-    ImageButton forwardButton = (ImageButton)fragment.findViewById(R.id.button_next);
+    Button forwardButton = (Button)fragment.findViewById(R.id.button_next);
     forwardButton.setOnClickListener(new OnClickListener() {
       public void onClick(View v) {
         mAnimationView.doForward();
@@ -203,6 +201,12 @@ public class AnimationFragment extends RotationFragment
       }
     );
     return fragment;
+  }
+
+  public void onResume()
+  {
+    super.onResume();
+    resetAnimation();
   }
 
   /**

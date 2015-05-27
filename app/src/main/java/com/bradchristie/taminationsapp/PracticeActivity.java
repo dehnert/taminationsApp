@@ -94,7 +94,7 @@ public class PracticeActivity extends RotationActivity
         av.setSquare();
         av.setAnimation(tam,gender.equals("Boy")?Dancer.BOY:Dancer.GIRL);
         //  Save link for definition
-        prefs.edit().putString("link",link).commit();
+        prefs.edit().putString("link",link).apply();
         found = true;
       }
     }
