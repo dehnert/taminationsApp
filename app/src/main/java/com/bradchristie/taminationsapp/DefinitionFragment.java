@@ -58,7 +58,7 @@ public class DefinitionFragment extends RotationFragment
           public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
             if (isChecked) {
               defview.loadUrl("javascript:setAbbrev(true)");
-              prefs.edit().putBoolean("isabbrev",true).apply();
+              prefs.edit().putBoolean("isabbrev",true).commit();
             }
           }
         });
@@ -70,7 +70,7 @@ public class DefinitionFragment extends RotationFragment
               public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                 if (isChecked) {
                   defview.loadUrl("javascript:setAbbrev(false)");
-                  prefs.edit().putBoolean("isabbrev", false).apply();
+                  prefs.edit().putBoolean("isabbrev", false).commit();
                 }
               }
             });
@@ -138,8 +138,10 @@ public class DefinitionFragment extends RotationFragment
   public void setPart(int part)
   {
     String name = intentString("title");
-    name = name.replaceAll("\\s+", "");
-    defview.loadUrl("javascript:currentcall='"+name+"'");
-    defview.loadUrl("javascript:setPart("+part+")");
+    if (name != null) {
+      name = name.replaceAll("\\s+", "");
+      defview.loadUrl("javascript:currentcall='" + name + "'");
+      defview.loadUrl("javascript:setPart(" + part + ")");
+    }
   }
 }

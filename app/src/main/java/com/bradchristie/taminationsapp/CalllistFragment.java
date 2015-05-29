@@ -93,6 +93,8 @@ public class CalllistFragment extends RotationFragment implements OnItemClickLis
       doc = Tamination.getXMLAsset(getActivity(),"src/callindex.xml");
       list1 = Tamination.evalXPath("/calls/call",doc);
       query = intentString("query");
+      if (query == null)
+        query = "";
       editText.setText(query);
     }
     calllistdata = new CallListData[list1.getLength()];

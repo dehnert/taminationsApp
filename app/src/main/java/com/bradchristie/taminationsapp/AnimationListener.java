@@ -22,11 +22,11 @@ package com.bradchristie.taminationsapp;
 
 public interface AnimationListener
 {
-  public static final int ANIMATION_READY = 1;
-  public static final int ANIMATION_PROGRESS = 2;
-  public static final int ANIMATION_DONE = 3;
-  public static final int ANIMATION_PART = 4;
+  int ANIMATION_READY = 1;
+  int ANIMATION_PROGRESS = 2;
+  int ANIMATION_DONE = 3;
+  int ANIMATION_PART = 4;
 
-  public void onAnimationChanged(int action, double loc, double beat, double z);
+  void onAnimationChanged(int action, double loc, double beat, double z);
 
 }
