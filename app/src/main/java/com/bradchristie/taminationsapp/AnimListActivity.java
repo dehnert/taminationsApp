@@ -125,6 +125,7 @@ public class AnimListActivity extends RotationActivity
   public int selectedPosition;
   public Drawable firstViewBackground;
   private String level;
+  private Intent intent;
 
   @Override
   protected void onCreate(Bundle savedInstanceState) {
@@ -175,7 +176,7 @@ public class AnimListActivity extends RotationActivity
       String from = tam.getAttribute("from");
       String group = tam.getAttribute("group");
       int d = 0;
-      String diffstr = tam.getAttribute("difficulty");
+      String diffstr = Tamination.tamXref(this,tam).getAttribute("difficulty");
       if (diffstr.length() > 0)
         d = Integer.valueOf(diffstr);
       diffsum += d;
@@ -214,7 +215,7 @@ public class AnimListActivity extends RotationActivity
         selectanim = adapter.getCount();
       //  Check for a match to a web link
       if (webquery != null) {
-        String webtarget = group.length() > 0 ? group + title : title + "from" + from;
+        String webtarget = group.length() > 0 ? title : title + "from" + from;
         if (webquery.toLowerCase().equals(webtarget.toLowerCase().replaceAll("\\s",""))) {
           selectanim = adapter.getCount();
           foundwebquery = true;
@@ -234,7 +235,7 @@ public class AnimListActivity extends RotationActivity
 
     //  List of all animations completed
     //  User selection from master index supercedes default 1st animation
-    Intent intent = new Intent(getIntent());
+    intent = new Intent(getIntent());
     if (selectanim >= 0)
       firstanim = selectanim;
     if (webquery != null && !foundwebquery) {
@@ -285,11 +286,22 @@ public class AnimListActivity extends RotationActivity
     }
   }
 
+  //  Link to use with share button
+  @Override
+  protected String shareURL()
+  {
+    String url = "http://www.tamtwirlers.org/tamination/" + intentString("link") + ".html";
+    if (multifragment) {
+      url = animfrag.intentString("url");
+    }
+    return url;
+  }
+
   // Definition
   public void onButtonDefinitionClicked(View v) {
     if (multifragment) {
       deffrag = new DefinitionFragment();
-      deffrag.setArguments(getIntent().getExtras());
+      deffrag.setArguments(intent.getExtras());
       replaceFragment(deffrag, R.id.fragment_definition);
     }
     else
@@ -351,7 +363,6 @@ public class AnimListActivity extends RotationActivity
       // Save info and start animation activity
       AnimListItem item = adapter.getItem(position);
       item.wasSelected = true;
-      final Intent intent = new Intent((getIntent()));
       intent.putExtra("anim", posanim[position]);
       intent.putExtra("title",item.title);
       intent.putExtra("name",item.group+" "+item.name);
@@ -368,7 +379,7 @@ public class AnimListActivity extends RotationActivity
           }
         }, R.id.fragment_animation);
         //boolean hasAudio = Tamination.assetExists(this, level, Tamination.audioAssetName(item.title));
-        findViewById(R.id.speaker).setVisibility( /* hasAudio ? View.VISIBLE : */ View.INVISIBLE);
+        //findViewById(R.id.speaker).setVisibility( /* hasAudio ? View.VISIBLE : */ View.INVISIBLE);
 
       } else
         // Single fragment - start animation activity

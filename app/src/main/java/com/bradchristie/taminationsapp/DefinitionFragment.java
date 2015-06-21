@@ -27,10 +27,14 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.webkit.ValueCallback;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
 import android.widget.CompoundButton;
 import android.widget.RadioButton;
+
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
 
 @SuppressLint("SetJavaScriptEnabled")
 public class DefinitionFragment extends RotationFragment
@@ -57,7 +61,7 @@ public class DefinitionFragment extends RotationFragment
           @Override
           public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
             if (isChecked) {
-              defview.loadUrl("javascript:setAbbrev(true)");
+              evaluateJavascript("setAbbrev(true)");
               prefs.edit().putBoolean("isabbrev",true).commit();
             }
           }
@@ -69,7 +73,7 @@ public class DefinitionFragment extends RotationFragment
               @Override
               public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                 if (isChecked) {
-                  defview.loadUrl("javascript:setAbbrev(false)");
+                  evaluateJavascript("setAbbrev(false)");
                   prefs.edit().putBoolean("isabbrev", false).commit();
                 }
               }
@@ -95,7 +99,7 @@ public class DefinitionFragment extends RotationFragment
     "          classstr += 'definition-highlight'; "+
     "        classstr = classstr.replace(/^\\s+|\\s+$/g,''); "+
     "        elem.className = classstr;      }   }  ";
-    defview.loadUrl("javascript:"+jsfunction);
+    evaluateJavascript(jsfunction);
 
     //  Show abbrev/full buttons only for Basic and Mainstream
     View dgv =  fragment.findViewById(R.id.definitionGroup);
@@ -123,7 +127,7 @@ public class DefinitionFragment extends RotationFragment
       //  abbrev/full and set the current state
       defview.setWebViewClient(new WebViewClient() {
         public void onPageFinished(WebView v, String u) {
-          defview.loadUrl("javascript:"+jsfunction2);
+          evaluateJavascript(jsfunction2);
         }
       });
 
@@ -140,8 +144,22 @@ public class DefinitionFragment extends RotationFragment
     String name = intentString("title");
     if (name != null) {
       name = name.replaceAll("\\s+", "");
-      defview.loadUrl("javascript:currentcall='" + name + "'");
-      defview.loadUrl("javascript:setPart(" + part + ")");
+      evaluateJavascript("currentcall='" + name + "'");
+      evaluateJavascript("setPart(" + part + ")");
     }
   }
+
+  private void evaluateJavascript(String script)
+  {
+    try {
+      //  WebView.evaluateJavascript method available starting with KitKat
+      Method m = defview.getClass().getMethod("evaluateJavascript", String.class, ValueCallback.class);
+      m.invoke(defview,script,null);
+    } catch (Exception e) {
+      //  fall back to loadUrl which usually works
+      defview.loadUrl("javascript:"+script);
+    }
+
+  }
+
 }

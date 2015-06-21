@@ -118,26 +118,29 @@ public class LevelActivity extends RotationActivity
       if (action.contains("VIEW")) {
         Uri u = getIntent().getData();
         Intent intent = new Intent(getIntent());
-        intent.putExtra("action",action);
+        intent.putExtra("action", action);
         if (u != null) {
           if (u.getQuery() != null)
             intent.putExtra("webquery", u.getQuery());
           if (u.getPath() != null) {
             String[] parts = u.getPath().split("/");
-            //  Level is parts[1], call link is parts[2]
-            if (parts.length > 1) {
-              LevelData d = LevelData.find(parts[1]);
-              if (d != null) {
-                if (parts.length > 2)
-                  intent.putExtra("link", parts[2]);
+            //  Look for the level in the path
+            LevelData d = null;
+            for (int i=0; i<parts.length; i++) {
+              if (parts[i].matches("(b1|b2|ms|plus|a1|a2|c1|c2|c3a|c3b)")) {
+                d = LevelData.find(parts[i]);
+                if (i < parts.length-1)
+                  intent.putExtra("link", parts[i+1]);
                 gotoLevel(d,intent);
-              } else {  //  bad level in link
-                AlertDialog.Builder ab = new AlertDialog.Builder(this);
-                ab.setTitle("Error loading Taminations link");
-                ab.setMessage("Incorrect level: "+parts[1]);
-                ab.setNegativeButton("Cancel",null);
-                ab.create().show();
               }
+            }
+            if (d == null) {
+              //  bad level in link
+              AlertDialog.Builder ab = new AlertDialog.Builder(this);
+              ab.setTitle("Error loading Taminations link");
+              ab.setMessage("Unable to parse level: "+u);
+              ab.setNegativeButton("Cancel",null);
+              ab.create().show();
             }
           }
         }

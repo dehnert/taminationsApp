@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.bradchristie.taminationsapp"
-    android:versionCode="40"
+    android:versionCode="42"
 
-    android:versionName="1.2.17.1" >
+    android:versionName="1.2.18.1" >
 
     <application
         android:allowBackup="true"
@@ -30,6 +30,27 @@
                 <category android:name="android.intent.category.DEFAULT"/>
                 <category android:name="android.intent.category.BROWSABLE"/>
                 <data android:scheme="Taminations" />
+            </intent-filter>
+            <!-- This is to intercept http://www.tamtwirlers.com/tamination -->
+            <!-- Works in some cases -->
+            <intent-filter>
+                <action android:name="android.intent.action.VIEW"/>
+                <category android:name="android.intent.category.DEFAULT"/>
+                <category android:name="android.intent.category.BROWSABLE"/>
+                <category android:name="android.intent.category.LAUNCHER" />
+                <data android:scheme="http"
+                      android:host="www.tamtwirlers.org"
+                      android:pathPrefix="/tamination"/>
+            </intent-filter>
+            <!-- And this is for Taminations://www.tamtwirlers.org/tamination/... -->
+            <intent-filter>
+                <action android:name="android.intent.action.VIEW"/>
+                <category android:name="android.intent.category.DEFAULT"/>
+                <category android:name="android.intent.category.BROWSABLE"/>
+                <category android:name="android.intent.category.LAUNCHER" />
+                <data android:scheme="Taminations"
+                      android:host="www.tamtwirlers.org"
+                      android:pathPrefix="/tamination"/>
             </intent-filter>
         </activity>
         <activity

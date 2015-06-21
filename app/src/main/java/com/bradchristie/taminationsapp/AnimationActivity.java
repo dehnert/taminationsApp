@@ -31,11 +31,16 @@ import android.widget.TextView;
 
 import com.bradchristie.taminationsapp.LevelActivity.LevelData;
 
+import org.w3c.dom.Document;
+import org.w3c.dom.Element;
+
 public class AnimationActivity extends PortraitActivity
              implements AnimationListener,
                         SharedPreferences.OnSharedPreferenceChangeListener,
                         SeekBar.OnSeekBarChangeListener
 {
+
+  private AnimationFragment af;
 
   public void onLogoClicked(View view) {
     super.onLogoClicked(view);
@@ -97,7 +102,7 @@ public class AnimationActivity extends PortraitActivity
     Button levelButton = (Button)findViewById(R.id.button_level);
     levelButton.setText(LevelData.find(level).name);
     //boolean hasAudio = Tamination.assetExists(this, level, Tamination.audioAssetName(title));
-    findViewById(R.id.speaker).setVisibility( /* hasAudio ? View.VISIBLE : */ View.GONE);
+    //findViewById(R.id.speaker).setVisibility( /* hasAudio ? View.VISIBLE : */ View.GONE);
   }
 
 
@@ -107,14 +112,20 @@ public class AnimationActivity extends PortraitActivity
   }
   //  Settings
   public void onButtonSettingsClicked(View v) {
-    startActivity(new Intent(this,SettingsActivity.class));
+    startActivity(new Intent(this, SettingsActivity.class));
+  }
+
+  //  Link to use with share button
+  @Override
+  protected String shareURL()
+  {
+    return af.intentString("url");
   }
 
   @Override
-  protected void onResume()
-  {
+  protected void onResume() {
     super.onResume();
-    AnimationFragment af = new AnimationFragment();
+    af = new AnimationFragment();
     af.setArguments(getIntent().getExtras());
     replaceFragment(af, R.id.fragment_animation);
   }

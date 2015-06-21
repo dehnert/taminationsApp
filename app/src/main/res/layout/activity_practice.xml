@@ -131,13 +131,13 @@
             </LinearLayout>
         </LinearLayout>
 
-        <fragment android:name="com.bradchristie.taminationsapp.DefinitionFragment"
-              android:id="@+id/fragment_definition"
-              android:layout_width="fill_parent"
-              android:layout_height="fill_parent"
-              android:layout_marginRight="100dp"
-              android:layout_marginLeft="100dp"
-               />
+        <FrameLayout
+            android:id="@+id/fragment_definition"
+            android:layout_width="fill_parent"
+            android:layout_height="fill_parent"
+            android:layout_marginRight="100dp"
+            android:layout_marginLeft="100dp"
+            android:background="@android:color/white"/>
 
         <Button
             android:id="@+id/button_practice_definition"

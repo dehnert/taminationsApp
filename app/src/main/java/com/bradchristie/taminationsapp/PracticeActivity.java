@@ -92,10 +92,10 @@ public class PracticeActivity extends RotationActivity
           continue;
         setTitle(tam.getAttribute("title"));
         av.setSquare();
-        av.setAnimation(tam,gender.equals("Boy")?Dancer.BOY:Dancer.GIRL);
-        //  Save link for definition
-        prefs.edit().putString("link",link).apply();
+        av.setAnimation(tam, gender.equals("Boy") ? Dancer.BOY : Dancer.GIRL);
         found = true;
+        //  Save link for definition
+        getIntent().putExtra("link",link);
       }
     }
   }
@@ -197,10 +197,9 @@ public class PracticeActivity extends RotationActivity
       fragmentDefinition.setVisibility(View.GONE);
       findViewById(R.id.practice_complete_panel).setVisibility(View.VISIBLE);
     } else {
-      DefinitionFragment df =
-          (DefinitionFragment)
-          getSupportFragmentManager().findFragmentById(R.id.fragment_definition);
-      df.setDefinition(link);
+      DefinitionFragment df = new DefinitionFragment();
+      df.setArguments(getIntent().getExtras());  // pass the link
+      replaceFragment(df, R.id.fragment_definition);
       hideExtraStuff();
       fragmentDefinition.setVisibility(View.VISIBLE);
       buttonDefinition.setVisibility(View.VISIBLE);

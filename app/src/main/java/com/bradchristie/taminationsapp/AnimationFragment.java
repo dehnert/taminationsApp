@@ -88,7 +88,7 @@ public class AnimationFragment extends RotationFragment
         //  A bit of a hack to pass the current part to the definition
         act = getActivity();
         if (act != null && act.getClass() == AnimListActivity.class)
-          ((AnimListActivity)act).setPart((int)loc);
+          ((AnimListActivity) act).setPart((int) loc);
         break;
       }
     }
@@ -114,11 +114,21 @@ public class AnimationFragment extends RotationFragment
     //  Read the xml file and select the requested animation
     Document tamdoc = Tamination.getXMLAsset(getActivity(), xmlname);
     Element tam = (Element)Tamination.tamList(tamdoc).item(anim);
-    if (tam != null)
+    if (tam != null) {
       setTitle(tam.getAttribute("title"));
+      //  For sharing, store the param for linking
+      String title = tam.getAttribute("title");
+      String from = tam.getAttribute("from");
+      String animname = title + "from" + from;
+      String group = tam.getAttribute("group");
+      if (group != null && group.length() > 1)
+        animname = title;
+      getArguments().putString("url", "http://www.tamtwirlers.org/tamination/" + intentString("link") + ".html?"
+          +  animname.replaceAll("\\W",""));
+    }
     //  Display any Taminator quote
     if (tam != null) {
-      NodeList tamsayslist = tam.getElementsByTagName("taminator");
+      NodeList tamsayslist = Tamination.tamXref(getActivity(),tam).getElementsByTagName("taminator");
       if (tamsayslist.getLength() > 0) {
         Element tamsayselem = (Element)tamsayslist.item(0);
         //  Clean up extra white space in the XML

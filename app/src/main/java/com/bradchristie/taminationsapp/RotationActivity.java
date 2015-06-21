@@ -54,7 +54,7 @@ public abstract class RotationActivity extends FragmentActivity
   }
   public int intentInt(String key)
   {
-    return getIntent().getIntExtra(key,0);
+    return getIntent().getIntExtra(key, 0);
   }
 
   protected boolean isLandscapeActivity()
@@ -67,6 +67,23 @@ public abstract class RotationActivity extends FragmentActivity
     super.onCreate(savedInstanceState);
     if (!isLandscapeActivity() && getResources().getBoolean(R.bool.portrait_only))
       setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
+  }
+
+  protected String shareURL()
+  {
+    return null;
+  }
+
+  public void onShareClicked(View v)
+  {
+    String url = shareURL();
+    if (url != null) {
+      Intent sendIntent = new Intent();
+      sendIntent.setAction(Intent.ACTION_SEND);
+      sendIntent.putExtra(Intent.EXTRA_TEXT, url);
+      sendIntent.setType("text/plain");
+      startActivity(Intent.createChooser(sendIntent, "Share via"));
+    }
   }
 
   public void onLogoClicked(View v)
