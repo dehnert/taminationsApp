@@ -32,6 +32,7 @@ public class Movement {
   //static public final int ANYGRIP =  4;
 
   public double beats;
+  public double fullbeats;
   public int hands;
   public double cx1;
   public double cy1;
@@ -81,7 +82,7 @@ public class Movement {
   public Movement(double beats, int hands, double cx1, double cy1,
                   double cx2, double cy2, double x2, double y2)
   {
-    this.beats = beats;
+    this.beats = this.fullbeats = beats;
     this.hands = hands;
     this.cx1 = this.cx3 = cx1;
     this.cy1 = cy1;
@@ -120,7 +121,7 @@ public class Movement {
                   double cx3, double cx4, double cy4, double x4, double y4)
 
   {
-    this.beats = beats;
+    this.beats = this.fullbeats = beats;
     this.hands = hands;
     this.cx1 = cx1;
     this.cx2 = cx2;
@@ -136,12 +137,32 @@ public class Movement {
   }
 
   /**
+   * Clone a movement
+   */
+  public Movement(Movement m)
+  {
+    beats = fullbeats = m.beats;
+    hands = m.hands;
+    cx1 = m.cx1;
+    cx2 = m.cx2;
+    cy2 = m.cy2;
+    x2 = m.x2;
+    y2 = m.y2;
+    cx3 = m.cx3;
+    cx4 = m.cx4;
+    cy4 = m.cy4;
+    x4 = m.x4;
+    y4 = m.y4;
+    recalculate();
+  }
+
+  /**
    * Construct a Movement from the attributes of an XML movement
    * @param elem from xml
    */
   public Movement(Element elem)
   {
-    beats = Double.valueOf(elem.getAttribute("beats"));
+    beats = fullbeats = Double.valueOf(elem.getAttribute("beats"));
     hands = getHands(elem.getAttribute("hands"));
     cx1 = Double.valueOf(elem.getAttribute("cx1"));
     cy1 = Double.valueOf(elem.getAttribute("cy1"));
@@ -172,8 +193,12 @@ public class Movement {
    */
   public Matrix translate(double t)
   {
-    Double tt = Math.min(Math.max(0,t),beats);
-    return btranslate.translate(tt/beats);
+    Double tt = Math.min(Math.max(0,t),fullbeats);
+    return btranslate.translate(tt/fullbeats);
+  }
+  public Matrix translate()
+  {
+    return translate(beats);
   }
 
   /**
@@ -183,8 +208,55 @@ public class Movement {
    */
   public Matrix rotate(double t)
   {
-    double tt = Math.min(Math.max(0,t),beats);
-    return brotate.rotate(tt/beats);
+    double tt = Math.min(Math.max(0,t),fullbeats);
+    return brotate.rotate(tt / fullbeats);
+  }
+  public Matrix rotate()
+  {
+    return rotate(beats);
+  }
+
+  public void scale(double x, double y)
+  {
+    btranslate = new Bezier(0,0,btranslate.ctrlx1*x,
+            btranslate.ctrly1*y,
+            btranslate.ctrlx2*x,
+            btranslate.ctrly2*y,
+            btranslate.x2*x,
+            btranslate.y2*y);
+    brotate = new Bezier(0,0,brotate.ctrlx1*x,
+            brotate.ctrly1*y,
+            brotate.ctrlx2*x,
+            brotate.ctrly2*y,
+            brotate.x2*x,
+            brotate.y2*y);
+    if (y < 0) {
+      if (this.hands == Movement.LEFTHAND)
+        this.hands = Movement.RIGHTHAND;
+      else if (this.hands == Movement.RIGHTHAND)
+        this.hands = Movement.LEFTHAND;
+    }
+  }
+
+  public void skew(double x, double y)
+  {
+    btranslate = new Bezier(0,0,btranslate.ctrlx1,
+            btranslate.ctrly1,
+            btranslate.ctrlx2+x,
+            btranslate.ctrly2+y,
+            btranslate.x2+x,
+            btranslate.y2+y);
+  }
+
+  public void reflect()
+  {
+    scale(1,-1);
+  }
+
+  public void clip(double b)
+  {
+    if (b > 0 && b < fullbeats)
+      beats = b;
   }
 
   /**

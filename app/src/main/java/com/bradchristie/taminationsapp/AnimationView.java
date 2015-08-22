@@ -25,6 +25,7 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Vector;
 
+import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.NodeList;
 
@@ -42,6 +43,10 @@ import android.view.SurfaceHolder;
 import android.view.SurfaceView;
 import android.view.View;
 import android.view.View.OnTouchListener;
+
+import javax.xml.parsers.DocumentBuilder;
+import javax.xml.parsers.DocumentBuilderFactory;
+import javax.xml.parsers.ParserConfigurationException;
 
 public class AnimationView extends SurfaceView
                            implements SurfaceHolder.Callback,
@@ -925,6 +930,28 @@ public class AnimationView extends SurfaceView
   public void setAnimation(Element tam)
   {
     setAnimation(tam,-1);
+  }
+
+  //  Set up animation given just a formation without any animation
+  //  Used by the sequencer
+  public void setFormation(Element f)
+  {
+    //  Build a complete tam element with empty paths
+    try {
+      DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
+      DocumentBuilder db = dbf.newDocumentBuilder();
+      Document doc = db.newDocument();
+      Element tam = doc.createElement("tam");
+      doc.appendChild(tam);
+      tam.appendChild(doc.adoptNode(f.cloneNode(true)));
+      int ndancers = f.getElementsByTagName("dancer").getLength();
+      for (int i=0; i<ndancers; i++)
+        tam.appendChild(doc.createElement("path"));
+      //  Now send the complete element to the animation builder
+      setAnimation(tam);
+    } catch (ParserConfigurationException e) {
+      e.printStackTrace();
+    }
   }
 
 

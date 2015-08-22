@@ -1,9 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.bradchristie.taminationsapp"
-    android:versionCode="42"
-
-    android:versionName="1.2.18.1" >
+    android:versionCode="46"
+    android:versionName="1.3.0" >
+    <uses-permission android:name="android.permission.RECORD_AUDIO"/>
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
 
     <application
         android:allowBackup="true"
@@ -91,6 +92,10 @@
             android:name="com.bradchristie.taminationsapp.TutorialActivity"
             android:screenOrientation="landscape"
             android:label="Practice" >
+        </activity>
+        <activity android:name="com.bradchristie.taminationsapp.SequenceActivity"
+                  android:permission="android.permission.RECORD_AUDIO"
+                  android:label="Sequencer">
         </activity>
     </application>
 

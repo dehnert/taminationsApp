@@ -26,7 +26,6 @@ import java.util.List;
 import android.graphics.Canvas;
 import android.graphics.Paint;
 import android.graphics.Paint.Style;
-import android.graphics.Path;
 import android.graphics.RectF;
 import android.support.annotation.NonNull;
 import android.util.Pair;
@@ -54,15 +53,15 @@ public class Dancer implements Comparable<Dancer> {
   public boolean leftHandVisibility;
   public boolean rightHandNewVisibility;
   public boolean leftHandNewVisibility;
+  public Dancer clonedFrom;
+  public Path path;
 
   private final int gender;
   public final String number;
   private final String number_couple;
   private final Geometry geom;
   protected final Matrix starttx;
-  private final List<Movement> movelist;
-  private final List<Matrix> transformlist;
-  private final Path pathpath;
+  private final android.graphics.Path pathpath;
   protected int fillColor;
   protected final int drawColor;
 
@@ -86,19 +85,10 @@ public class Dancer implements Comparable<Dancer> {
     drawColor = Color.darker(c);
     starttx = geometry.startMatrix(mat);
     geom = geometry.clone();
-    movelist = moves;
-    // Calculate list of transforms to speed up animations
-    transformlist = new ArrayList<>();
-    Matrix tx = new Matrix();
-    for (Movement m : movelist) {
-      Matrix tt = m.translate(999);
-      tx.preConcat(tt);
-      Matrix tr = m.rotate(999);
-      tx.preConcat(tr);
-      transformlist.add(new Matrix(tx));
-    }
+    path = new Path(moves);
+    clonedFrom = null;
     // Compute points of path for drawing path
-    pathpath = new Path();
+    pathpath = new android.graphics.Path();
     animate(0.0);
     Pair<Float, Float> loc = location();
     pathpath.moveTo(loc.first, loc.second);
@@ -108,6 +98,21 @@ public class Dancer implements Comparable<Dancer> {
       pathpath.lineTo(loc.first, loc.second);
     }
     //  Restore dancer to start position
+    animate(-2.0);
+  }
+
+  public Dancer(Dancer from)
+  {
+    number = from.number;
+    number_couple = from.number_couple;
+    gender = from.gender;
+    fillColor = from.fillColor;
+    drawColor = from.drawColor;
+    starttx = from.starttx;
+    geom = from.geom.clone();
+    path = new Path();
+    pathpath = new android.graphics.Path();
+    clonedFrom = from;
     animate(-2.0);
   }
 
@@ -125,7 +130,7 @@ public class Dancer implements Comparable<Dancer> {
    */
   public float beats() {
     float retval = 0f;
-    for (Movement m : movelist)
+    for (Movement m : path.movelist)
       retval += m.beats;
     return retval;
   }
@@ -164,12 +169,12 @@ public class Dancer implements Comparable<Dancer> {
     hands = Movement.BOTHHANDS;
     // Apply all completed movements
     Movement m = null;
-    for (int i = 0; i < movelist.size(); i++) {
-      m = movelist.get(i);
+    for (int i = 0; i < path.movelist.size(); i++) {
+      m = path.movelist.get(i);
       if (beat >= m.beats) {
         tx = new Matrix(starttx);
-        tx.preConcat(transformlist.get(i));
-        beat -= movelist.get(i).beats;
+        tx.preConcat(path.transformlist.get(i));
+        beat -= path.movelist.get(i).beats;
         m = null;
       } else
         break;
@@ -189,6 +194,11 @@ public class Dancer implements Comparable<Dancer> {
       hands = Movement.BOTHHANDS;
     // Modification for any special geometry
     tx.postConcat(geom.pathMatrix(this.starttx,this.tx,beatin));
+  }
+
+  public void animateToEnd()
+  {
+
   }
 
   /**

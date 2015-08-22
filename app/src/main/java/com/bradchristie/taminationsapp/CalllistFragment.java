@@ -173,6 +173,8 @@ public class CalllistFragment extends RotationFragment implements OnItemClickLis
     //  Build a regex from the user query
     //  Use upper case and dup numbers while building regex so expressions don't get compounded
     query = query.toLowerCase();
+    //  Remove all non-alphanums that might interfere with the regex
+    query = query.replaceAll("[^a-zA-Z0-9/-]+"," ");
     //  Through => Thru
     query = query.replaceAll("\\bthrough\\b","THRU");
     //  Process fractions 1/2 3/4 1/4 2/3

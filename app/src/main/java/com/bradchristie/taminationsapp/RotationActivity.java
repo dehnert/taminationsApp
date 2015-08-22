@@ -99,7 +99,7 @@ public abstract class RotationActivity extends FragmentActivity
   {
     //  Build an intent to view the specific level
     //  Set action to VIEW to show the list of calls in portrait mode
-    LevelData d = LevelData.find((String) (((TextView) v).getText()));
+    LevelData d = LevelData.find(((TextView)v).getText().toString());
     Uri u = Uri.parse("intent://view/"+d.dir);
     startActivity(new Intent(Intent.ACTION_VIEW,u,this,LevelActivity.class));
   }

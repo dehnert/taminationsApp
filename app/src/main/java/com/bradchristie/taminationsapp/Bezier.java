@@ -22,14 +22,14 @@ package com.bradchristie.taminationsapp;
 
 public class Bezier {
 
-  private final double x1;
-  private final double y1;
-  private final double ctrlx1;
-  private final double ctrly1;
-  private final double ctrlx2;
-  private final double ctrly2;
-  private final double x2;
-  private final double y2;
+  public final double x1;
+  public final double y1;
+  public final double ctrlx1;
+  public final double ctrly1;
+  public final double ctrlx2;
+  public final double ctrly2;
+  public final double x2;
+  public final double y2;
   private double ax;
   private double bx;
   private double cx;

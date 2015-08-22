@@ -216,7 +216,7 @@ public class AnimListActivity extends RotationActivity
       //  Check for a match to a web link
       if (webquery != null) {
         String webtarget = group.length() > 0 ? title : title + "from" + from;
-        if (webquery.toLowerCase().equals(webtarget.toLowerCase().replaceAll("\\s",""))) {
+        if (webquery.toLowerCase().equals(webtarget.toLowerCase().replaceAll("\\W",""))) {
           selectanim = adapter.getCount();
           foundwebquery = true;
         }

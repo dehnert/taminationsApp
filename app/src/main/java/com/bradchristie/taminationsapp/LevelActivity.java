@@ -92,6 +92,7 @@ public class LevelActivity extends RotationActivity
     }
   }
 
+  @Override
   protected void onNewIntent(Intent intent)
   {
     setIntent(intent);
@@ -101,6 +102,7 @@ public class LevelActivity extends RotationActivity
   /**
    *   Called whenever this activity is re-displayed
    */
+  @Override
   protected void onResume() {
     super.onResume();
     String action = getIntent().getAction();
@@ -149,7 +151,7 @@ public class LevelActivity extends RotationActivity
 
     //  End of processing intent
     //  So reset it to MAIN so we don't repeat when the user navigates back up
-    getIntent().setAction(Intent.ACTION_MAIN);
+    getIntent().setAction(Intent.ACTION_MAIN).replaceExtras((Bundle)null);
 
     //  For portrait view, make sure none of the levels are highlighted
     String level = intentString("level");
