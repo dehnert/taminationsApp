@@ -64,7 +64,6 @@
 
         <ImageButton
             android:id="@+id/button_play"
-            android:src="@drawable/button_play"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1" />
