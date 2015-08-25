@@ -18,7 +18,7 @@
 
 */
 
-package com.bradchristie.taminationsapp;
+package com.bradchristie.taminationsapp
 
 class Bezier(val x1:Double, val y1:Double,
              val ctrlx1:Double, val ctrly1:Double,

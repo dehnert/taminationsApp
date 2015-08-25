@@ -21,7 +21,6 @@
 package com.bradchristie.taminationsapp;
 
 import scala.collection.JavaConversions.asScalaBuffer
-
 object Path {
 
   def apply(moves:java.util.List[Movement]) = {

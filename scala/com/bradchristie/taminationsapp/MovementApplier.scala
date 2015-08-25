@@ -6,7 +6,6 @@ package com.bradchristie.taminationsapp
 
 import org.w3c.dom.Element
 
-
 class MovementApplier {
 
   def movement(elem:Element):Movement = Movement(elem)
