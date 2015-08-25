@@ -140,7 +140,7 @@ class BigonGeometry extends Geometry
     x = r*Math.cos(bigangle);
     y = r*Math.sin(bigangle);
     startangle += angle;
-    Matrix retval = new Matrix();
+    Matrix retval = new Matrix(Matrix.IDENTITY());
     retval.postRotate(startangle);
     retval.postTranslate(x,y);
     return retval;
@@ -164,7 +164,7 @@ class BigonGeometry extends Geometry
     double wrap = Math.round((a1-prevangle)/(Math.PI*2));
     a1 -= wrap*Math.PI*2;
     double a2 = a1 - a0;
-    Matrix m = new Matrix();
+    Matrix m = new Matrix(Matrix.IDENTITY());
     m.postRotate(a2);
     prevangle = a1;
     return m;
@@ -184,7 +184,7 @@ class BigonGeometry extends Geometry
         points.lineTo((float)x,(float)y);
       }
       c.drawPath(points,pline);
-      Matrix m = new Matrix();
+      Matrix m = new Matrix(Matrix.IDENTITY());
       m.postScale(-1.0,1.0);
       points.transform(m);
       c.drawPath(points,pline);
@@ -214,7 +214,7 @@ class SquareGeometry extends Geometry
   public Matrix pathMatrix(Matrix starttx, Matrix tx, double b)
   {
     //  No additional transform needed for squares
-    return new Matrix();
+    return new Matrix(Matrix.IDENTITY());
   }
 
   static public void drawGrid(Canvas c)
@@ -252,7 +252,7 @@ class HexagonGeometry extends Geometry
     x = r * Math.cos(angle+dangle+a);
     y = r * Math.sin(angle+dangle+a);
     startangle += a + dangle;
-    Matrix retval = new Matrix();
+    Matrix retval = new Matrix(Matrix.IDENTITY());
     retval.postRotate(startangle);
     retval.postTranslate(x,y);
     return retval;
@@ -277,7 +277,7 @@ class HexagonGeometry extends Geometry
     double wrap = Math.round((a1-prevangle)/(Math.PI*2));
     a1 -= wrap*Math.PI*2;
     double a2 = -(a1-a0)/3;
-    Matrix m = new Matrix();
+    Matrix m = new Matrix(Matrix.IDENTITY());
     m.postRotate(a2);
     prevangle = a1;
     return m;
@@ -302,7 +302,7 @@ class HexagonGeometry extends Geometry
       //  rotate and reflect the result
       Path p = new Path();
       for (double a=0.0; a<6.0; a+=1.0) {
-        Matrix m = new Matrix();
+        Matrix m = new Matrix(Matrix.IDENTITY());
         m.postRotate(Math.PI/6+a*Math.PI/3);
         points.transform(m,p);
         c.drawPath(p,pline);

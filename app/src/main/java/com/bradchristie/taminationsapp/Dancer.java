@@ -20,7 +20,6 @@
 
 package com.bradchristie.taminationsapp;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import android.graphics.Canvas;
@@ -85,7 +84,7 @@ public class Dancer implements Comparable<Dancer> {
     drawColor = Color.darker(c);
     starttx = geometry.startMatrix(mat);
     geom = geometry.clone();
-    path = new Path(moves);
+    path = Path.apply(moves);
     clonedFrom = null;
     // Compute points of path for drawing path
     pathpath = new android.graphics.Path();
@@ -129,10 +128,7 @@ public class Dancer implements Comparable<Dancer> {
    * @return  Total number of beats used by dancer's path
    */
   public float beats() {
-    float retval = 0f;
-    for (Movement m : path.movelist)
-      retval += m.beats;
-    return retval;
+    return (float)path.beats();
   }
 
   /**
@@ -160,40 +156,9 @@ public class Dancer implements Comparable<Dancer> {
    * @param beat where to place dancer
    */
   public void animate(double beat) {
-    double beatin = beat;
-    // Be sure to reset grips at start
-    if (beat == 0)
-      rightgrip = leftgrip = null;
-    // Start to build transform
-    tx = new Matrix(starttx);
-    hands = Movement.BOTHHANDS;
-    // Apply all completed movements
-    Movement m = null;
-    for (int i = 0; i < path.movelist.size(); i++) {
-      m = path.movelist.get(i);
-      if (beat >= m.beats) {
-        tx = new Matrix(starttx);
-        tx.preConcat(path.transformlist.get(i));
-        beat -= path.movelist.get(i).beats;
-        m = null;
-      } else
-        break;
-    }
-    // Apply movement in progress
-    if (m != null) {
-      tx.preConcat(m.translate(beat));
-      tx.preConcat(m.rotate(beat));
-      if (beat >= 0)
-        hands = m.hands;
-      if ((m.hands & Movement.GRIPLEFT) == 0)
-        leftgrip = null;
-      if ((m.hands & Movement.GRIPRIGHT) == 0)
-        rightgrip = null;
-    } else
-      // End of path
-      hands = Movement.BOTHHANDS;
-    // Modification for any special geometry
-    tx.postConcat(geom.pathMatrix(this.starttx,this.tx,beatin));
+    tx = new Matrix(starttx).preConcat(path.animate(beat));
+    hands = path.hands(beat);
+    tx.postConcat(geom.pathMatrix(this.starttx,this.tx,beat));
   }
 
   public void animateToEnd()
@@ -254,7 +219,7 @@ public class Dancer implements Comparable<Dancer> {
       float[] m = new float[9];
       tx.getValues(m);
       double angle = Math.atan2(m[Matrix.MSKEW_X], m[Matrix.MSCALE_Y]);
-      Matrix txtext = new Matrix();
+      Matrix txtext = new Matrix(Matrix.IDENTITY());
       txtext.postRotate(-angle+Math.PI/2);
       txtext.postScale(1, -1);
       c.concat(txtext);

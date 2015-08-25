@@ -602,7 +602,7 @@ public class AnimationView extends SurfaceView
     //  Check dancer's facing direction
     double au = idancer.tx.angle();
     double ac = computetx.angle();
-    if (Math.abs(Vector3D.angleDiff(au,ac)) > Math.PI/4)
+    if (Math.abs(Vector3D.angleAngleDiff(au,ac)) > Math.PI/4)
       return false;
 
     //  Check relationship with the other dancers
@@ -688,29 +688,29 @@ public class AnimationView extends SurfaceView
       //  Check that the hands aren't already used
       boolean incenter = geometry == Geometry.HEXAGON && hh.inCenter();
       if (incenter ||
-          (hh.hold1 == Movement.RIGHTHAND && hh.dancer1.rightdancer == null ||
-          hh.hold1 == Movement.LEFTHAND && hh.dancer1.leftdancer == null) &&
-          (hh.hold2 == Movement.RIGHTHAND && hh.dancer2.rightdancer == null ||
-          hh.hold2 == Movement.LEFTHAND && hh.dancer2.leftdancer == null)) {
+          (hh.hold1 == Movement.RIGHTHAND() && hh.dancer1.rightdancer == null ||
+          hh.hold1 == Movement.LEFTHAND() && hh.dancer1.leftdancer == null) &&
+          (hh.hold2 == Movement.RIGHTHAND() && hh.dancer2.rightdancer == null ||
+          hh.hold2 == Movement.LEFTHAND() && hh.dancer2.leftdancer == null)) {
         //      	Make the handhold visible
         //  Scale should be 1 if distance is 2
         //  float scale = hh.distance/2f;
-        if (hh.hold1 == Movement.RIGHTHAND || hh.hold1 == Movement.GRIPRIGHT) {
+        if (hh.hold1 == Movement.RIGHTHAND() || hh.hold1 == Movement.GRIPRIGHT()) {
           if (!hh.dancer1.rightHandVisibility)
             hh.dancer1.rightHandVisibility = true;
           hh.dancer1.rightHandNewVisibility = true;
         }
-        if (hh.hold1 == Movement.LEFTHAND || hh.hold1 == Movement.GRIPLEFT) {
+        if (hh.hold1 == Movement.LEFTHAND() || hh.hold1 == Movement.GRIPLEFT()) {
           if (!hh.dancer1.leftHandVisibility)
             hh.dancer1.leftHandVisibility = true;
           hh.dancer1.leftHandNewVisibility = true;
         }
-        if (hh.hold2 == Movement.RIGHTHAND || hh.hold2 == Movement.GRIPRIGHT) {
+        if (hh.hold2 == Movement.RIGHTHAND() || hh.hold2 == Movement.GRIPRIGHT()) {
           if (!hh.dancer2.rightHandVisibility)
             hh.dancer2.rightHandVisibility = true;
           hh.dancer2.rightHandNewVisibility = true;
         }
-        if (hh.hold2 == Movement.LEFTHAND || hh.hold2 == Movement.GRIPLEFT) {
+        if (hh.hold2 == Movement.LEFTHAND() || hh.hold2 == Movement.GRIPLEFT()) {
           if (!hh.dancer2.leftHandVisibility)
             hh.dancer2.leftHandVisibility = true;
           hh.dancer2.leftHandNewVisibility = true;
@@ -718,22 +718,22 @@ public class AnimationView extends SurfaceView
 
         if (incenter)
           continue;
-        if (hh.hold1 == Movement.RIGHTHAND) {
+        if (hh.hold1 == Movement.RIGHTHAND()) {
           hh.dancer1.rightdancer = hh.dancer2;
-          if ((hh.dancer1.hands & Movement.GRIPRIGHT) == Movement.GRIPRIGHT)
+          if ((hh.dancer1.hands & Movement.GRIPRIGHT()) == Movement.GRIPRIGHT())
             hh.dancer1.rightgrip = hh.dancer2;
         } else {
           hh.dancer1.leftdancer = hh.dancer2;
-          if ((hh.dancer1.hands & Movement.GRIPLEFT) == Movement.GRIPLEFT)
+          if ((hh.dancer1.hands & Movement.GRIPLEFT()) == Movement.GRIPLEFT())
             hh.dancer1.leftgrip = hh.dancer2;
         }
-        if (hh.hold2 == Movement.RIGHTHAND) {
+        if (hh.hold2 == Movement.RIGHTHAND()) {
           hh.dancer2.rightdancer = hh.dancer1;
-          if ((hh.dancer2.hands & Movement.GRIPRIGHT) == Movement.GRIPRIGHT)
+          if ((hh.dancer2.hands & Movement.GRIPRIGHT()) == Movement.GRIPRIGHT())
             hh.dancer2.rightgrip = hh.dancer1;
         } else {
           hh.dancer2.leftdancer = hh.dancer1;
-          if ((hh.dancer2.hands & Movement.GRIPLEFT) == Movement.GRIPLEFT)
+          if ((hh.dancer2.hands & Movement.GRIPLEFT()) == Movement.GRIPLEFT())
             hh.dancer2.leftgrip = hh.dancer1;
         }
       }
@@ -828,7 +828,7 @@ public class AnimationView extends SurfaceView
       }
       int dnum = 0;
       int icount = -1;
-      Matrix im = new Matrix();
+      Matrix im = new Matrix(Matrix.IDENTITY());
       Vector<Geometry> geoms = Geometry.getGeometry(geometry);
       if (intdan > 0) {
         //  Select a random dancer of the correct gender for the interactive dancer
@@ -873,7 +873,7 @@ public class AnimationView extends SurfaceView
         //  Each dancer listed in the formation corresponds to
         //  one, two, or three real dancers depending on the geometry
         for (Geometry geom : geoms) {
-          Matrix m = new Matrix();
+          Matrix m = new Matrix(Matrix.IDENTITY());
           //  compute the transform for the start position
           m.postRotate(Math.toRadians(angle));
           m.postTranslate(x, y);

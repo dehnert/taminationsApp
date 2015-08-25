@@ -20,6 +20,7 @@
 
 package com.bradchristie.taminationsapp;
 
+@SuppressWarnings("serial")
 public class CallError extends Exception
 {
 

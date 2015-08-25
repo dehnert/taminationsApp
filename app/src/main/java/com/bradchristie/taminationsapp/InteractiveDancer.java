@@ -88,17 +88,17 @@ public class InteractiveDancer extends Dancer
             primaryDirection = new Vector3D(dx,dy,0);
           else {
             double DIRECTIONALPHA = 0.9;
-            primaryDirection = new Vector3D( DIRECTIONALPHA * primaryDirection.x +
+            primaryDirection = new Vector3D( DIRECTIONALPHA * primaryDirection.x() +
                               (1- DIRECTIONALPHA) * dx,
-                                            DIRECTIONALPHA * primaryDirection.y +
-                              (1- DIRECTIONALPHA) * dy);
+                                            DIRECTIONALPHA * primaryDirection.y() +
+                              (1- DIRECTIONALPHA) * dy, 0);
           }
           double DIRECTIONTHRESHOLD = 0.01;
           if (primaryDirection.length() >=DIRECTIONTHRESHOLD) {
             float vm[] = {1.0f, 0.0f};
             tx.mapVectors(vm);
             double a1 = Math.atan2(vm[1],vm[0]);
-            double a2 = Math.atan2(primaryDirection.y,primaryDirection.x);
+            double a2 = Math.atan2(primaryDirection.y(),primaryDirection.x());
             tx.preRotate(a2-a1);
           }
         }
@@ -113,7 +113,7 @@ public class InteractiveDancer extends Dancer
         //  Get the vector the dancer is facing
         Vector3D vu = tx.direction();
         //  Amount of rotation is z of the cross product of the two
-        double da = vu.cross(vf).z;
+        double da = vu.cross(vf).z();
         tx.preRotate(da);
         secondaryTouch = secondaryMove;
       }

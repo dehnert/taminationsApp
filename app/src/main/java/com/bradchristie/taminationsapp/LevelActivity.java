@@ -72,7 +72,7 @@ public class LevelActivity extends RotationActivity
       }
       return null;
     }
-  }  // end of LevelData class
+  }  //  end of LevelData class
 
   private View selectedView = null;
 
@@ -228,7 +228,7 @@ public class LevelActivity extends RotationActivity
       replaceFragment(af,R.id.fragment_calllist);
     } else
       //  Single-fragment display - start calllist activity
-      startActivity(new Intent(this,AboutActivity.class));
+      startActivity(new Intent(this,SequenceActivity.class));
   }
 
 }

@@ -33,7 +33,6 @@ import android.webkit.WebViewClient;
 import android.widget.CompoundButton;
 import android.widget.RadioButton;
 
-import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 
 @SuppressLint("SetJavaScriptEnabled")

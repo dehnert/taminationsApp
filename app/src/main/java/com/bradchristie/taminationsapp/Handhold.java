@@ -52,13 +52,13 @@ public class Handhold implements Comparable<Handhold> {
     if (d1.hidden || d2.hidden)
       return null;
     //  Turn off grips if not specified in current movement
-    if ((d1.hands & Movement.GRIPRIGHT) != Movement.GRIPRIGHT)
+    if ((d1.hands & Movement.GRIPRIGHT()) != Movement.GRIPRIGHT())
       d1.rightgrip = null;
-    if ((d1.hands & Movement.GRIPLEFT) != Movement.GRIPLEFT)
+    if ((d1.hands & Movement.GRIPLEFT()) != Movement.GRIPLEFT())
       d1.leftgrip = null;
-    if ((d2.hands & Movement.GRIPRIGHT) != Movement.GRIPRIGHT)
+    if ((d2.hands & Movement.GRIPRIGHT()) != Movement.GRIPRIGHT())
       d2.rightgrip = null;
-    if ((d2.hands & Movement.GRIPLEFT) != Movement.GRIPLEFT)
+    if ((d2.hands & Movement.GRIPLEFT()) != Movement.GRIPLEFT())
       d2.leftgrip = null;
 
     //  Check distance
@@ -102,19 +102,19 @@ public class Handhold implements Comparable<Handhold> {
     double a = Math.abs(Math.IEEEremainder(Math.abs(a1-a0+Math.PI*3.0/2.0),Math.PI*2.0));
     double ascore = a > Math.PI/6.0 ? (a-Math.PI/6.0)*afactor2+Math.PI/6.0*afactor1
                                    : a*afactor1;
-    if (score1+ascore < 1.0 && (d1.hands & Movement.RIGHTHAND) != 0 &&
+    if (score1+ascore < 1.0 && (d1.hands & Movement.RIGHTHAND()) != 0 &&
         d1.rightgrip==null || d1.rightgrip==d2) {
       score1 = d1.rightgrip==d2 ? 0.0 : score1 + ascore;
-      h1 = Movement.RIGHTHAND;
+      h1 = Movement.RIGHTHAND();
       ah1 = a1-a0+Math.PI*3.0/2.0;
     } else {
       a = Math.abs(Math.IEEEremainder(Math.abs(a1-a0+Math.PI/2.0),Math.PI*2.0));
       ascore = a > Math.PI/6.0 ? (a-Math.PI/6.0)*afactor2+Math.PI/6.0*afactor1
                                : a*afactor1;
-      if (score1+ascore < 1.0 && (d1.hands & Movement.LEFTHAND) != 0 &&
+      if (score1+ascore < 1.0 && (d1.hands & Movement.LEFTHAND()) != 0 &&
           d1.leftgrip==null || d1.leftgrip==d2) {
         score1 = d1.leftgrip==d2 ? 0.0 : score1 + ascore;
-        h1 = Movement.LEFTHAND;
+        h1 = Movement.LEFTHAND();
         ah1 = a1-a0+Math.PI/2.0;
       } else
         score1 = 10.0;
@@ -123,32 +123,32 @@ public class Handhold implements Comparable<Handhold> {
     a = Math.abs(Math.IEEEremainder(Math.abs(a2-a0+Math.PI/2.0),Math.PI*2.0));
     ascore = a > Math.PI/6.0 ? (a-Math.PI/6.0)*afactor2+Math.PI/6.0*afactor1
                              : a*afactor1;
-    if (score2+ascore < 1.0 && (d2.hands & Movement.RIGHTHAND) != 0 &&
+    if (score2+ascore < 1.0 && (d2.hands & Movement.RIGHTHAND()) != 0 &&
         d2.rightgrip==null || d2.rightgrip==d1) {
       score2 = d2.rightgrip==d1 ? 0.0 : score2 + ascore;
-      h2 = Movement.RIGHTHAND;
+      h2 = Movement.RIGHTHAND();
       ah2 = a2-a0+Math.PI/2.0;
     } else {
       a = Math.abs(Math.IEEEremainder(Math.abs(a2-a0+Math.PI*3.0/2.0),Math.PI*2.0));
       ascore = a > Math.PI/6.0 ? (a-Math.PI/6.0)*afactor2+Math.PI/6.0*afactor1
                                : a*afactor1;
-      if (score2+ascore < 1.0 && (d2.hands & Movement.LEFTHAND) != 0 &&
+      if (score2+ascore < 1.0 && (d2.hands & Movement.LEFTHAND()) != 0 &&
           d2.leftgrip==null || d2.leftgrip==d1) {
         score2 = d2.leftgrip==d1 ? 0.0 : score2 + ascore;
-        h2 = Movement.LEFTHAND;
+        h2 = Movement.LEFTHAND();
         ah2 = a2-a0+Math.PI*3.0/2.0;
       } else
         score2 = 10f;
     }
 
     if (d1.rightgrip == d2 && d2.rightgrip == d1)
-      return new Handhold(d1,d2,Movement.RIGHTHAND,Movement.RIGHTHAND,ah1,ah2,d,0.0);
+      return new Handhold(d1,d2,Movement.RIGHTHAND(),Movement.RIGHTHAND(),ah1,ah2,d,0.0);
     if (d1.rightgrip == d2 && d2.leftgrip == d1)
-      return new Handhold(d1,d2,Movement.RIGHTHAND,Movement.LEFTHAND,ah1,ah2,d,0.0);
+      return new Handhold(d1,d2,Movement.RIGHTHAND(),Movement.LEFTHAND(),ah1,ah2,d,0.0);
     if (d1.leftgrip == d2 && d2.rightgrip == d1)
-      return new Handhold(d1,d2,Movement.LEFTHAND,Movement.RIGHTHAND,ah1,ah2,d,0.0);
+      return new Handhold(d1,d2,Movement.LEFTHAND(),Movement.RIGHTHAND(),ah1,ah2,d,0.0);
     if (d1.leftgrip == d2 && d2.leftgrip == d1)
-      return new Handhold(d1,d2,Movement.LEFTHAND,Movement.LEFTHAND,ah1,ah2,d,0.0);
+      return new Handhold(d1,d2,Movement.LEFTHAND(),Movement.LEFTHAND(),ah1,ah2,d,0.0);
 
     if (score1 > 1.0 || score2 > 1.0 || score1+score2 > 1.2)
       return null;

@@ -20,6 +20,7 @@
 
 package com.bradchristie.taminationsapp;
 
+@SuppressWarnings("serial")
 public class CallNotFoundError extends CallError
 {
   public CallNotFoundError()

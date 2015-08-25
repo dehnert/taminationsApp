@@ -31,9 +31,6 @@ import android.widget.TextView;
 
 import com.bradchristie.taminationsapp.LevelActivity.LevelData;
 
-import org.w3c.dom.Document;
-import org.w3c.dom.Element;
-
 public class AnimationActivity extends PortraitActivity
              implements AnimationListener,
                         SharedPreferences.OnSharedPreferenceChangeListener,

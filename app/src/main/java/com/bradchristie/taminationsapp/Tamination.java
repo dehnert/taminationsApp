@@ -284,55 +284,27 @@ public class Tamination {
     String reflect = moveelem.getAttribute("reflect");
     String hands = moveelem.getAttribute("hands");
     float oldbeats = 0f;  //  If beats is given, we need to know how to scale
-    for  (int i=0; i<retval.size(); i++)  // each movement
-      oldbeats += retval.get(i).beats;
+    for  (int i=0; i<retval.size(); i++) {  // each movement
+      Movement m = retval.get(i);
+      oldbeats += m.beats();
+    }
     for  (int i=0; i<retval.size(); i++) {
       Movement move = retval.get(i);
       if (beats != 0)
-        move.beats *= beats / oldbeats;
-      if (scaleX != 0) {
-        move.cx1 *= scaleX;
-        move.cx2 *= scaleX;
-        move.x2 *= scaleX;
-        move.cx3 *= scaleX;
-        move.cx4 *= scaleX;
-        move.x4 *= scaleX;
-      }
-      if (scaleY != 0) {
-        move.cy1 *= scaleY;
-        move.cy2 *= scaleY;
-        move.y2 *= scaleY;
-        move.cy4 *= scaleY;
-        move.y4 *= scaleY;
-      }
-      if (reflect.equals("-1")) {
-        move.cy1 = -move.cy1;
-        move.cy2 = -move.cy2;
-        move.y2 = -move.y2;
-        move.cy4 = -move.cy4;
-        move.y4 = -move.y4;
-      }
-      if (offsetX != 0) {
-        move.cx2 += offsetX;
-        move.x2 += offsetX;
-      }
-      if (offsetY != 0) {
-        move.cy2 += offsetY;
-        move.y2 += offsetY;
-      }
+        move = move.time(move.beats()*beats/oldbeats);
+      if (scaleX != 0)
+        move = move.scale(scaleX,1);
+      if (scaleY != 0)
+        move = move.scale(1,scaleY);
+      if (reflect.equals("-1"))
+        move = move.reflect();
+      if (offsetX != 0)
+        move = move.skew(offsetX, 0);
+      if (offsetY != 0)
+        move = move.skew(0, offsetY);
       if (!hands.equals(""))
-        move.hands = Movement.getHands(hands);
-      else if (reflect.equals("-1")) {
-        if (move.hands == Movement.RIGHTHAND)
-          move.hands = Movement.LEFTHAND;
-        else if (move.hands == Movement.LEFTHAND)
-          move.hands = Movement.RIGHTHAND;
-        else if (move.hands == Movement.GRIPRIGHT)
-          move.hands = Movement.GRIPLEFT;
-        else if (move.hands == Movement.GRIPLEFT)
-          move.hands = Movement.GRIPRIGHT;
-      }
-      move.recalculate();
+        move = move.handy(Movement.getHands(hands));
+      retval.set(i, move);
     }
     return retval;
   }
@@ -343,7 +315,7 @@ public class Tamination {
   static List<Movement> translateMovement(Element move)
   {
     List<Movement> movements = new ArrayList<>();
-    movements.add(new Movement(move));
+    movements.add(new MovementApplier().movement(move));
     return movements;
   }
 
